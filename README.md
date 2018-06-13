@@ -16,7 +16,7 @@ Run the following commands from you terminal
 
 ```sh
 # Clone the repo
-git clone https://github.com/tterb/YouTube-to-MP3
+git clone https://github.com/deepjyoti30/ytmdl
 
 # Go to the directory
 cd YouTube-to-MP3
