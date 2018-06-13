@@ -19,7 +19,7 @@ Run the following commands from you terminal
 git clone https://github.com/deepjyoti30/ytmdl
 
 # Go to the directory
-cd YouTube-to-MP3
+cd ytmdl
 
 # Install dependencies.
 pip install -r requirements.txt
