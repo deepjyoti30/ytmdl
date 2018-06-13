@@ -8,7 +8,7 @@
 
 from __future__ import unicode_literals
 import youtube_dl
-from mutagen.id3 import ID3, APIC, TIT2, TPE1, TALB, TCON, TRCK
+from mutagen.id3 import ID3, APIC, TIT2, TPE1, TALB, TCON, TRCK, TYER
 from mutagen.mp3 import MP3
 import os
 import glob
@@ -140,6 +140,7 @@ def setData(SONG_INFO):
 
         option = int(option)
 
+        data.add(TYER(encoding=3, text=SONG_INFO[option].release_date))
         data.add(TIT2(encoding=3, text=SONG_INFO[option].track_name))
         data.add(TPE1(encoding=3, text=SONG_INFO[option].artist_name))
         data.add(TALB(encoding=3, text=SONG_INFO[option].collection_name))
@@ -153,6 +154,10 @@ def setData(SONG_INFO):
         # Rename the downloaded file
         os.rename(SONG_PATH[0], os.path.join(SONG_DIR, SONG_NAME_TO_SAVE))
 
+
+        # Show the written stuff in a better format
+        PREPEND(1)
+        print('YEAR: ' + SONG_INFO[option].release_date)
         PREPEND(1)
         print('TITLE: ' + SONG_INFO[option].track_name)
         PREPEND(1)
