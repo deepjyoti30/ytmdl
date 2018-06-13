@@ -52,7 +52,7 @@ pip install -r requirements.txt
 ```sh
 
 # Move to directory first
-python ytmdl [URL] [TITLE]
+python ytmdl.py [URL] [TITLE]
 
 ```
 
