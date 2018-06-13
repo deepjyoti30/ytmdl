@@ -28,7 +28,7 @@ init()
 HOME_DIR = str(Path.home())
 
 # The temp song dir
-SONG_DIR = os.path.join(HOME_DIR, 'Music', 'temp')
+SONG_DIR = os.path.join(HOME_DIR, 'Music', 'ytmdl')
 
 # The name that the song will be saved with
 SONG_NAME_TO_SAVE = ''
@@ -62,7 +62,8 @@ def GRAB_SONG(link):
         'outtmpl' : os.path.join(SONG_DIR, '%(title)s.%(ext)s'),
         'postprocessors':[{
             'key' : 'FFmpegExtractAudio',
-            'preferredcodec' :  'mp3'
+            'preferredcodec' :  'mp3',
+            'preferredquality' : '320'
         }]
     }
 
