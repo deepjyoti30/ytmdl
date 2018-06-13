@@ -19,6 +19,9 @@ import shutil
 from colorama import init
 from colorama import Fore, Style
 
+# init colorama for windows
+init()
+
 # Define colors
 class bcolors:
     CYAN = '\033[95m'
