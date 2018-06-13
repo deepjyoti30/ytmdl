@@ -18,21 +18,10 @@ import sys
 import shutil
 from colorama import init
 from colorama import Fore, Style
+import requests
 
 # init colorama for windows
 init()
-
-# Define colors
-class bcolors:
-    CYAN = '\033[95m'
-    OKBLUE = '\033[94m'
-    OKGREEN = '\033[92m'
-    WARNING = '\033[93m'
-    FAIL = '\033[91m'
-    ENDC = '\033[0m'
-    BOLD = '\033[1m'
-    UNDERLINE = '\033[4m'
-
 
 
 # The home dir
@@ -43,6 +32,9 @@ SONG_DIR = os.path.join(HOME_DIR, 'Music', 'temp')
 
 # The name that the song will be saved with
 SONG_NAME_TO_SAVE = ''
+
+# The path to keep cover image
+COVER_IMG = os.path.join(SONG_DIR, 'cover.jpg')
 
 #-----------Print----------------------
 def PREPEND(state):
@@ -82,6 +74,28 @@ def GRAB_SONG(link):
     except:
         return False
 
+#----------------------cover--------------------
+
+def dwCover(SONG_INFO, index):
+    # Try to download the cover art as cover.jpg in temp
+    try:
+        imgURL = SONG_INFO[index].artwork_url_100
+        try:
+            # Try to get 512 cover art
+            imgURL = imgURL.replace('100x100', '2048x2048')
+        except:
+            pass
+
+        r = requests.get(imgURL)
+
+        with open(COVER_IMG, 'wb') as f:
+            f.write(r.content)
+
+        return True
+    except:
+        return False
+
+
 #-----------------------tag----------------------
 
 def getData(SONG_NAME):
@@ -106,8 +120,16 @@ def getChoice(SONG_INFO):
         results = 5
 
     while count != results:
+        print(Fore.LIGHTMAGENTA_EX,end='')
         print(' [' + str(count+1) + '] ',end='')
-        print(SONG_INFO[count].track_name + ' by ' + SONG_INFO[count].artist_name)
+        print(Style.RESET_ALL,end='')
+        print(Fore.LIGHTCYAN_EX,end='')
+        print(SONG_INFO[count].track_name,end='')
+        print(Style.RESET_ALL,end='')
+        print(' by ',end='')
+        print(Fore.YELLOW,end='')
+        print(SONG_INFO[count].artist_name,end='')
+        print(Style.RESET_ALL)
         
         count += 1
 
@@ -122,6 +144,8 @@ def getChoice(SONG_INFO):
     return choice
 
 def setData(SONG_INFO):
+    # A variable to see if cover image was added.
+    IS_IMG_ADDED = False
 
     try:
         # If more than one choice then call getChoice
@@ -132,10 +156,21 @@ def setData(SONG_INFO):
         
         SONG_PATH = glob.glob(os.path.join(SONG_DIR,'*mp3'))
 
-        #SONG_PATH = os.path.basename(SONG_PATH[0])
-
         audio = MP3(SONG_PATH[0], ID3=ID3)
         data = ID3(SONG_PATH[0])
+
+        # Download the cover image, if failed, pass
+        if dwCover(SONG_INFO, option):
+            imagedata = open(COVER_IMG, 'rb').read()
+
+            data.add(APIC(3, 'image/jpeg', 3, 'Front cover', imagedata))
+
+            # REmove the image
+            os.remove(COVER_IMG)
+
+            IS_IMG_ADDED = True
+        else:
+            pass
 
         # If tags are not present then add them
         try:
@@ -171,6 +206,10 @@ def setData(SONG_INFO):
         print('  ALBUM: ' + SONG_INFO[option].collection_name)
         print('  GENRE: ' + SONG_INFO[option].primary_genre_name)
         print('  TRACK NO: ' + str(SONG_INFO[option].track_number))
+
+        if IS_IMG_ADDED:
+            print('  ALBUM COVER ADDED')
+
         PREPEND(1)
         print('================================')
 
