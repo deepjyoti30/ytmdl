@@ -2,3 +2,4 @@ youtube_dl==2018.3.20
 mutagen==1.40.0
 itunespy==1.5.5
 requests==2.18.4
+colorama==0.3.9

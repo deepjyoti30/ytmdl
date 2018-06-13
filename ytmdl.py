@@ -16,6 +16,8 @@ from pathlib import Path
 import itunespy
 import sys
 import shutil
+from colorama import init
+from colorama import Fore, Style
 
 # Define colors
 class bcolors:
@@ -27,6 +29,8 @@ class bcolors:
     ENDC = '\033[0m'
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
+
+
 
 # The home dir
 HOME_DIR = str(Path.home())
@@ -42,16 +46,16 @@ def PREPEND(state):
     # State 1 is for ok
     # State 2 is for notok
 
-    print(bcolors.BOLD,end='')
+    print(Style.BRIGHT,end='')
     if state == 1:
-        print(bcolors.OKGREEN, end='')
+        print(Fore.LIGHTGREEN_EX, end='')
     elif state == 2:
-        print(bcolors.FAIL, end='')
+        print(Fore.LIGHTRED_EX, end='')
     else:
         pass
 
     print(' ==> ',end='')
-    print(bcolors.ENDC, end='')
+    print(Style.RESET_ALL, end='')
 
 #--------------------------------------
 
@@ -191,10 +195,10 @@ def cleanup():
 def main():
 
     if len(sys.argv) != 3:
-        print(bcolors.WARNING,end='')
+        print(Fore.LIGHTYELLOW_EX,end='')
         print(' Usage: ',end='')
         print(sys.argv[0] + ' [URL] [TRACK NAME]')
-        print(bcolors.ENDC,end='')
+        print(Style.RESET_ALL,end='')
         sys.exit(0)
 
     PREPEND(1)
