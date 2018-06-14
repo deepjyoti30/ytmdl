@@ -1,6 +1,10 @@
 #*****************************************#
 #*-------------config for ytmdl ----------#
 #
+#-----------------------------------------#
+#------PLEASE DONT LEAVE ANY BLANK LINE---#
+#-----------------------------------------#
+#
 # To change defaults just remove the hash(#)
 # from thw beginning of the line.
 # The will be read as a single line comment.
@@ -12,3 +16,11 @@
 # In case the path has spaces in in, include it in a " "
 #
 #SONG_DIR = "/your/desired/path/to/save/songs"
+#
+#*****************************************#
+# The QUALITY is the quality of the song in kbps
+# By default it is set to 320kbps
+# In case you want to change it to something else,
+# Uncomment the following line and change it
+#
+#QUALITY = "192"

@@ -12,6 +12,9 @@ class DEFAULTS:
     # The temp dir
     SONG_TEMP_DIR = os.path.join(SONG_DIR, 'ytmdl')
 
+    # The default song quality
+    SONG_QUALITY = '320'
+
 def checkConfig():
     # Need to check the config to see if defaults are changed
     # The config will be saved in the ytmdl directory in Music
@@ -35,8 +38,8 @@ def checkConfig():
         return True
 
 
-class getPATHS:
-    def GIVE_SONG_DIR(self):
+class retDEFAULT:
+    def GIVE_DEFAULT(self, keyword):
         # Check If the config is already present in SONG_TEMP_DIR
         if not checkConfig():
             return False
@@ -47,13 +50,17 @@ class getPATHS:
             while True:
                 line = READ_STREAM.readline()
                 if not line:
-                    return DEFAULTS.SONG_DIR
-                if line[0] != '#' and 'SONG_DIR' in line:
+                    if keyword == 'QUALITY':
+                        return DEFAULTS.SONG_QUALITY
+                    elif keyword == 'SONG_DIR':
+                        return DEFAULTS.SONG_DIR
+                if line[0] != '#' and keyword in line:
                     # Remove all the spaces
                     line = line.replace(' ', '')
                     # Remove the "
                     line = line.replace('"', '')
-                    newSONG_DIR = line[line.index('=') + 1:]
-                    return newSONG_DIR
+                    newDEFAULT = line[line.index('=') + 1:]
+                    return newDEFAULT
+            
 
                 
