@@ -60,7 +60,16 @@ python ytmdl.py [URL] [TITLE]
 
 ```
 
-_The default directory is $HOME/Music. It can be changed by editing the config file in $HOME/Music/ytmdl_
+## Change Defaults
+
+#### The defaults can be changed by editing the config file in ytmdl folder in your Music Directory
+
+### Supported options to change are:
+
+| Name           |                                                    |
+|:--------------:|----------------------------------------------------|
+| `SONG_DIR`     | Directory to save the songs in after editing       |
+| `SONG_QUALITY` | Quality of the song                                |
 
 ## Acknowledgements
 
