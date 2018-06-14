@@ -250,8 +250,10 @@ def main():
         sys.exit(0)
 
     PREPEND(1)
-    print('Downloading the song to ' + DEFAULT.SONG_TEMP_DIR,end='')
-    print('in ' + DEFAULT.SONG_QUALITY + 'kbps')
+    print('Downloading the song to ' + DEFAULT.SONG_TEMP_DIR + ' in ',end=' ')
+    print(Fore.LIGHTYELLOW_EX,end='')
+    print(DEFAULT.SONG_QUALITY + 'kbps',end='')
+    print(Style.RESET_ALL)
     if not GRAB_SONG(sys.argv[1]):
         PREPEND(2)
         print('Something went wrong while downloading!\a')
