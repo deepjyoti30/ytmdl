@@ -79,7 +79,10 @@ def GRAB_SONG(link):
         ydl = youtube_dl.YoutubeDL(ydl_opts)
         ydl.download([link])
         return True
-    except:
+    except TimeoutError:
+        print('Timed Out! Are you connected to internet?\a')
+        return False
+    else:
         return False
 
 #----------------------cover--------------------
@@ -100,9 +103,12 @@ def dwCover(SONG_INFO, index):
             f.write(r.content)
 
         return True
-    except:
+    except TimeoutError:
+        PREPEND(2)
+        print('Could not get album cover. Are you connected to internet?\a')
         return False
-
+    else:
+        return False
 
 #-----------------------tag----------------------
 
@@ -111,7 +117,17 @@ def getData(SONG_NAME):
     try:
         SONG_INFO = itunespy.search_track(SONG_NAME)
         return SONG_INFO
-    except:
+    except LookupError:
+        PREPEND(2)
+        print('Song not found!')
+        return False
+    except TimeoutError:
+        PREPEND(2)
+        print('Search timed out. Are you connected to internet?\a')
+        return False
+    else:
+        PREPEND(2)
+        print('Unknown Error!\a')
         return False
 
 def getChoice(SONG_INFO):
@@ -250,7 +266,7 @@ def main():
         sys.exit(0)
 
     PREPEND(1)
-    print('Downloading the song to ' + DEFAULT.SONG_TEMP_DIR + ' in ',end=' ')
+    print('Downloading the song to ' + DEFAULT.SONG_TEMP_DIR + ' in',end=' ')
     print(Fore.LIGHTYELLOW_EX,end='')
     print(DEFAULT.SONG_QUALITY + 'kbps',end='')
     print(Style.RESET_ALL)
@@ -269,7 +285,8 @@ def main():
 
     if TRACK_INFO == False:
         PREPEND(2)
-        print('Something went wrong while getting data!\a')
+        print('Exiting now!\a')
+        cleanup()
         sys.exit(0)
     elif len(TRACK_INFO) == 0:
         PREPEND(2)
