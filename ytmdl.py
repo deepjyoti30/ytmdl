@@ -19,22 +19,26 @@ import shutil
 from colorama import init
 from colorama import Fore, Style
 import requests
+import setupConfig
 
 # init colorama for windows
 init()
 
+class PATHS:
+    # The home dir
+    HOME_DIR = str(Path.home())
 
-# The home dir
-HOME_DIR = str(Path.home())
+    # the directory where songs will be saved
+    SONG_DIR = setupConfig.getPATHS.GIVE_SONG_DIR(1)
 
-# The temp song dir
-SONG_DIR = os.path.join(HOME_DIR, 'Music', 'ytmdl')
+    # the temp directory where songs will be modded
+    SONG_TEMP_DIR = os.path.join(SONG_DIR, 'ytmdl')
 
-# The name that the song will be saved with
-SONG_NAME_TO_SAVE = ''
+    # The name that the song will be saved with
+    SONG_NAME_TO_SAVE = ''
 
-# The path to keep cover image
-COVER_IMG = os.path.join(SONG_DIR, 'cover.jpg')
+    # The path to keep cover image
+    COVER_IMG = os.path.join(SONG_TEMP_DIR, 'cover.jpg')
 
 #-----------Print----------------------
 def PREPEND(state):
@@ -59,7 +63,7 @@ def GRAB_SONG(link):
     ydl_opts = {
         'format' : 'bestaudio',
         'quiet' : True,
-        'outtmpl' : os.path.join(SONG_DIR, '%(title)s.%(ext)s'),
+        'outtmpl' : os.path.join(PATHS.SONG_TEMP_DIR, '%(title)s.%(ext)s'),
         'postprocessors':[{
             'key' : 'FFmpegExtractAudio',
             'preferredcodec' :  'mp3',
@@ -89,7 +93,7 @@ def dwCover(SONG_INFO, index):
 
         r = requests.get(imgURL)
 
-        with open(COVER_IMG, 'wb') as f:
+        with open(PATHS.COVER_IMG, 'wb') as f:
             f.write(r.content)
 
         return True
@@ -155,19 +159,19 @@ def setData(SONG_INFO):
         else:
             option = 0
         
-        SONG_PATH = glob.glob(os.path.join(SONG_DIR,'*mp3'))
+        SONG_PATH = glob.glob(os.path.join(PATHS.SONG_TEMP_DIR,'*mp3'))
 
         audio = MP3(SONG_PATH[0], ID3=ID3)
         data = ID3(SONG_PATH[0])
 
         # Download the cover image, if failed, pass
         if dwCover(SONG_INFO, option):
-            imagedata = open(COVER_IMG, 'rb').read()
+            imagedata = open(PATHS.COVER_IMG, 'rb').read()
 
             data.add(APIC(3, 'image/jpeg', 3, 'Front cover', imagedata))
 
             # REmove the image
-            os.remove(COVER_IMG)
+            os.remove(PATHS.COVER_IMG)
 
             IS_IMG_ADDED = True
         else:
@@ -192,10 +196,10 @@ def setData(SONG_INFO):
 
         data.save()
 
-        SONG_NAME_TO_SAVE = SONG_INFO[option].track_name + '.mp3'
+        PATHS.SONG_NAME_TO_SAVE = SONG_INFO[option].track_name + '.mp3'
 
         # Rename the downloaded file
-        os.rename(SONG_PATH[0], os.path.join(SONG_DIR, SONG_NAME_TO_SAVE))
+        os.rename(SONG_PATH[0], os.path.join(PATHS.SONG_TEMP_DIR, PATHS.SONG_NAME_TO_SAVE))
 
 
         # Show the written stuff in a better format
@@ -221,11 +225,11 @@ def setData(SONG_INFO):
 def cleanup():
     # Move the song from temp to $HOME/Music dir
     try: 
-        SONG = glob.glob(os.path.join(SONG_DIR, '*mp3'))
+        SONG = glob.glob(os.path.join(PATHS.SONG_TEMP_DIR, '*mp3'))
         SONG = SONG[0]
 
         SONG_NAME = os.path.basename(SONG)
-        shutil.move(SONG, os.path.join(HOME_DIR, 'Music', SONG_NAME))
+        shutil.move(SONG, os.path.join(PATHS.SONG_DIR, SONG_NAME))
 
         return True
     except:
@@ -243,7 +247,7 @@ def main():
         sys.exit(0)
 
     PREPEND(1)
-    print('Downloading the song to ' + SONG_DIR)
+    print('Downloading the song to ' + PATHS.SONG_TEMP_DIR)
     if not GRAB_SONG(sys.argv[1]):
         PREPEND(2)
         print('Something went wrong while downloading!\a')

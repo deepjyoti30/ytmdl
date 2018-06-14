@@ -56,6 +56,8 @@ python ytmdl.py [URL] [TITLE]
 
 ```
 
+_The default directory is $HOME/Music. It can be changed by editing the config file in $HOME/Music/ytmdl_
+
 ## Acknowledgements
 
  * Inspired from <a href = https://github.com/tterb/yt2mp3>https://github.com/tterb/yt2mp3</a>
