@@ -8,6 +8,10 @@
 
 ### Pass the url and the song name. Yeah, thats it.
 
+#### ytmdl in action
+
+[![screenshot](https://i.imgur.com/YnaVTLU.png)](https://i.imgur.com/YnaVTLU.png)
+
 ## Prerequisites
 
  * Python 3.x
