@@ -6,7 +6,7 @@
 
 ### What you need to do?
 
-### Pass the url and the song name. Yeah, thats it.
+### Pass song name. Yeah, thats it.
 
 #### ytmdl in action
 
@@ -56,7 +56,7 @@ pip install -r requirements.txt
 ```sh
 
 # Move to directory first
-python ytmdl.py [URL] [TITLE]
+python ytmdl.py [TITLE]
 
 ```
 
