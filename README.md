@@ -64,6 +64,12 @@ python ytmdl.py [TITLE]
 
 #### The defaults can be changed by editing the config file in ytmdl folder in your Music Directory
 
+** _Please Run once with the default settings to start using the config_ **
+
+### OR
+
+** _Copy the config file from the ytmdl folder to your Music/ytmdl folder_ **
+
 ### Supported options to change are:
 
 | Name           |                                                    |

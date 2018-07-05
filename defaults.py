@@ -1,13 +1,17 @@
+"""Contains the definition of class DEFAULT."""
 from pathlib import Path
 import setupConfig
 import os
 
+
 class DEFAULT:
+    """DEFAULT class contains value of different paths."""
+
     # The home dir
     HOME_DIR = str(Path.home())
 
     # the directory where songs will be saved
-    SONG_DIR = setupConfig.retDEFAULT.GIVE_DEFAULT(1, 'SONG_DIR')
+    SONG_DIR = setupConfig.GIVE_DEFAULT(1, 'SONG_DIR')
 
     # the temp directory where songs will be modded
     SONG_TEMP_DIR = os.path.join(SONG_DIR, 'ytmdl')
@@ -19,4 +23,4 @@ class DEFAULT:
     COVER_IMG = os.path.join(SONG_TEMP_DIR, 'cover.jpg')
 
     # The song quality
-    SONG_QUALITY = setupConfig.retDEFAULT.GIVE_DEFAULT(1, 'QUALITY')
+    SONG_QUALITY = setupConfig.GIVE_DEFAULT(1, 'QUALITY')
