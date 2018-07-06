@@ -61,7 +61,7 @@ def search(querry, lim=5):
         search_url = search_tmplt.format(url)
         try:
             data = requests.get(search_url).json()
-        except:
+        except Exception:
             # If something was wrong, append the last result and return
             video.append(data)
             urls.append(url)

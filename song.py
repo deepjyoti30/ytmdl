@@ -1,4 +1,8 @@
-from colorama import init
+"""song.py - Used for song related functions.
+
+All the functions used to interact with the downloaded song are defined here.
+"""
+
 from colorama import Fore, Style
 from mutagen.id3 import ID3, APIC, TIT2, TPE1, TALB, TCON, TRCK, TYER
 from mutagen.mp3 import MP3
@@ -9,18 +13,20 @@ from print import PREPEND
 import glob
 import os
 
-#----------------------cover--------------------
+# ----------------------cover--------------------
+
 
 def dwCover(SONG_INFO, index):
+    """Download the song cover img from itunes."""
     # Try to download the cover art as cover.jpg in temp
     try:
         imgURL = SONG_INFO[index].artwork_url_100
         try:
             # Try to get 512 cover art
             imgURL = imgURL.replace('100x100', '2048x2048')
-        except:
+        except Exception:
             pass
-        
+
         r = requests.get(imgURL)
 
         with open(DEFAULT.COVER_IMG, 'wb') as f:
@@ -34,9 +40,11 @@ def dwCover(SONG_INFO, index):
     else:
         return False
 
-#-----------------------tag----------------------
+# -----------------------tag----------------------
+
 
 def getData(SONG_NAME):
+    """Try to download the metadata using itunespy."""
     # Try to get the song data from itunes
     try:
         SONG_INFO = itunespy.search_track(SONG_NAME)
@@ -54,7 +62,9 @@ def getData(SONG_NAME):
         print('Unknown Error!\a')
         return False
 
+
 def getChoice(SONG_INFO, type):
+    """If more than 1 result from getData then ask for a choice."""
     # Print 5 of the search results
     # In case less, print all
 
@@ -68,19 +78,19 @@ def getChoice(SONG_INFO, type):
         results = 5
 
     while count != results:
-        print(Fore.LIGHTMAGENTA_EX,end='')
-        print(' [' + str(count+1) + '] ',end='')
-        print(Style.RESET_ALL,end='')
-        print(Fore.LIGHTCYAN_EX,end='')
+        print(Fore.LIGHTMAGENTA_EX, end='')
+        print(' [' + str(count+1) + '] ', end='')
+        print(Style.RESET_ALL, end='')
+        print(Fore.LIGHTCYAN_EX, end='')
         if type == 'metadata':
-            print(SONG_INFO[count].track_name,end='')
+            print(SONG_INFO[count].track_name, end='')
         if type == 'mp3':
-            print(SONG_INFO[count]['title'],end='')
-        print(Style.RESET_ALL,end='')
-        print(' by ',end='')
-        print(Fore.YELLOW,end='')
+            print(SONG_INFO[count]['title'], end='')
+        print(Style.RESET_ALL, end='')
+        print(' by ', end='')
+        print(Fore.YELLOW, end='')
         if type == 'metadata':
-            print(SONG_INFO[count].artist_name,end='')
+            print(SONG_INFO[count].artist_name, end='')
         if type == 'mp3':
             print(SONG_INFO[count]['author_name'], end='')
         print(Style.RESET_ALL)
@@ -97,7 +107,9 @@ def getChoice(SONG_INFO, type):
     choice -= 1
     return choice
 
+
 def setData(SONG_INFO, is_quiet):
+    """Add the metadata to the song."""
     # A variable to see if cover image was added.
     IS_IMG_ADDED = False
 
@@ -108,7 +120,7 @@ def setData(SONG_INFO, is_quiet):
         else:
             option = 0
 
-        SONG_PATH = glob.glob(os.path.join(DEFAULT.SONG_TEMP_DIR,'*mp3'))
+        SONG_PATH = glob.glob(os.path.join(DEFAULT.SONG_TEMP_DIR, '*mp3'))
 
         audio = MP3(SONG_PATH[0], ID3=ID3)
         data = ID3(SONG_PATH[0])
@@ -129,7 +141,7 @@ def setData(SONG_INFO, is_quiet):
         # If tags are not present then add them
         try:
             audio.add_tags()
-        except:
+        except Exception:
             pass
 
         audio.save()
@@ -148,8 +160,8 @@ def setData(SONG_INFO, is_quiet):
         DEFAULT.SONG_NAME_TO_SAVE = SONG_INFO[option].track_name + '.mp3'
 
         # Rename the downloaded file
-        os.rename(SONG_PATH[0], os.path.join(DEFAULT.SONG_TEMP_DIR, DEFAULT.SONG_NAME_TO_SAVE))
-
+        os.rename(SONG_PATH[0], os.path.join(DEFAULT.SONG_TEMP_DIR,
+                                             DEFAULT.SONG_NAME_TO_SAVE))
 
         # Show the written stuff in a better format
         PREPEND(1)
@@ -168,5 +180,5 @@ def setData(SONG_INFO, is_quiet):
         print('================================')
 
         return True
-    except:
+    except Exception:
         return False
