@@ -135,8 +135,6 @@ def setData(SONG_INFO, is_quiet):
             os.remove(DEFAULT.COVER_IMG)
 
             IS_IMG_ADDED = True
-        else:
-            pass
 
         # If tags are not present then add them
         try:
