@@ -38,6 +38,8 @@ def arguments():
                         if more than one search result.\
                         The first result in each case will be considered.",
                         action='store_true')
+    parser.add_argument('--url',
+                        help="Youtube song link.")
 
     args = parser.parse_args()
 
@@ -54,7 +56,7 @@ def cleanup():
         shutil.move(SONG, os.path.join(DEFAULT.SONG_DIR, SONG_NAME))
 
         return True
-    except:
+    except Exception:
         return False
 
 # -----------------------------------------------
@@ -65,26 +67,40 @@ def main():
     args = arguments()
     song_name = args.SONG_NAME
     is_quiet = args.quiet
+    url = args.url
 
-    if is_quiet:
-        PREPEND(1)
-        print('Quiet is enabled')
+    # If the url is passed then get the data
+    if url != 'None':
+        data = []
+        # Get video data from youtube
+        temp_data = yt.scan_video(yt.get_href(url))
+        data.append(temp_data)
 
-    PREPEND(1)
-    print('Searching Youtube for ', end='')
-    print(Fore.LIGHTYELLOW_EX, end='')
-    print(song_name, end='')
-    print(Style.RESET_ALL)
+        # link to dw the song
+        link = url
 
-    data, urls = yt.search(song_name)
-
-    if len(data) > 1 and not is_quiet:
-        # Ask for a choice
-        choice = song.getChoice(data, 'mp3')
-    else:
+        # In this case choice will be 0
         choice = 0
+    else:
+        if is_quiet:
+            PREPEND(1)
+            print('Quiet is enabled')
 
-    link = 'https://youtube.com{}'.format(urls[int(choice)])
+        PREPEND(1)
+        print('Searching Youtube for ', end='')
+        print(Fore.LIGHTYELLOW_EX, end='')
+        print(song_name, end='')
+        print(Style.RESET_ALL)
+
+        data, urls = yt.search(song_name)
+
+        if len(data) > 1 and not is_quiet:
+            # Ask for a choice
+            choice = song.getChoice(data, 'mp3')
+        else:
+            choice = 0
+
+        link = 'https://youtube.com{}'.format(urls[int(choice)])
 
     PREPEND(1)
     print('Downloading ', end='')

@@ -37,6 +37,15 @@ video = []
 urls = []
 
 
+def get_href(url):
+    """Get the watch? part of the url in case of urls."""
+    pos_watch = url.index('/watch?v=')
+
+    part = url[pos_watch:]
+
+    return part
+
+
 def search(querry, lim=5):
     """Search the querry in youtube and return lim number of results.
 
@@ -46,7 +55,6 @@ def search(querry, lim=5):
     # Replace all the spaces with +
     querry = querry.replace(' ', '+')
 
-    search_tmplt = "http://www.youtube.com/oembed?url={}&format=json"
     url = "https://www.youtube.com/results?search_query={}".format(querry)
 
     response = urlopen(url)
@@ -58,9 +66,9 @@ def search(querry, lim=5):
             break
 
         url = vid['href']
-        search_url = search_tmplt.format(url)
+
         try:
-            data = requests.get(search_url).json()
+            data = scan_video(url)
         except Exception:
             # If something was wrong, append the last result and return
             video.append(data)
@@ -71,3 +79,12 @@ def search(querry, lim=5):
         urls.append(url)
         count += 1
     return (video, urls)
+
+
+def scan_video(url):
+    """Scan the link of the video and return data and."""
+    search_tmplt = "http://www.youtube.com/oembed?url={}&format=json"
+    search_url = search_tmplt.format(url)
+    data = requests.get(search_url).json()
+
+    return data
