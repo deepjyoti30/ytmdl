@@ -11,10 +11,7 @@
 """
 
 from __future__ import unicode_literals
-import os
-import glob
 import sys
-import shutil
 from colorama import init
 from colorama import Fore, Style
 import argparse
@@ -22,6 +19,8 @@ from print import PREPEND
 from defaults import DEFAULT
 import song
 import yt
+import dir
+import os
 
 # init colorama for windows
 init()
@@ -46,22 +45,6 @@ def arguments():
     return args
 
 
-def cleanup():
-    """Move the song from temp to $HOME/Music dir."""
-    try:
-        SONG = glob.glob(os.path.join(DEFAULT.SONG_TEMP_DIR, '*mp3'))
-        SONG = SONG[0]
-
-        SONG_NAME = os.path.basename(SONG)
-        shutil.move(SONG, os.path.join(DEFAULT.SONG_DIR, SONG_NAME))
-
-        return True
-    except Exception:
-        return False
-
-# -----------------------------------------------
-
-
 def main():
     """Run on program call."""
     args = arguments()
@@ -70,7 +53,7 @@ def main():
     url = args.url
 
     # If the url is passed then get the data
-    if url != 'None':
+    if url is not None:
         data = []
         # Get video data from youtube
         temp_data = yt.scan_video(yt.get_href(url))
@@ -127,7 +110,7 @@ def main():
     if TRACK_INFO is False:
         PREPEND(2)
         print('Exiting now!\a')
-        cleanup()
+        dir.cleanup()
         sys.exit(0)
     elif len(TRACK_INFO) == 0:
         PREPEND(2)
@@ -148,7 +131,7 @@ def main():
     PREPEND(1)
     print('Moving to Music directory...')
 
-    if not cleanup():
+    if not dir.cleanup(TRACK_INFO, choice):
         PREPEND(2)
         print('Something went wrong while moving!\a')
         sys.exit(0)

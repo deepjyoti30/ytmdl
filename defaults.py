@@ -14,7 +14,7 @@ class DEFAULT:
     SONG_DIR = setupConfig.GIVE_DEFAULT(1, 'SONG_DIR')
 
     # the temp directory where songs will be modded
-    SONG_TEMP_DIR = os.path.join(SONG_DIR, 'ytmdl')
+    SONG_TEMP_DIR = os.path.join(HOME_DIR, 'Music', 'ytmdl')
 
     # The name that the song will be saved with
     SONG_NAME_TO_SAVE = ''

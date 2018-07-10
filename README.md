@@ -1,20 +1,26 @@
 # YouTube Music Downloader
 
-## Description
-
-### A simple cross platform script that gets the song from YouTube and the metadata from itunes.
-
-### What you need to do?
-
-### Pass song name. Yeah, thats it.
-
 #### ytmdl in action
 
 [![screenshot](https://i.imgur.com/whdtw8l.png)](https://i.imgur.com/whdtw8l.png)
 
+1. [Prerequisites](#prerequisites)
+2. [Important](#important)
+3. [Setup](#setup)
+4. [Usage](#usage)
+5. [Change Defaults](#change-defaults)
+6. [Acknowledgements](#acknowledgements)
+
 ## Prerequisites
 
  * Python 3.x
+
+## Important
+#### _After every clone please run the following in order to update the config file with the changes._
+
+```sh
+python setupConfig.py
+```
 
 ## Setup
 
@@ -31,6 +37,9 @@ cd ytmdl
 
 # Install dependencies.
 pip install -r requirements.txt
+
+# Copy the config
+python setupConfig.py
 ```
 
 ### Windows
@@ -42,6 +51,9 @@ pip install -r requirements.txt
 
  ```sh
     pip install -r requirements.txt
+
+    # Copy the config
+    python setupConfig.py
 ```
 
  * Download a zip from <a href = https://ffmpeg.zeranoe.com/>here.</a>
@@ -72,18 +84,37 @@ optional arguments:
 
 #### The defaults can be changed by editing the config file in ytmdl folder in your Music Directory
 
-** _Please Run once with the default settings to start using the config_ **
-
-### OR
-
-** _Copy the config file from the ytmdl folder to your Music/ytmdl folder_ **
-
 ### Supported options to change are:
 
 | Name           |                                                    |
 |:--------------:|----------------------------------------------------|
 | `SONG_DIR`     | Directory to save the songs in after editing       |
 | `SONG_QUALITY` | Quality of the song                                |
+
+#### SONG_DIR now takes values that are extracted from the song
+##### Example format is `/your/desired/path$Album->Artist->Title` to save in the following way
+
+```sh
+|--your
+    |--desired
+           |--path
+                |--Album
+                        |--Artist
+                                |--Title
+                                    |--Song.mp3
+```
+
+Supported options are:
+
+| Name          |                               |
+|:-------------:|-------------------------------|
+| `Artist`      | Artist Of the Song            |
+| `Album`       | Album Of the Song             |
+| `Title`       | Title Of the Song             |
+| `Genre`       | Genre Of the Song             |
+| `TrackNumber` | TrackNumber Of the Song       |
+| `ReleaseDate` | ReleaseDate Of the Song       |
+
 
 ## Acknowledgements
 

@@ -21,10 +21,6 @@ class DEFAULTS:
     SONG_QUALITY = '320'
 
 
-# Possible values that QUALITY can take
-possibleQualities = ['320', '192']
-
-
 def checkConfig():
     """Need to check the config to see if defaults are changed.
 
@@ -52,12 +48,21 @@ def checkConfig():
 def checkExistence(keyword, value):
     """Check if the user specified value in config is possible."""
     if keyword == 'SONG_DIR':
+        # In this case check if $ and -> are presnt
+        # If they are then only check if the base dir exists
+        if '$' in value and '->' in value:
+            pos = value.find('$')
+            value = value[:pos]
+
         if os.path.isdir(value):
             return True
         else:
             return False
     elif keyword == 'QUALITY':
-        if value in possibleQualities:
+        # Possible values that QUALITY can take
+        possQ = ['320', '192']
+
+        if value in possQ:
             return True
         else:
             return False
@@ -92,9 +97,25 @@ def GIVE_DEFAULT(self, keyword):
                 line = line.replace(' ', '')
                 # Remove the "
                 line = line.replace('"', '')
+                # Check if the line has a \n in it
+                if "\n" in line:
+                    line = line.replace('\n', '')
+
                 newDEFAULT = line[line.index('=') + 1:]
-                # Before returning check the value
+
                 if checkExistence(keyword, newDEFAULT):
                     return newDEFAULT
                 else:
                     return retDefault(keyword)
+
+
+if __name__ == '__main__':
+    # Remove the current config from SONG_TEMP_DIR
+    config_path = os.path.join(DEFAULTS.SONG_TEMP_DIR, 'config')
+    if os.path.isfile(config_path):
+        os.remove(config_path)
+
+    # Now copy the current one to that
+    shutil.copy('config', config_path)
+
+    exit(0)
