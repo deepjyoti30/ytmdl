@@ -10,7 +10,7 @@
 
 #### ytmdl in action
 
-[![screenshot](https://i.imgur.com/YnaVTLU.png)](https://i.imgur.com/YnaVTLU.png)
+[![screenshot](https://i.imgur.com/whdtw8l.png)](https://i.imgur.com/whdtw8l.png)
 
 ## Prerequisites
 
