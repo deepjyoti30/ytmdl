@@ -62,8 +62,9 @@ positional arguments:
 
 optional arguments:
   -h, --help   show this help message and exit
-  -q, --quiet  Don't ask the user to select songs if more than one search
+  -q, --quiet  Do not ask the user to select songs if more than one search
                result. The first result in each case will be considered.
+  --url URL    Youtube song link.
 
 ```
 
