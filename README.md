@@ -55,8 +55,15 @@ pip install -r requirements.txt
 
 ```sh
 
-# Move to directory first
-python ytmdl.py [TITLE]
+usage: ytmdl.py [-h] [-q] SONG_NAME
+
+positional arguments:
+  SONG_NAME    Name of the song to download.
+
+optional arguments:
+  -h, --help   show this help message and exit
+  -q, --quiet  Don't ask the user to select songs if more than one search
+               result. The first result in each case will be considered.
 
 ```
 
