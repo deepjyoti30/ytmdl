@@ -93,17 +93,22 @@ def GIVE_DEFAULT(self, keyword):
             if not line:
                 return retDefault(keyword)
             if line[0] != '#' and keyword in line:
-                # Remove all the spaces
-                line = line.replace(' ', '')
+                # Get the position of =
+                index_equal = line.index('=')
+                if line[index_equal + 1] == ' ':
+                    newDEFAULT = line[index_equal + 2:]
+                else:
+                    newDEFAULT = line[index_equal + 1:]
+
                 # Remove the "
-                line = line.replace('"', '')
+                newDEFAULT = newDEFAULT.replace('"', '')
                 # Check if the line has a \n in it
                 if "\n" in line:
-                    line = line.replace('\n', '')
+                    newDEFAULT = newDEFAULT.replace('\n', '')
 
-                newDEFAULT = line[line.index('=') + 1:]
-
+                input(newDEFAULT)
                 if checkExistence(keyword, newDEFAULT):
+                    input(newDEFAULT)
                     return newDEFAULT
                 else:
                     return retDefault(keyword)

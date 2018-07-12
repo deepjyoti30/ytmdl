@@ -90,7 +90,7 @@ def main():
     print(Fore.LIGHTMAGENTA_EX, end='')
     print(data[choice]['title'], end=' ')
     print(Style.RESET_ALL, end='')
-    print('to ' + DEFAULT.SONG_TEMP_DIR + ' in', end=' ')
+    print('in', end=' ')
     print(Fore.LIGHTYELLOW_EX, end='')
     print(DEFAULT.SONG_QUALITY + 'kbps', end='')
     print(Style.RESET_ALL)
@@ -128,16 +128,19 @@ def main():
         print('Something went wrong while writing data!\a')
         sys.exit(0)
 
-    PREPEND(1)
-    print('Moving to Music directory...')
+    # Get the directory where song is moved
 
-    if not dir.cleanup(TRACK_INFO, choice):
+    DIR = dir.cleanup(TRACK_INFO, choice)
+    PREPEND(1)
+    print('Moving to {}...'.format(DIR))
+
+    if not DIR:
         PREPEND(2)
         print('Something went wrong while moving!\a')
         sys.exit(0)
     else:
         PREPEND(1)
-        print('Done!')
+        print('Done')
 
 
 main()

@@ -23,7 +23,7 @@ def cleanup(TRACK_INFO, index):
             DIR = make_custom_dir(DIR, TRACK_INFO[index])
         shutil.move(SONG, os.path.join(DIR, SONG_NAME))
 
-        return True
+        return DIR
     except Exception:
         return False
 
