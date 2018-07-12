@@ -117,9 +117,7 @@ def GIVE_DEFAULT(self, keyword):
                 if "\n" in line:
                     newDEFAULT = newDEFAULT.replace('\n', '')
 
-                input(newDEFAULT)
                 if checkExistence(keyword, newDEFAULT):
-                    input(newDEFAULT)
                     return newDEFAULT
                 else:
                     return retDefault(keyword)
