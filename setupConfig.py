@@ -97,7 +97,7 @@ def GIVE_DEFAULT(self, keyword):
         return False
     else:
         # Then read from it
-        READ_STREAM = open(os.path.join(DEFAULTS.SONG_TEMP_DIR, 'config'), 'r')
+        READ_STREAM = open(os.path.join(DEFAULTS.CONFIG_PATH, 'config'), 'r')
 
         while True:
             line = READ_STREAM.readline()
