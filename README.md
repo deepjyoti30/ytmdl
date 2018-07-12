@@ -82,7 +82,7 @@ optional arguments:
 
 ## Change Defaults
 
-#### The defaults can be changed by editing the config file in ytmdl folder in your Music Directory
+#### The defaults can be changed by editing the config file in ytmdl folder in your .config folder
 
 ### Supported options to change are:
 

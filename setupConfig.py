@@ -20,27 +20,38 @@ class DEFAULTS:
     # The default song quality
     SONG_QUALITY = '320'
 
+    # The config path
+    CONFIG_PATH = os.path.join(Path.home(), '.config', 'ytmdl')
+
+
+def make_config():
+    """Copy the config file to .config folder."""
+    # Remove the current config from SONG_TEMP_DIR
+    config_path = os.path.join(DEFAULTS.CONFIG_PATH, 'config')
+
+    # Check if the ytmdl folder is present in config
+    if not os.path.isdir(DEFAULTS.CONFIG_PATH):
+        # Make the ytmdl folder
+        os.mkdir(DEFAULTS.CONFIG_PATH)
+    elif os.path.isfile(config_path):
+        os.remove(config_path)
+
+    # Now copy the current one to that
+    shutil.copy('config', config_path)
+
 
 def checkConfig():
     """Need to check the config to see if defaults are changed.
 
-    The config will be saved in the ytmdl directory in Music.
+    The config will be saved in the .config folder.
     """
     # Try to see if the config is present in the SONG_TEMP_DIR
 
-    DIR_CONTENTS = os.listdir(DEFAULTS.SONG_TEMP_DIR)
+    DIR_CONTENTS = os.listdir(DEFAULTS.CONFIG_PATH)
 
     if 'config' not in DIR_CONTENTS:
-        # Copy the config file from the current dir to SONG_TEMP_DIR
-        try:
-            src = os.path.join(os.getcwd(), 'config')
-            dst = os.path.join(DEFAULTS.SONG_TEMP_DIR, 'config')
-
-            shutil.copy(src, dst)
-
-            return True
-        except:
-            return False
+        make_config()
+        return True
     else:
         return True
 
@@ -115,12 +126,5 @@ def GIVE_DEFAULT(self, keyword):
 
 
 if __name__ == '__main__':
-    # Remove the current config from SONG_TEMP_DIR
-    config_path = os.path.join(DEFAULTS.SONG_TEMP_DIR, 'config')
-    if os.path.isfile(config_path):
-        os.remove(config_path)
-
-    # Now copy the current one to that
-    shutil.copy('config', config_path)
-
+    make_config()
     exit(0)
