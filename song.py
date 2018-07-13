@@ -112,10 +112,13 @@ def getChoice(SONG_INFO, type):
     if results > 5:
         results = 5
 
+    PRINT_WHOLE = True
+
     beg = 0
     while True:
         # Print the results first
-        print_choice(beg, results, SONG_INFO, type)
+        if PRINT_WHOLE:
+            print_choice(beg, results, SONG_INFO, type)
         PREPEND(1)
         choice = input('Enter Choice [a valid choice] ')
         choice = int(choice)
@@ -123,8 +126,11 @@ def getChoice(SONG_INFO, type):
         if choice <= results and choice > 0:
             break
         elif choice == 0:
+            PRINT_WHOLE = True
             beg = results
             results = beg + 5
+        else:
+            PRINT_WHOLE = False
 
     choice = int(choice)
     choice -= 1
