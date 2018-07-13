@@ -3,7 +3,6 @@
 #### ytmdl in action
 
 <p align="right">
-  <!--<a href="https://pypi.python.org/pypi/ytmdl/"><img src="https://img.shields.io/pypi/status/ytmdl.svg" alt="PyPI status"/></a> -->
   <a href="https://pypi.python.org/pypi/ytmdl/"><img src="https://img.shields.io/pypi/v/ytmdl.svg" alt="PyPi Version"/></a>
   <a href="https://pypi.python.org/pypi/ytmdl/"><img src="https://pypip.in/py_versions/ytmdl/badge.svg" alt="PyPI Python Versions"/></a>
   <a href="https://github.com/deepjyoti30/ytmdl/blob/master/LICENSE"><img src="https://img.shields.io/github/license/deepjyoti30/ytmdl.svg" alt="License"/></a>
@@ -76,6 +75,7 @@ optional arguments:
   -h, --help   show this help message and exit
   -q, --quiet  Do not ask the user to select songs if more than one search
                result. The first result in each case will be considered.
+  --version    show the program version number and exit
   --url URL    Youtube song link.
   -s, --setup  Setup the config file
 
