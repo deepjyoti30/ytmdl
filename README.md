@@ -8,7 +8,7 @@
   <a href="https://github.com/deepjyoti30/ytmdl/blob/master/LICENSE"><img src="https://img.shields.io/github/license/deepjyoti30/ytmdl.svg" alt="License"/></a>
 </p>
 
-[![screenshot](https://i.imgur.com/whdtw8l.png)](https://i.imgur.com/whdtw8l.png)
+![GIF](https://i.imgur.com/IqrmHcV.gif)
 
 1. [Prerequisites](#prerequisites)
 2. [Important](#important)
