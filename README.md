@@ -2,6 +2,13 @@
 
 #### ytmdl in action
 
+<p align="right">
+  <!--<a href="https://pypi.python.org/pypi/ytmdl/"><img src="https://img.shields.io/pypi/status/ytmdl.svg" alt="PyPI status"/></a> -->
+  <a href="https://pypi.python.org/pypi/ytmdl/"><img src="https://img.shields.io/pypi/v/ytmdl.svg" alt="PyPi Version"/></a>
+  <a href="https://pypi.python.org/pypi/ytmdl/"><img src="https://pypip.in/py_versions/ytmdl/badge.svg" alt="PyPI Python Versions"/></a>
+  <a href="https://github.com/deepjyoti30/ytmdl/blob/master/LICENSE"><img src="https://img.shields.io/github/license/deepjyoti30/ytmdl.svg" alt="License"/></a>
+</p>
+
 [![screenshot](https://i.imgur.com/whdtw8l.png)](https://i.imgur.com/whdtw8l.png)
 
 1. [Prerequisites](#prerequisites)
@@ -42,6 +49,7 @@ ytmdl -s
  * Run the following in cmd
 
  ```sh
+    # Install ytmdl
     pip install ytmdl
 
     # Copy the config

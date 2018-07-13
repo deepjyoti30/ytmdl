@@ -115,8 +115,7 @@ def main():
     if TRACK_INFO is False:
         prepend.PREPEND(2)
         print('Exiting now!\a')
-        dir.cleanup()
-        sys.exit(0)
+        exit(0)
     elif len(TRACK_INFO) == 0:
         prepend.PREPEND(2)
         print('No data was found!\a')
