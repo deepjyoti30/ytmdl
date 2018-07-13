@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """
     * ytmdl.py - A script to download songs.
 
@@ -15,12 +16,7 @@ import sys
 from colorama import init
 from colorama import Fore, Style
 import argparse
-from print import PREPEND
-from defaults import DEFAULT
-import song
-import yt
-import dir
-import os
+from ytmdl import dir, song, yt, defaults, prepend, setupConfig
 
 # init colorama for windows
 init()
@@ -31,7 +27,7 @@ def arguments():
     parser = argparse.ArgumentParser()
 
     parser.add_argument('SONG_NAME', help="Name of the song to download.",
-                        type=str)
+                        default=None, nargs='?', type=str)
     parser.add_argument('-q', '--quiet',
                         help="Don't ask the user to select songs\
                         if more than one search result.\
@@ -39,6 +35,9 @@ def arguments():
                         action='store_true')
     parser.add_argument('--url',
                         help="Youtube song link.")
+    parser.add_argument('-s', '--setup',
+                        help='Setup the config file',
+                        action='store_true')
 
     args = parser.parse_args()
 
@@ -48,6 +47,12 @@ def arguments():
 def main():
     """Run on program call."""
     args = arguments()
+
+    # Check if --setup is passed
+    if args.setup:
+        setupConfig.make_config()
+        exit(0)
+
     song_name = args.SONG_NAME
     is_quiet = args.quiet
     url = args.url
@@ -66,10 +71,10 @@ def main():
         choice = 0
     else:
         if is_quiet:
-            PREPEND(1)
+            prepend.PREPEND(1)
             print('Quiet is enabled')
 
-        PREPEND(1)
+        prepend.PREPEND(1)
         print('Searching Youtube for ', end='')
         print(Fore.LIGHTYELLOW_EX, end='')
         print(song_name, end='')
@@ -85,62 +90,63 @@ def main():
 
         link = 'https://youtube.com{}'.format(urls[int(choice)])
 
-    PREPEND(1)
+    prepend.PREPEND(1)
     print('Downloading ', end='')
     print(Fore.LIGHTMAGENTA_EX, end='')
     print(data[choice]['title'], end=' ')
     print(Style.RESET_ALL, end='')
     print('in', end=' ')
     print(Fore.LIGHTYELLOW_EX, end='')
-    print(DEFAULT.SONG_QUALITY + 'kbps', end='')
+    print(defaults.DEFAULT.SONG_QUALITY + 'kbps', end='')
     print(Style.RESET_ALL)
     if not yt.GRAB_SONG(link):
-        PREPEND(2)
+        prepend.PREPEND(2)
         print('Something went wrong while downloading!\a')
         sys.exit(0)
     else:
-        PREPEND(1)
+        prepend.PREPEND(1)
         print('Downloaded!')
 
-    PREPEND(1)
+    prepend.PREPEND(1)
     print('Getting song data...')
 
     TRACK_INFO = song.getData(song_name)
 
     if TRACK_INFO is False:
-        PREPEND(2)
+        prepend.PREPEND(2)
         print('Exiting now!\a')
         dir.cleanup()
         sys.exit(0)
     elif len(TRACK_INFO) == 0:
-        PREPEND(2)
+        prepend.PREPEND(2)
         print('No data was found!\a')
         sys.exit(0)
     else:
-        PREPEND(1)
+        prepend.PREPEND(1)
         print('Data downloaded!')
 
-    PREPEND(1)
+    prepend.PREPEND(1)
     print('Setting data...')
 
     if not song.setData(TRACK_INFO, is_quiet):
-        PREPEND(2)
+        prepend.PREPEND(2)
         print('Something went wrong while writing data!\a')
         sys.exit(0)
 
     # Get the directory where song is moved
 
     DIR = dir.cleanup(TRACK_INFO, choice)
-    PREPEND(1)
+    prepend.PREPEND(1)
     print('Moving to {}...'.format(DIR))
 
     if not DIR:
-        PREPEND(2)
+        prepend.PREPEND(2)
         print('Something went wrong while moving!\a')
         sys.exit(0)
     else:
-        PREPEND(1)
+        prepend.PREPEND(1)
         print('Done')
 
 
-main()
+if __name__ == '__main__':
+    main()

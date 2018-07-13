@@ -1,15 +1,60 @@
 """Functions used in setting up the config file are defined here."""
 
 import os
-from pathlib import Path
 import shutil
+
+config_text = '#*****************************************#\
+                #*-------------config for ytmdl ----------#\
+                #\
+                #-----------------------------------------#\
+                #------PLEASE DONT LEAVE ANY BLANK LINE---#\
+                #-----------------------------------------#\
+                #\
+                # To change defaults just remove the hash(#)\
+                # from thw beginning of the line.\
+                # The will be read as a single line comment.\
+                #\
+                #*****************************************\
+                # The SONG_DIR is the directory where all the songs will be saved.\
+                # In order to change it, simply remove the hash from beginning\
+                # And change the path to your desired one.\
+                # In case the path has spaces in in, include it in a " "\
+                # Following is a simple folder path example\
+                #\
+                #SONG_DIR = "path/to/your/desired/folder"\
+                #\
+                #************--------ADVANCED-------*********\
+                # If you want to save the song in custom folders than those can be\
+                # added to the name like the following example.\
+                # The possible values are following\
+                #\
+                # Artist --> Song Artist\
+                # Album  --> Song Album Name\
+                # Title  --> Song Name\
+                # Genre  --> Song Genre\
+                # TrackNumber --> Song Number in the album\
+                # ReleaseDate --> Song Release date\
+                #\
+                # Following is an example of the format\
+                #SONG_DIR = "/home/deepjyoti30/Music$Artist->Album->Title"\
+                #\
+                #*****************************************#\
+                # The QUALITY is the quality of the song in kbps\
+                # By default it is set to 320kbps\
+                # In case you want to change it to something else,\
+                # Uncomment the following line and change it\
+                #\
+                # Supported values are 320 and 192\
+                #\
+                #QUALITY = "320"\
+                #'
 
 
 class DEFAULTS:
     """Some default stuff defined."""
 
     # The home dir
-    HOME_DIR = str(Path.home())
+    HOME_DIR = os.path.expanduser('~')
 
     # The default song dir
     SONG_DIR = os.path.join(HOME_DIR, 'Music')
@@ -21,7 +66,7 @@ class DEFAULTS:
     SONG_QUALITY = '320'
 
     # The config path
-    CONFIG_PATH = os.path.join(Path.home(), '.config', 'ytmdl')
+    CONFIG_PATH = os.path.join(HOME_DIR, '.config', 'ytmdl')
 
 
 def make_config():
@@ -36,8 +81,9 @@ def make_config():
     elif os.path.isfile(config_path):
         os.remove(config_path)
 
-    # Now copy the current one to that
-    shutil.copy('config', config_path)
+    # Now write the config test to config file
+    with open(config_path, 'w') as write_config:
+        write_config.write(config_text)
 
 
 def checkConfig():
@@ -47,7 +93,10 @@ def checkConfig():
     """
     # Try to see if the config is present in the SONG_TEMP_DIR
 
-    DIR_CONTENTS = os.listdir(DEFAULTS.CONFIG_PATH)
+    if os.path.isdir(DEFAULTS.CONFIG_PATH):
+        DIR_CONTENTS = os.listdir(DEFAULTS.CONFIG_PATH)
+    else:
+        return False
 
     if 'config' not in DIR_CONTENTS:
         make_config()
@@ -94,7 +143,7 @@ def GIVE_DEFAULT(self, keyword):
     """
     # Check If the config is already present in SONG_TEMP_DIR
     if not checkConfig():
-        return False
+        return retDefault(keyword)
     else:
         # Then read from it
         READ_STREAM = open(os.path.join(DEFAULTS.CONFIG_PATH, 'config'), 'r')

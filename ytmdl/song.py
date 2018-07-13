@@ -7,9 +7,8 @@ from colorama import Fore, Style
 from mutagen.id3 import ID3, APIC, TIT2, TPE1, TALB, TCON, TRCK, TYER
 from mutagen.mp3 import MP3
 import requests
-from defaults import DEFAULT
 import itunespy
-from print import PREPEND
+from ytmdl import prepend, defaults
 import glob
 import os
 
@@ -29,12 +28,12 @@ def dwCover(SONG_INFO, index):
 
         r = requests.get(imgURL)
 
-        with open(DEFAULT.COVER_IMG, 'wb') as f:
+        with open(defaults.DEFAULT.COVER_IMG, 'wb') as f:
             f.write(r.content)
 
         return True
     except TimeoutError:
-        PREPEND(2)
+        prepend.PREPEND(2)
         print('Could not get album cover. Are you connected to internet?\a')
         return False
     else:
@@ -50,15 +49,15 @@ def getData(SONG_NAME):
         SONG_INFO = itunespy.search_track(SONG_NAME)
         return SONG_INFO
     except LookupError:
-        PREPEND(2)
+        prepend.PREPEND(2)
         print('Song not found!')
         return False
     except TimeoutError:
-        PREPEND(2)
+        prepend.PREPEND(2)
         print('Search timed out. Are you connected to internet?\a')
         return False
     else:
-        PREPEND(2)
+        prepend.PREPEND(2)
         print('Unknown Error!\a')
         return False
 
@@ -104,7 +103,7 @@ def getChoice(SONG_INFO, type):
     # Print 5 of the search results
     # In case less, print all
 
-    PREPEND(1)
+    prepend.PREPEND(1)
     print('Choose One')
 
     results = len(SONG_INFO)
@@ -119,7 +118,7 @@ def getChoice(SONG_INFO, type):
         # Print the results first
         if PRINT_WHOLE:
             print_choice(beg, results, SONG_INFO, type)
-        PREPEND(1)
+        prepend.PREPEND(1)
         choice = input('Enter Choice [a valid choice] ')
         choice = int(choice)
         # If the choice is 6 then try to print more results
@@ -149,19 +148,20 @@ def setData(SONG_INFO, is_quiet):
         else:
             option = 0
 
-        SONG_PATH = glob.glob(os.path.join(DEFAULT.SONG_TEMP_DIR, '*mp3'))
+        SONG_PATH = glob.glob(os.path.join(defaults.DEFAULT.SONG_TEMP_DIR,
+                                           '*mp3'))
 
         audio = MP3(SONG_PATH[0], ID3=ID3)
         data = ID3(SONG_PATH[0])
 
         # Download the cover image, if failed, pass
         if dwCover(SONG_INFO, option):
-            imagedata = open(DEFAULT.COVER_IMG, 'rb').read()
+            imagedata = open(defaults.DEFAULT.COVER_IMG, 'rb').read()
 
             data.add(APIC(3, 'image/jpeg', 3, 'Front cover', imagedata))
 
             # REmove the image
-            os.remove(DEFAULT.COVER_IMG)
+            os.remove(defaults.DEFAULT.COVER_IMG)
 
             IS_IMG_ADDED = True
 
@@ -184,14 +184,14 @@ def setData(SONG_INFO, is_quiet):
 
         data.save()
 
-        DEFAULT.SONG_NAME_TO_SAVE = SONG_INFO[option].track_name + '.mp3'
+        defaults.DEFAULT.SONG_NAME_TO_SAVE = SONG_INFO[option].track_name + '.mp3'
 
         # Rename the downloaded file
-        os.rename(SONG_PATH[0], os.path.join(DEFAULT.SONG_TEMP_DIR,
-                                             DEFAULT.SONG_NAME_TO_SAVE))
+        os.rename(SONG_PATH[0], os.path.join(defaults.DEFAULT.SONG_TEMP_DIR,
+                                             defaults.DEFAULT.SONG_NAME_TO_SAVE))
 
         # Show the written stuff in a better format
-        PREPEND(1)
+        prepend.PREPEND(1)
         print('================================')
         print('  || YEAR: ' + SONG_INFO[option].release_date)
         print('  || TITLE: ' + SONG_INFO[option].track_name)
@@ -203,7 +203,7 @@ def setData(SONG_INFO, is_quiet):
         if IS_IMG_ADDED:
             print('  || ALBUM COVER ADDED')
 
-        PREPEND(1)
+        prepend.PREPEND(1)
         print('================================')
 
         return True

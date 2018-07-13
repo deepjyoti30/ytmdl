@@ -5,7 +5,7 @@ import requests
 from bs4 import BeautifulSoup
 import os
 import youtube_dl
-from defaults import DEFAULT
+from ytmdl import defaults
 
 
 def GRAB_SONG(link):
@@ -13,11 +13,12 @@ def GRAB_SONG(link):
     ydl_opts = {
         'format': 'bestaudio',
         'quiet': True,
-        'outtmpl': os.path.join(DEFAULT.SONG_TEMP_DIR, '%(title)s.%(ext)s'),
+        'outtmpl': os.path.join(defaults.DEFAULT.SONG_TEMP_DIR,
+                                '%(title)s.%(ext)s'),
         'postprocessors': [{
             'key': 'FFmpegExtractAudio',
             'preferredcodec':  'mp3',
-            'preferredquality': DEFAULT.SONG_QUALITY
+            'preferredquality': defaults.DEFAULT.SONG_QUALITY
         }]
     }
 

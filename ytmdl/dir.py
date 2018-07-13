@@ -3,18 +3,18 @@
 import os
 import glob
 import shutil
-from defaults import DEFAULT
+from ytmdl import defaults
 
 
 def cleanup(TRACK_INFO, index):
     """Move the song from temp to $HOME/Music dir."""
     try:
-        SONG = glob.glob(os.path.join(DEFAULT.SONG_TEMP_DIR, '*mp3'))
+        SONG = glob.glob(os.path.join(defaults.DEFAULT.SONG_TEMP_DIR, '*mp3'))
         SONG = SONG[0]
 
         SONG_NAME = os.path.basename(SONG)
 
-        DIR = DEFAULT.SONG_DIR
+        DIR = defaults.DEFAULT.SONG_DIR
 
         # Check if DIR has $ in its path
         # If it does then make those folders accordingly

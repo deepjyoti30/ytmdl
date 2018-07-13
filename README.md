@@ -16,10 +16,10 @@
  * Python 3.x
 
 ## Important
-#### _After every clone please run the following in order to update the config file with the changes._
+#### _After every update run the following._
 
 ```sh
-python setupConfig.py
+ytmdl -s
 ```
 
 ## Setup
@@ -29,31 +29,23 @@ python setupConfig.py
 Run the following commands from you terminal  
 
 ```sh
-# Clone the repo
-git clone https://github.com/deepjyoti30/ytmdl
+# Install ytmdl
+sudo pip install ytmdl
 
-# Go to the directory
-cd ytmdl
-
-# Install dependencies.
-pip install -r requirements.txt
-
-# Copy the config
-python setupConfig.py
+# Setup the config file
+ytmdl -s
 ```
 
 ### Windows
 
 
- * Download the zip and extract it.
-
- * Open cmd in the extracted folder and run the following command
+ * Run the following in cmd
 
  ```sh
-    pip install -r requirements.txt
+    pip install ytmdl
 
     # Copy the config
-    python setupConfig.py
+    ytmdl -s
 ```
 
  * Download a zip from <a href = https://ffmpeg.zeranoe.com/>here.</a>
@@ -77,6 +69,7 @@ optional arguments:
   -q, --quiet  Do not ask the user to select songs if more than one search
                result. The first result in each case will be considered.
   --url URL    Youtube song link.
+  -s, --setup  Setup the config file
 
 ```
 
