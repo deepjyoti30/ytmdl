@@ -63,6 +63,42 @@ def getData(SONG_NAME):
         return False
 
 
+def print_choice(beg, end, SONG_INFO, type):
+    """Print the available choices."""
+    # Check if end is more than length of SONG_INFO
+    if end > len(SONG_INFO):
+        end = len(SONG_INFO)
+
+    while beg != end:
+        print(Fore.LIGHTMAGENTA_EX, end='')
+        print(' [' + str(beg+1) + '] ', end='')
+        print(Style.RESET_ALL, end='')
+        print(Fore.LIGHTCYAN_EX, end='')
+        if type == 'metadata':
+            print(SONG_INFO[beg].track_name, end='')
+        if type == 'mp3':
+            print(SONG_INFO[beg]['title'], end='')
+        print(Style.RESET_ALL, end='')
+        print(' by ', end='')
+        print(Fore.YELLOW, end='')
+        if type == 'metadata':
+            print(SONG_INFO[beg].artist_name, end='')
+        if type == 'mp3':
+            print(SONG_INFO[beg]['author_name'], end='')
+        print(Style.RESET_ALL)
+
+        beg += 1
+
+    # Before exiting print another choice to show more
+    if end < len(SONG_INFO):
+        print(Fore.LIGHTMAGENTA_EX, end='')
+        print(' [0]', end='')
+        print(Style.RESET_ALL, end='')
+        print(Fore.YELLOW, end='')
+        print(' More results')
+        print(Style.RESET_ALL, end='')
+
+
 def getChoice(SONG_INFO, type):
     """If more than 1 result from getData then ask for a choice."""
     # Print 5 of the search results
@@ -72,36 +108,23 @@ def getChoice(SONG_INFO, type):
     print('Choose One')
 
     results = len(SONG_INFO)
-    count = 0
 
     if results > 5:
         results = 5
 
-    while count != results:
-        print(Fore.LIGHTMAGENTA_EX, end='')
-        print(' [' + str(count+1) + '] ', end='')
-        print(Style.RESET_ALL, end='')
-        print(Fore.LIGHTCYAN_EX, end='')
-        if type == 'metadata':
-            print(SONG_INFO[count].track_name, end='')
-        if type == 'mp3':
-            print(SONG_INFO[count]['title'], end='')
-        print(Style.RESET_ALL, end='')
-        print(' by ', end='')
-        print(Fore.YELLOW, end='')
-        if type == 'metadata':
-            print(SONG_INFO[count].artist_name, end='')
-        if type == 'mp3':
-            print(SONG_INFO[count]['author_name'], end='')
-        print(Style.RESET_ALL)
-
-        count += 1
-
+    beg = 0
     while True:
+        # Print the results first
+        print_choice(beg, results, SONG_INFO, type)
         PREPEND(1)
         choice = input('Enter Choice [a valid choice] ')
-        if choice <= str(results + 1) and choice > str(0):
+        choice = int(choice)
+        # If the choice is 6 then try to print more results
+        if choice <= results and choice > 0:
             break
+        elif choice == 0:
+            beg = results
+            results = beg + 5
 
     choice = int(choice)
     choice -= 1
