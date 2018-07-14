@@ -44,15 +44,13 @@ ytmdl -s
 
 ### Windows
 
+ * Download the repo and extract it.
 
  * Run the following in cmd
 
  ```sh
-    # Install ytmdl
-    pip install ytmdl
-
     # Copy the config
-    ytmdl -s
+    python ytmdl.py -s
 ```
 
  * Download a zip from <a href = https://ffmpeg.zeranoe.com/>here.</a>
@@ -66,7 +64,7 @@ ytmdl -s
 
 ```sh
 
-usage: ytmdl.py [-h] [-q] SONG_NAME
+usage: ytmdl [-h] [-q] [--version] [--url URL] [-s] [SONG_NAME]
 
 positional arguments:
   SONG_NAME    Name of the song to download.
@@ -80,6 +78,8 @@ optional arguments:
   -s, --setup  Setup the config file
 
 ```
+
+_In case of windows, use ```python ytmdl.py``` instead of ```ytmdl``` above_
 
 ## Change Defaults
 
