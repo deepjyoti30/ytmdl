@@ -1,7 +1,6 @@
 """Functions used in setting up the config file are defined here."""
 
 import os
-import shutil
 
 config_text = '#*****************************************#\n\
 #*-------------config for ytmdl ----------#\n\
@@ -77,7 +76,7 @@ def make_config():
     # Check if the ytmdl folder is present in config
     if not os.path.isdir(DEFAULTS.CONFIG_PATH):
         # Make the ytmdl folder
-        os.mkdir(DEFAULTS.CONFIG_PATH)
+        os.mkdirs(DEFAULTS.CONFIG_PATH)
     elif os.path.isfile(config_path):
         os.remove(config_path)
 
