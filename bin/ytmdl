@@ -16,7 +16,7 @@ import sys
 from colorama import init
 from colorama import Fore, Style
 import argparse
-from ytmdl import dir, song, yt, defaults, prepend, setupConfig
+from ytmdl import dir, song, yt, defaults, prepend, setupConfig, cache
 
 # init colorama for windows
 init()
@@ -33,12 +33,16 @@ def arguments():
                         if more than one search result.\
                         The first result in each case will be considered.",
                         action='store_true')
-    parser.add_argument('--version', action='version', version='v0.1-r6',
+    parser.add_argument('--version', action='version', version='v0.1-r7',
                         help='show the program version number and exit')
     parser.add_argument('--url',
                         help="Youtube song link.")
     parser.add_argument('-s', '--setup',
                         help='Setup the config file',
+                        action='store_true')
+    parser.add_argument('--nolocal',
+                        help='Dont search locally for the song before\
+                        downloading.',
                         action='store_true')
 
     args = parser.parse_args()
@@ -49,13 +53,18 @@ def arguments():
 def main():
     """Run on program call."""
     args = arguments()
+    song_name = args.SONG_NAME
 
     # Check if --setup is passed
     if args.setup:
         setupConfig.make_config()
         exit(0)
 
-    song_name = args.SONG_NAME
+    if not args.nolocal:
+        # Search for the song locally
+        if not cache.main(song_name):
+            exit(0)
+
     is_quiet = args.quiet
     url = args.url
 

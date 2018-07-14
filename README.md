@@ -76,6 +76,7 @@ optional arguments:
   --version    show the program version number and exit
   --url URL    Youtube song link.
   -s, --setup  Setup the config file
+  --nolocal    Dont search locally for the song before downloading.
 
 ```
 
@@ -122,5 +123,7 @@ Supported options are:
  * Inspired from <a href = https://github.com/tterb/yt2mp3>https://github.com/tterb/yt2mp3</a>
 
  * Thanks to the developers of youtube-dl, itunespy, mutagen, colorama and Python.
+
+ * Thanks to <a href = https://github.com/NISH1001>Nishan Pantha</a> for search logic.
 
  * Thanks to <a href = https://github.com/biswaroop1547>Biswaroop</a> for testing in windows.

@@ -7,4 +7,5 @@ __all__ = ['ytmdl',
            'setupConfig',
            'song',
            'yt',
-           'config']
+           'cache',
+           'stringutils']
