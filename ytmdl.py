@@ -60,6 +60,12 @@ def main():
         setupConfig.make_config()
         exit(0)
 
+    # After this part song name is required
+    if song_name is None:
+        prepend.PREPEND(2)
+        print('Please pass a song name.')
+        exit(1)
+
     if not args.nolocal:
         # Search for the song locally
         if not cache.main(song_name):
