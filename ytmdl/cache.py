@@ -71,6 +71,8 @@ def main(SONG_NAME=''):
                 return True
             elif choice == 'n' or choice == 'N':
                 return False
+    else:
+        return True
 
 
 if __name__ == "__main__":
