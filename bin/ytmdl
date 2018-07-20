@@ -33,7 +33,7 @@ def arguments():
                         if more than one search result.\
                         The first result in each case will be considered.",
                         action='store_true')
-    parser.add_argument('--version', action='version', version='v0.1-r10',
+    parser.add_argument('--version', action='version', version='v0.1-r12',
                         help='show the program version number and exit')
     parser.add_argument('--url',
                         help="Youtube song link.")
@@ -144,14 +144,16 @@ def main():
     prepend.PREPEND(1)
     print('Setting data...')
 
-    if not song.setData(TRACK_INFO, is_quiet):
+    option = song.setData(TRACK_INFO, is_quiet)
+
+    if type(option) is not int:
         prepend.PREPEND(2)
         print('Something went wrong while writing data!\a')
         sys.exit(0)
 
     # Get the directory where song is moved
 
-    DIR = dir.cleanup(TRACK_INFO, choice)
+    DIR = dir.cleanup(TRACK_INFO, option)
     prepend.PREPEND(1)
     print('Moving to {}...'.format(DIR))
 
