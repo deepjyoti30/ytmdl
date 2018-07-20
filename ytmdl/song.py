@@ -206,6 +206,6 @@ def setData(SONG_INFO, is_quiet):
         prepend.PREPEND(1)
         print('================================')
 
-        return True
+        return option
     except Exception:
         return False

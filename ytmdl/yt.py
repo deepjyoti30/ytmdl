@@ -68,12 +68,9 @@ def search(querry, lim=5):
 
         url = vid['href']
 
-        try:
-            data = scan_video(url)
-        except Exception:
-            # If something was wrong, append the last result and return
-            video.append(data)
-            urls.append(url)
+        data = scan_video(url)
+
+        if not data:
             break
 
         video.append(data)
@@ -84,8 +81,11 @@ def search(querry, lim=5):
 
 def scan_video(url):
     """Scan the link of the video and return data and."""
-    search_tmplt = "http://www.youtube.com/oembed?url={}&format=json"
-    search_url = search_tmplt.format(url)
-    data = requests.get(search_url).json()
+    try:
+        search_tmplt = "http://www.youtube.com/oembed?url={}&format=json"
+        search_url = search_tmplt.format(url)
+        data = requests.get(search_url).json()
 
-    return data
+        return data
+    except Exception:
+        return False
