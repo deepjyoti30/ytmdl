@@ -7,7 +7,9 @@
 
 import glob
 import os
-from ytmdl.stringutils import get_closest_match_ignorecase
+from ytmdl.stringutils import (
+    remove_multiple_spaces, remove_punct, compute_jaccard, remove_stopwords
+)
 from ytmdl.defaults import DEFAULT
 from ytmdl.prepend import PREPEND
 from colorama import Fore, Style
@@ -48,20 +50,39 @@ class Cache:
         """Return full location of the song."""
         return self.directory + "/" + song_name
 
-    def search_fuzzy(self, song_name):
-        """Fuzzy search the song in the cache."""
+    def search(self, song_name):
+        return self._search_tokens(song_name)
+
+    def _search_tokens(self, song_name):
+        """Search song in the cache based on each word matching."""
+        song_name = remove_stopwords(remove_multiple_spaces(song_name).lower())
+        tokens1 = song_name.split()
         cached_songs = self.list_mp3()
-        return get_closest_match_ignorecase(cached_songs, song_name)
+
+        res = []
+        for song in cached_songs:
+            name = os.path.splitext(song)[0].lower()
+            title = name
+            name = remove_punct(name)
+            name = remove_multiple_spaces(name)
+            tokens2 = name.split()
+            dist = compute_jaccard(tokens1, tokens2)
+            res.append((song_name, song, title, dist))
+        res = sorted(res, key=lambda x: x[-1], reverse=True)
+        if res and res[0][-1] > 0:
+            return res[0][2], self.get_full_location(res[0][1])
+        else:
+            return None
 
 
 def main(SONG_NAME=''):
     """Run on program call."""
     cache = Cache("~/Music")
-    match = cache.search_fuzzy(SONG_NAME)
+    match = cache.search(SONG_NAME)
     if match is not None:
         PREPEND(1)
         print(Fore.MAGENTA, end='')
-        print('{} '.format(match), end='')
+        print('{} '.format(match[0]), end='')
         print(Style.RESET_ALL, end='')
         print('found.')
         while True:
