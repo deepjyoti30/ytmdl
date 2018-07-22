@@ -8,4 +8,5 @@ __all__ = ['ytmdl',
            'song',
            'yt',
            'cache',
-           'stringutils']
+           'stringutils',
+           'utility']

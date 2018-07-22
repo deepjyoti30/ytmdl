@@ -148,11 +148,11 @@ def setData(SONG_INFO, is_quiet):
         else:
             option = 0
 
-        SONG_PATH = glob.glob(os.path.join(defaults.DEFAULT.SONG_TEMP_DIR,
-                                           '*mp3'))
+        SONG_PATH = os.path.join(defaults.DEFAULT.SONG_TEMP_DIR,
+                                 'ytmdl_temp.mp3_new.mp3')
 
-        audio = MP3(SONG_PATH[0], ID3=ID3)
-        data = ID3(SONG_PATH[0])
+        audio = MP3(SONG_PATH, ID3=ID3)
+        data = ID3(SONG_PATH)
 
         # Download the cover image, if failed, pass
         if dwCover(SONG_INFO, option):
@@ -187,7 +187,7 @@ def setData(SONG_INFO, is_quiet):
         defaults.DEFAULT.SONG_NAME_TO_SAVE = SONG_INFO[option].track_name + '.mp3'
 
         # Rename the downloaded file
-        os.rename(SONG_PATH[0], os.path.join(defaults.DEFAULT.SONG_TEMP_DIR,
+        os.rename(SONG_PATH, os.path.join(defaults.DEFAULT.SONG_TEMP_DIR,
                                              defaults.DEFAULT.SONG_NAME_TO_SAVE))
 
         # Show the written stuff in a better format

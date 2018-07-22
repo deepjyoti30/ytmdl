@@ -16,7 +16,7 @@ import sys
 from colorama import init
 from colorama import Fore, Style
 import argparse
-from ytmdl import dir, song, yt, defaults, prepend, setupConfig, cache
+from ytmdl import dir, song, yt, defaults, prepend, setupConfig, cache, utility
 
 # init colorama for windows
 init()
@@ -33,7 +33,7 @@ def arguments():
                         if more than one search result.\
                         The first result in each case will be considered.",
                         action='store_true')
-    parser.add_argument('--version', action='version', version='v0.2-r2',
+    parser.add_argument('--version', action='version', version='v0.2-r3',
                         help='show the program version number and exit')
     parser.add_argument('--url',
                         help="Youtube song link.")
@@ -116,13 +116,22 @@ def main():
     print(Fore.LIGHTYELLOW_EX, end='')
     print(defaults.DEFAULT.SONG_QUALITY + 'kbps', end='')
     print(Style.RESET_ALL)
-    if not yt.GRAB_SONG(link):
+    path = yt.dw(link)
+
+    if not path:
         prepend.PREPEND(2)
         print('Something went wrong while downloading!\a')
         sys.exit(0)
     else:
         prepend.PREPEND(1)
         print('Downloaded!')
+
+    prepend.PREPEND(1)
+    print('Converting to mp3...')
+
+    if not utility.convert_to_mp3(path):
+        prepend.PREPEND(2)
+        print('Something went wrong while converting!\a')
 
     prepend.PREPEND(1)
     print('Getting song data...')

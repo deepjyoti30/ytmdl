@@ -5,7 +5,21 @@ import requests
 from bs4 import BeautifulSoup
 import os
 import youtube_dl
-from ytmdl import defaults
+from ytmdl import defaults, utility
+from shutil import copyfileobj
+
+
+def get_youtube_streams(url):
+    """Get both audio & vidoe stream urls for youtube using youtube-dl.
+
+    PS: I don't know how youtube-dl does the magic
+    """
+    cli = "youtube-dl -g {}".format(url)
+    output, error = utility.exe(cli)
+    stream_urls = output.split("\n")
+
+    url = stream_urls[1]
+    return url
 
 
 def GRAB_SONG(link):
@@ -31,6 +45,27 @@ def GRAB_SONG(link):
         print('Timed Out! Are you connected to internet?\a')
         return False
     else:
+        return False
+
+
+def dw(value):
+    """Download the song."""
+    try:
+        # Get the audio stream link
+        url = get_youtube_streams(value)
+
+        # Name of the temp file
+        name = os.path.join(defaults.DEFAULT.SONG_TEMP_DIR, 'ytmdl_temp.mp3')
+
+        # Start downloading the song
+        response = requests.get(url, stream=True)
+        with open(name, 'wb') as out_file:
+            copyfileobj(response.raw, out_file)
+
+        del response
+
+        return name
+    except Exception:
         return False
 
 
@@ -89,3 +124,7 @@ def scan_video(url):
         return data
     except Exception:
         return False
+
+
+if __name__ == '__main__':
+    print(defaults.DEFAULT.SONG_QUALITY)
