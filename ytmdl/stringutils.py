@@ -75,9 +75,15 @@ def remove_stopwords(string):
             res.append(token)
     return ' '.join(res)
 
+
+def check_keywords(tokens1, tokens2):
+    """Check if all the tokens from tokens1 is in tokens2 list."""
+    res = [token in tokens2 for token in tokens1]
+    return sum(res) == len(tokens1)
+
+
 def main():
     pass
 
 if __name__ == "__main__":
     main()
-

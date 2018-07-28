@@ -8,7 +8,8 @@
 import glob
 import os
 from ytmdl.stringutils import (
-    remove_multiple_spaces, remove_punct, compute_jaccard, remove_stopwords
+    remove_multiple_spaces, remove_punct, compute_jaccard, remove_stopwords,
+    check_keywords
 )
 from ytmdl.defaults import DEFAULT
 from ytmdl.prepend import PREPEND
@@ -54,7 +55,7 @@ class Cache:
         return self._search_tokens(song_name)
 
     def _search_tokens(self, song_name):
-        """Search song in the cache based on each word matching."""
+        """Search song in the cache based on simple each word matching."""
         song_name = remove_stopwords(remove_multiple_spaces(song_name).lower())
         tokens1 = song_name.split()
         cached_songs = self.list_mp3()
@@ -66,8 +67,10 @@ class Cache:
             name = remove_punct(name)
             name = remove_multiple_spaces(name)
             tokens2 = name.split()
-            dist = compute_jaccard(tokens1, tokens2)
-            res.append((song_name, song, title, dist))
+            match = check_keywords(tokens1, tokens2)
+            if match:
+                dist = compute_jaccard(tokens1, tokens2)
+                res.append((song_name, song, title, dist))
         res = sorted(res, key=lambda x: x[-1], reverse=True)
         if res and res[0][-1] > 0:
             return res[0][2], self.get_full_location(res[0][1])
