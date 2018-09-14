@@ -33,7 +33,7 @@ def arguments():
                         if more than one search result.\
                         The first result in each case will be considered.",
                         action='store_true')
-    parser.add_argument('--version', action='version', version='v0.2-r5',
+    parser.add_argument('--version', action='version', version='v0.2-r6',
                         help='show the program version number and exit')
     parser.add_argument('--url',
                         help="Youtube song link.")
@@ -107,16 +107,19 @@ def main():
 
         link = 'https://youtube.com{}'.format(urls[int(choice)])
 
+    # Declare a var to store the name of the yt video
+    yt_title = data[choice]['title']
+
     prepend.PREPEND(1)
     print('Downloading ', end='')
     print(Fore.LIGHTMAGENTA_EX, end='')
-    print(data[choice]['title'], end=' ')
+    print(yt_title, end=' ')
     print(Style.RESET_ALL, end='')
     print('in', end=' ')
     print(Fore.LIGHTYELLOW_EX, end='')
     print(defaults.DEFAULT.SONG_QUALITY + 'kbps', end='')
     print(Style.RESET_ALL)
-    path = yt.dw(link)
+    path = yt.dw(link, yt_title)
 
     if not path:
         prepend.PREPEND(2)
@@ -129,7 +132,9 @@ def main():
     prepend.PREPEND(1)
     print('Converting to mp3...')
 
-    if not utility.convert_to_mp3(path):
+    conv_name = utility.convert_to_mp3(path)
+
+    if not conv_name:
         prepend.PREPEND(2)
         print('Something went wrong while converting!\a')
 
@@ -153,7 +158,7 @@ def main():
     prepend.PREPEND(1)
     print('Setting data...')
 
-    option = song.setData(TRACK_INFO, is_quiet)
+    option = song.setData(TRACK_INFO, is_quiet, conv_name)
 
     if type(option) is not int:
         prepend.PREPEND(2)

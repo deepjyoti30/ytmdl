@@ -48,14 +48,21 @@ def GRAB_SONG(link):
         return False
 
 
-def dw(value):
+def dw(value, song_name='ytmdl_temp.mp3'):
     """Download the song."""
     try:
         # Get the audio stream link
         url = get_youtube_streams(value)
 
+        # If song_name doesnt have mp3 extension, add it
+        if not song_name.endswith(',mp3'):
+            song_name += '.mp3'
+
+        # Replace the spaces with hashes
+        song_name = song_name.replace(' ', '#')
+
         # Name of the temp file
-        name = os.path.join(defaults.DEFAULT.SONG_TEMP_DIR, 'ytmdl_temp.mp3')
+        name = os.path.join(defaults.DEFAULT.SONG_TEMP_DIR, song_name)
 
         # Start downloading the song
         response = requests.get(url, stream=True)

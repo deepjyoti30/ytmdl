@@ -136,7 +136,7 @@ def getChoice(SONG_INFO, type):
     return choice
 
 
-def setData(SONG_INFO, is_quiet):
+def setData(SONG_INFO, is_quiet, song_path):
     """Add the metadata to the song."""
     # A variable to see if cover image was added.
     IS_IMG_ADDED = False
@@ -149,7 +149,7 @@ def setData(SONG_INFO, is_quiet):
             option = 0
 
         SONG_PATH = os.path.join(defaults.DEFAULT.SONG_TEMP_DIR,
-                                 'ytmdl_temp.mp3_new.mp3')
+                                 song_path)
 
         audio = MP3(SONG_PATH, ID3=ID3)
         data = ID3(SONG_PATH)

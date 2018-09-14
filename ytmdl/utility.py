@@ -22,12 +22,16 @@ def exe(command):
 
 def convert_to_mp3(path):
     """Convert the file to mp3 using ffmpeg."""
-    new_name = path + '_new.mp3'
-    command = "ffmpeg -loglevel panic -i {} -vn -ar 44100 -ac 2 -ab {}k -f mp3 {}".format(path,
-                                                                                         defaults.DEFAULT.SONG_QUALITY,
-                                                                                          new_name)
-    output, error = exe(command)
+    try:
+        new_name = path + '_new.mp3'
 
-    # Delete the temp file now
-    remove(path)
-    return True
+        command = "ffmpeg -loglevel panic -i {} -vn -ar 44100 -ac 2 -ab {}k -f mp3 {}".format(path,
+                                                                                             defaults.DEFAULT.SONG_QUALITY,
+                                                                                              new_name)
+        output, error = exe(command)
+
+        # Delete the temp file now
+        remove(path)
+        return new_name
+    except Exception:
+        return False
