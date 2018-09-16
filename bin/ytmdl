@@ -63,7 +63,8 @@ def main():
     # After this part song name is required
     if song_name is None:
         prepend.PREPEND(2)
-        print('Please pass a song name.')
+        print("Please pass a song name. This is necessary",
+              "to search in itunes.")
         exit(1)
 
     if not args.nolocal:
@@ -143,27 +144,28 @@ def main():
 
     TRACK_INFO = song.getData(song_name)
 
+    # declare a variable to store the option
+    option = 0
+
     if TRACK_INFO is False:
-        prepend.PREPEND(2)
-        print('Exiting now!\a')
-        exit(0)
+        # prepend.PREPEND(2)
+        # print('Data \a')
+        # exit(0)
+        pass
     elif len(TRACK_INFO) == 0:
         prepend.PREPEND(2)
         print('No data was found!\a')
         sys.exit(0)
     else:
         prepend.PREPEND(1)
-        print('Data downloaded!')
+        print('Setting data...')
 
-    prepend.PREPEND(1)
-    print('Setting data...')
+        option = song.setData(TRACK_INFO, is_quiet, conv_name)
 
-    option = song.setData(TRACK_INFO, is_quiet, conv_name)
-
-    if type(option) is not int:
-        prepend.PREPEND(2)
-        print('Something went wrong while writing data!\a')
-        sys.exit(0)
+        if type(option) is not int:
+            prepend.PREPEND(2)
+            print('Something went wrong while writing data!\a')
+            sys.exit(0)
 
     # Get the directory where song is moved
 

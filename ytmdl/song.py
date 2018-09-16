@@ -9,7 +9,6 @@ from mutagen.mp3 import MP3
 import requests
 import itunespy
 from ytmdl import prepend, defaults
-import glob
 import os
 
 # ----------------------cover--------------------
