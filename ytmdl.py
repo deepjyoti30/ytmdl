@@ -16,7 +16,8 @@ import sys
 from colorama import init
 from colorama import Fore, Style
 import argparse
-from ytmdl import dir, song, yt, defaults, prepend, setupConfig, cache, utility
+from ytmdl import (dir, song, yt, defaults, prepend, setupConfig, cache, utility,
+                   metadata)
 
 # init colorama for windows
 init()
@@ -33,7 +34,7 @@ def arguments():
                         if more than one search result.\
                         The first result in each case will be considered.",
                         action='store_true')
-    parser.add_argument('--version', action='version', version='v0.2-r6',
+    parser.add_argument('--version', action='version', version='v0.2-r7',
                         help='show the program version number and exit')
     parser.add_argument('--url',
                         help="Youtube song link.")
@@ -142,7 +143,8 @@ def main():
     prepend.PREPEND(1)
     print('Getting song data...')
 
-    TRACK_INFO = song.getData(song_name)
+    # TRACK_INFO = song.getData(song_name)
+    TRACK_INFO = metadata.SEARCH_SONG(song_name)
 
     # declare a variable to store the option
     option = 0

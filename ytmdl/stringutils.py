@@ -81,7 +81,6 @@ def check_keywords(tokens1, tokens2):
     res = [token in tokens2 for token in tokens1]
     return sum(res) == len(tokens1)
 
-
 def main():
     pass
 

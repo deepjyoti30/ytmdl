@@ -7,7 +7,6 @@ from colorama import Fore, Style
 from mutagen.id3 import ID3, APIC, TIT2, TPE1, TALB, TCON, TRCK, TYER
 from mutagen.mp3 import MP3
 import requests
-import itunespy
 from ytmdl import prepend, defaults
 import os
 
@@ -39,26 +38,6 @@ def dwCover(SONG_INFO, index):
         return False
 
 # -----------------------tag----------------------
-
-
-def getData(SONG_NAME):
-    """Try to download the metadata using itunespy."""
-    # Try to get the song data from itunes
-    try:
-        SONG_INFO = itunespy.search_track(SONG_NAME)
-        return SONG_INFO
-    except LookupError:
-        prepend.PREPEND(2)
-        print('Song not found!')
-        return False
-    except TimeoutError:
-        prepend.PREPEND(2)
-        print('Search timed out. Are you connected to internet?\a')
-        return False
-    else:
-        prepend.PREPEND(2)
-        print('Unknown Error!\a')
-        return False
 
 
 def print_choice(beg, end, SONG_INFO, type):
@@ -156,12 +135,9 @@ def setData(SONG_INFO, is_quiet, song_path):
         # Download the cover image, if failed, pass
         if dwCover(SONG_INFO, option):
             imagedata = open(defaults.DEFAULT.COVER_IMG, 'rb').read()
-
             data.add(APIC(3, 'image/jpeg', 3, 'Front cover', imagedata))
-
             # REmove the image
             os.remove(defaults.DEFAULT.COVER_IMG)
-
             IS_IMG_ADDED = True
 
         # If tags are not present then add them

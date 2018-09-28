@@ -124,6 +124,8 @@ Supported options are:
 
  * Thanks to the developers of youtube-dl, itunespy, mutagen, colorama and Python.
 
+ * Thanks to itunes and gaana for their awesome API's.
+
  * Thanks to <a href = https://github.com/NISH1001>Nishan Pantha</a> for search logic.
 
  * Thanks to <a href = https://github.com/biswaroop1547>Biswaroop</a> for testing in windows.

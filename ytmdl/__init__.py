@@ -9,4 +9,6 @@ __all__ = ['ytmdl',
            'yt',
            'cache',
            'stringutils',
-           'utility']
+           'utility',
+           'gaana',
+           'metadata']
