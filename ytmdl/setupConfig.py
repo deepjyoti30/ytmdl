@@ -77,6 +77,12 @@ def make_config():
     if not os.path.isdir(DEFAULTS.CONFIG_PATH):
         # Make the ytmdl folder
         os.makedirs(DEFAULTS.CONFIG_PATH)
+    
+    # Check if the ytmdl folder is present in Music directory
+    if not os.path.isdir(DEFAULTS.SONG_TEMP_DIR):
+        # Make the ytmdk folder
+        os.makedirs(DEFAULTS.SONG_TEMP_DIR)
+
     elif os.path.isfile(config_path):
         os.remove(config_path)
 
