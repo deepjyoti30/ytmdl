@@ -80,13 +80,13 @@ def make_config():
     
     # Check if the ytmdl folder is present in Music directory
     if not os.path.isdir(DEFAULTS.SONG_TEMP_DIR):
-        # Make the ytmdk folder
+        # Make the ytmdl folder
         os.makedirs(DEFAULTS.SONG_TEMP_DIR)
 
     elif os.path.isfile(config_path):
         os.remove(config_path)
 
-    # Now write the config test to config file
+    # Now write the config text to config file
     with open(config_path, 'w') as write_config:
         write_config.write(config_text)
 
