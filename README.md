@@ -20,6 +20,7 @@
 ## Prerequisites
 
  * Python 3.x
+ * ffmpeg  
 
 ## Important
 #### _After every update run the following._
@@ -35,6 +36,9 @@ ytmdl -s
 Run the following commands from you terminal  
 
 ```sh
+# Install ffmpeg
+sudo apt-get install ffmpeg
+
 # Install ytmdl
 sudo pip install ytmdl
 
@@ -53,7 +57,7 @@ ytmdl -s
     python ytmdl.py -s
 ```
 
- * Download a zip from <a href = https://ffmpeg.zeranoe.com/>here.</a>
+ * Download ffmpeg from <a href = https://ffmpeg.zeranoe.com/>here.</a>
 
  * Extract.
 
