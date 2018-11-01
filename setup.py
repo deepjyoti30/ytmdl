@@ -27,7 +27,7 @@ if __name__ == '__main__':
             'youtube_dl==2018.09.10',
             'mutagen==1.40.0',
             'itunespy==1.5.5',
-            'requests==2.18.4',
+            'requests==2.20.0',
             'colorama==0.3.9',
             'bs4==0.0.1'
         ]
