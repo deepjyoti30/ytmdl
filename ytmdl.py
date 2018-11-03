@@ -34,7 +34,7 @@ def arguments():
                         if more than one search result.\
                         The first result in each case will be considered.",
                         action='store_true')
-    parser.add_argument('--version', action='version', version='v0.2-r7',
+    parser.add_argument('--version', action='version', version='v0.3-r1',
                         help='show the program version number and exit')
     parser.add_argument('--url',
                         help="Youtube song link.")

@@ -11,4 +11,5 @@ __all__ = ['ytmdl',
            'stringutils',
            'utility',
            'gaana',
-           'metadata']
+           'metadata',
+           'download']

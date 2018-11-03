@@ -5,7 +5,7 @@ import requests
 from bs4 import BeautifulSoup
 import os
 import youtube_dl
-from ytmdl import defaults, utility
+from ytmdl import defaults, utility, download
 from shutil import copyfileobj
 
 
@@ -65,11 +65,11 @@ def dw(value, song_name='ytmdl_temp.mp3'):
         name = os.path.join(defaults.DEFAULT.SONG_TEMP_DIR, song_name)
 
         # Start downloading the song
-        response = requests.get(url, stream=True)
+        """response = requests.get(url, stream=True)
         with open(name, 'wb') as out_file:
             copyfileobj(response.raw, out_file)
-
-        del response
+        """
+        download.download(url, name)
 
         return name
     except Exception:
@@ -89,7 +89,7 @@ def get_href(url):
     return part
 
 
-def search(querry, lim=5):
+def search(querry, lim=10):
     """Search the querry in youtube and return lim number of results.
 
     Querry is the keyword, i:e name of the song
