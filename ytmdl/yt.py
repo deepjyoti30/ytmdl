@@ -76,10 +76,6 @@ def dw(value, song_name='ytmdl_temp.mp3'):
         return False
 
 
-video = []
-urls = []
-
-
 def get_href(url):
     """Get the watch? part of the url in case of urls."""
     pos_watch = url.index('/watch?v=')
@@ -95,6 +91,10 @@ def search(querry, lim=10):
     Querry is the keyword, i:e name of the song
     lim is the number of songs that will be added to video array and returned
     """
+    # Initialize some tuples
+    video = []
+    urls = []
+
     # Replace all the spaces with +
     querry = querry.replace(' ', '+')
 
