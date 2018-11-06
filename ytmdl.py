@@ -41,6 +41,9 @@ def arguments():
     parser.add_argument('-s', '--setup',
                         help='Setup the config file',
                         action='store_true')
+    parser.add_argument('-l', '--list', help="Download list of songs.\
+                        The list should have one song name in every line.",
+                        default=None)
     parser.add_argument('--nolocal',
                         help='Dont search locally for the song before\
                         downloading.',
@@ -51,9 +54,9 @@ def arguments():
     return args
 
 
-def main():
+def main(args):
     """Run on program call."""
-    args = arguments()
+    # args = arguments()
     song_name = args.SONG_NAME
 
     # Check if --setup is passed
@@ -65,13 +68,13 @@ def main():
     if song_name is None:
         prepend.PREPEND(2)
         print("Please pass a song name. This is necessary",
-              "to search in itunes.")
+              "to search metadata.")
         exit(1)
 
     if not args.nolocal:
         # Search for the song locally
         if not cache.main(song_name):
-            exit(0)
+            return 0
 
     is_quiet = args.quiet
     url = args.url
@@ -184,5 +187,24 @@ def main():
         print('Done')
 
 
+def extract_data():
+    """Extract the arguments and act accordingly."""
+    args = arguments()
+
+    if args.list is not None:
+        songs = utility.get_songs(args.list)
+        if len(songs) != 0:
+            prepend.PREPEND(1)
+            print("Downloading songs in {}".format(args.list))
+            for song in songs:
+                args.SONG_NAME = song
+                main(args)
+        else:
+            prepend.PREPEND(2)
+            print("{}: is empty".format(args.list))
+    else:
+        main(args)
+
+
 if __name__ == '__main__':
-    main()
+    extract_data()

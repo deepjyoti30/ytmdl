@@ -1,9 +1,9 @@
 """Some definitions to interact with the command line."""
 
 import subprocess
-from os import remove
+from os import remove, path
 from ytmdl import defaults
-
+    
 
 def exe(command):
     """Execute the command externally.
@@ -35,3 +35,29 @@ def convert_to_mp3(path):
         return new_name
     except Exception:
         return False
+
+
+def is_valid(dir_path):
+    """Check if passed path is valid or not."""
+    if not path.isfile(dir_path):
+        return False
+    else:
+        return True
+
+
+def get_songs(file_path):
+    """Extract the songs from the provided list."""
+    song_tup = []
+
+    if is_valid(file_path):
+        STREAM = open(file_path, 'r')
+
+        while True:
+            line = STREAM.readline()
+            if not line:
+                break
+            # Remove the \n
+            line = line.replace('\n', '')
+            song_tup.append(line)
+
+    return song_tup

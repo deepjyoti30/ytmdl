@@ -68,19 +68,24 @@ ytmdl -s
 
 ```sh
 
-usage: ytmdl [-h] [-q] [--version] [--url URL] [-s] [SONG_NAME]
+usage: ytmdl [-h] [-q] [--version] [--url URL] [-s] [-l LIST] [--nolocal]
+                [SONG_NAME]
 
 positional arguments:
-  SONG_NAME    Name of the song to download.
+  SONG_NAME             Name of the song to download.
 
 optional arguments:
-  -h, --help   show this help message and exit
-  -q, --quiet  Do not ask the user to select songs if more than one search
-               result. The first result in each case will be considered.
-  --version    show the program version number and exit
-  --url URL    Youtube song link.
-  -s, --setup  Setup the config file
-  --nolocal    Dont search locally for the song before downloading.
+  -h, --help            show this help message and exit
+  -q, --quiet           Dont ask the user to select songs if more than one
+                        search result. The first result in each case will be
+                        considered.
+  --version             show the program version number and exit
+  --url URL             Youtube song link.
+  -s, --setup           Setup the config file
+  -l LIST, --list LIST  Download list of songs. The list should have one song
+                        name in every line.
+  --nolocal             Dont search locally for the song before downloading.
+
 
 ```
 
