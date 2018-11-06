@@ -23,7 +23,6 @@ def cleanup(TRACK_INFO, index):
             DIR, name = make_custom_dir(DIR, TRACK_INFO[index])
 
             if name is not None:
-                input("{}:{}".format(DIR, name))
                 os.rename(SONG, name + '.mp3')
                 SONG_NAME = name + '.mp3'
                 SONG = SONG_NAME
