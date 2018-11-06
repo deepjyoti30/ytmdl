@@ -34,7 +34,7 @@ def arguments():
                         if more than one search result.\
                         The first result in each case will be considered.",
                         action='store_true')
-    parser.add_argument('--version', action='version', version='v0.3-r2',
+    parser.add_argument('--version', action='version', version='v0.3-r3',
                         help='show the program version number and exit')
     parser.add_argument('--url',
                         help="Youtube song link.")
@@ -196,8 +196,8 @@ def extract_data():
         if len(songs) != 0:
             prepend.PREPEND(1)
             print("Downloading songs in {}".format(args.list))
-            for song in songs:
-                args.SONG_NAME = song
+            for song_name in songs:
+                args.SONG_NAME = song_name
                 main(args)
         else:
             prepend.PREPEND(2)

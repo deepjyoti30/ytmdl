@@ -102,7 +102,7 @@ _In case of windows, use ```python ytmdl.py``` instead of ```ytmdl``` above_
 | `SONG_DIR`     | Directory to save the songs in after editing       |
 | `SONG_QUALITY` | Quality of the song                                |
 
-#### SONG_DIR now takes values that are extracted from the song
+#### SONG_DIR also takes values that are extracted from the song
 ##### Example format is `/your/desired/path$Album->Artist->Title` to save in the following way
 
 ```sh
@@ -113,6 +113,18 @@ _In case of windows, use ```python ytmdl.py``` instead of ```ytmdl``` above_
                         |--Artist
                                 |--Title
                                     |--Song.mp3
+```
+
+#### Adding any tag at the end of the SONG_DIR between [] will be considerd the name of the song.
+##### Example format is `/your/desired/path$Album->Artist->[Title]` to save in the following way
+
+```sh
+|--your
+    |--desired
+        |--path
+            |--Album
+                |--Artist
+                    |--Title.mp3
 ```
 
 Supported options are:

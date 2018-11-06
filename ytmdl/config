@@ -33,6 +33,11 @@
 # Following is an example of the format
 #SONG_DIR = "/home/deepjyoti30/Music$Artist->Album->Title"
 #
+# The name of the song finally can be directed by adding tags at the end
+# of SONG_DIR in between []
+# Following is an example:
+#SONG_DIR = "/home/deepjyoti30/Music$Album->[Title]"
+#
 #*****************************************#
 # The QUALITY is the quality of the song in kbps
 # By default it is set to 320kbps

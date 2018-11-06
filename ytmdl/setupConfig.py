@@ -116,7 +116,7 @@ def checkExistence(keyword, value):
     if keyword == 'SONG_DIR':
         # In this case check if $ and -> are presnt
         # If they are then only check if the base dir exists
-        if '$' in value and '->' in value:
+        if '$' in value:
             pos = value.find('$')
             value = value[:pos]
 
