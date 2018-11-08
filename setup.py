@@ -24,7 +24,7 @@ if __name__ == '__main__':
         ),
         scripts=['bin/ytmdl'],
         install_requires=[
-            'youtube_dl==2018.09.10',
+            'youtube_dl==2018.11.07',
             'mutagen==1.40.0',
             'itunespy==1.5.5',
             'requests==2.20.0',

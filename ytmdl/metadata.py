@@ -84,7 +84,7 @@ def SEARCH_SONG(q="Tera Buzz"):
 
 
 if __name__ == '__main__':
-    n = SEARCH_SONG()
+    n = SEARCH_SONG("How would you feel (Paean)")
 
     for i in n:
         print(i.track_name + ' by ' + i.artist_name + ' of ' + i.collection_name)

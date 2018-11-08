@@ -55,7 +55,7 @@ def dw(value, song_name='ytmdl_temp.mp3'):
         url = get_youtube_streams(value)
 
         # If song_name doesnt have mp3 extension, add it
-        if not song_name.endswith(',mp3'):
+        if not song_name.endswith('.mp3'):
             song_name += '.mp3'
 
         # Replace the spaces with hashes
