@@ -9,7 +9,7 @@ with open("README.md", "r") as fh:
 if __name__ == '__main__':
     setuptools.setup(
         name="ytmdl",
-        version="2018.11.08",
+        version="2018.11.10",
         author="Deepjyoti Barman",
         author_email="deep.barma30@gmail.com",
         description="Youtube Music Downloader",
