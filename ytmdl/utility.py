@@ -1,7 +1,7 @@
 """Some definitions to interact with the command line."""
 
 import subprocess
-from os import remove, path
+from os import remove, path, popen
 from ytmdl import defaults
     
 
@@ -18,6 +18,13 @@ def exe(command):
     output = output.decode('utf-8').strip()
     error = error.decode('utf-8').strip()
     return (output, error)
+
+
+def get_terminal_length():
+    """Return the length of the terminal."""
+    rows, cols = popen('stty size', 'r').read().split()
+
+    return int(cols)
 
 
 def convert_to_mp3(path):

@@ -2,7 +2,7 @@ import urllib.request
 import sys
 import time
 from os import path
-from seriesdw import utility
+from ytmdl import utility
 
 
 def download(url, des):
@@ -58,7 +58,7 @@ def download(url, des):
             # Calculate amount of space req in between
             length = utility.get_terminal_length()
 
-            stuff_len = len(basename) + 13 + 17 + 7 + 26
+            stuff_len = len(basename) + 13 + 17 + 7 + 26 + 5
             space = 0
 
             if stuff_len < length:
@@ -66,7 +66,7 @@ def download(url, des):
             elif stuff_len > length:
                 basename = basename[:(length - stuff_len) - 2] + '..'
 
-            status = r"%s %s %0.2f %s [%d kbps] [%s %s] [%-20s] [%3.2f%%]" % (basename, space * " ", file_size_to_disp, dw_unit, speed, time_left, time_unit, "#" * int(percent / 5), percent)
+            status = r"%s %s %0.2f %s |%d kbps| ETA: %s %s |%-20s| %3.2f%%" % (basename, space * " ", file_size_to_disp, dw_unit, speed, time_left, time_unit, "-" * int(percent / 5), percent)
             sys.stdout.write('\r')
             sys.stdout.write(status)
             sys.stdout.flush()
