@@ -85,7 +85,7 @@ def get_href(url):
     return part
 
 
-def search(querry, lim=10):
+def search(querry, bettersearch, kw=[], lim=10):
     """Search the querry in youtube and return lim number of results.
 
     Querry is the keyword, i:e name of the song
@@ -94,6 +94,12 @@ def search(querry, lim=10):
     # Initialize some tuples
     video = []
     urls = []
+
+    # Add keywords if better search is enabled
+    if bettersearch:
+        for keyword in kw:
+            if keyword is not None:
+                querry += ' ' + keyword
 
     # Replace all the spaces with +
     querry = querry.replace(' ', '+')

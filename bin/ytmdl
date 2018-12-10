@@ -34,10 +34,16 @@ def arguments():
                         if more than one search result.\
                         The first result in each case will be considered.",
                         action='store_true')
-    parser.add_argument('--version', action='version', version='2018.11.10',
+    parser.add_argument('--artist', help="Name of the artist")
+    parser.add_argument('--album', help="Name of the album.")
+    parser.add_argument('--version', action='version', version='2018.12.10',
                         help='show the program version number and exit')
     parser.add_argument('--url',
                         help="Youtube song link.")
+    parser.add_argument('--better-search', help="Better search is addition of\
+                        passed artist and album keyword to the youtube search\
+                        in order to get a more accurate result. (Default: true)",
+                        type=bool, default=True)
     parser.add_argument('-s', '--setup',
                         help='Setup the config file',
                         action='store_true')
@@ -102,7 +108,8 @@ def main(args):
         print(song_name, end='')
         print(Style.RESET_ALL)
 
-        data, urls = yt.search(song_name)
+        data, urls = yt.search(song_name, args.better_search,
+                                kw=[args.artist, args.album])
 
         if len(data) > 1 and not is_quiet:
             # Ask for a choice
@@ -147,7 +154,7 @@ def main(args):
     print('Getting song data...')
 
     # TRACK_INFO = song.getData(song_name)
-    TRACK_INFO = metadata.SEARCH_SONG(song_name)
+    TRACK_INFO = metadata.SEARCH_SONG(song_name, filters=[args.artist, args.album])
 
     # declare a variable to store the option
     option = 0

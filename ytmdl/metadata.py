@@ -54,7 +54,32 @@ def _search_tokens(song_name, song_list):
     return res
 
 
-def SEARCH_SONG(q="Tera Buzz"):
+def filterSongs(data, filters={}):
+    """Filter the songs according to the passed filters.
+
+    In the passed filters the first element is artist.
+    The second element is album."""
+
+    new_tuple = []
+    rest = []
+
+    for songData in data:
+        aritstMatch = True
+        albumMatch = True
+
+        if filters[0] is not None:
+            aritstMatch = (songData.artist_name == filters[0])
+        if filters[1] is not None:
+            albumMatch = (songData.collection_name == filters[1])
+
+        if aritstMatch and albumMatch:
+            new_tuple.append(songData)
+        else:
+            rest.append(songData)
+    return (new_tuple + rest)
+
+
+def SEARCH_SONG(q="Tera Buzz", filters=[]):
     """Do the task by calling other functions."""
     to_be_sorted = []
     rest = []
@@ -62,6 +87,12 @@ def SEARCH_SONG(q="Tera Buzz"):
     # Get from itunes
     data_itunes = get_from_itunes(q)
     data_gaana = get_from_gaana(q)
+
+    # Before passing for sorting filter the songs
+    # with the passed args
+    if len(filters) != 0:
+        data_itunes = filterSongs(data_itunes, filters)
+        data_gaana = filterSongs(data_gaana, filters)
 
     if data_itunes is not None:
         to_be_sorted = data_itunes[:10]
@@ -84,7 +115,7 @@ def SEARCH_SONG(q="Tera Buzz"):
 
 
 if __name__ == '__main__':
-    n = SEARCH_SONG("How would you feel (Paean)")
+    n = SEARCH_SONG("Mia", ['Drake', None])
 
     for i in n:
         print(i.track_name + ' by ' + i.artist_name + ' of ' + i.collection_name)
