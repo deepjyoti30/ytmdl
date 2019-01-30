@@ -9,7 +9,7 @@ with open("README.md", "r") as fh:
 if __name__ == '__main__':
     setuptools.setup(
         name="ytmdl",
-        version="2018.12.10",
+        version="2019.1.30",
         author="Deepjyoti Barman",
         author_email="deep.barma30@gmail.com",
         description="Youtube Music Downloader",
@@ -24,7 +24,7 @@ if __name__ == '__main__':
         ),
         scripts=['bin/ytmdl'],
         install_requires=[
-            'youtube_dl==2018.11.07',
+            'youtube_dl==2019.01.30.1',
             'mutagen==1.40.0',
             'itunespy==1.5.5',
             'requests==2.20.0',
