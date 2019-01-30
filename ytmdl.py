@@ -36,7 +36,7 @@ def arguments():
                         action='store_true')
     parser.add_argument('--artist', help="Name of the artist")
     parser.add_argument('--album', help="Name of the album.")
-    parser.add_argument('--version', action='version', version='2018.11.10',
+    parser.add_argument('--version', action='version', version='2019.1.30.1',
                         help='show the program version number and exit')
     parser.add_argument('--url',
                         help="Youtube song link.")
