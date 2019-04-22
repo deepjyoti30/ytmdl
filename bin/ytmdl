@@ -36,7 +36,7 @@ def arguments():
                         action='store_true')
     parser.add_argument('--artist', help="Name of the artist")
     parser.add_argument('--album', help="Name of the album.")
-    parser.add_argument('--version', action='version', version='2019.1.30.1',
+    parser.add_argument('--version', action='version', version='2019.4.23',
                         help='show the program version number and exit')
     parser.add_argument('--url',
                         help="Youtube song link.")
@@ -110,6 +110,13 @@ def main(args):
 
         data, urls = yt.search(song_name, args.better_search,
                                 kw=[args.artist, args.album])
+        
+        # Handle the exception if urls has len 0
+        if len(urls) == 0:
+            prepend.PREPEND(2)
+            print("No song found. Please try again with a different keyword.")
+            print(Style.RESET_ALL, end='')
+            exit()
 
         if len(data) > 1 and not is_quiet:
             # Ask for a choice
