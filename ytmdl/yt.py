@@ -106,11 +106,12 @@ def search(querry, bettersearch, kw=[], lim=10):
 
     url = "https://www.youtube.com/results?search_query={}".format(querry)
 
-    response = urlopen(url)
-    html = response.read()
-    soup = BeautifulSoup(html, "html.parser")
+    response = requests.get(url)
+    soup = BeautifulSoup(response.text, "html.parser")
     count = 0
-    for vid in soup.findAll(attrs={'class': 'yt-uix-tile-link'}):
+    videos = soup.findAll('a', attrs={'class': 'yt-uix-tile-link'})
+
+    for vid in videos:
         if lim == count:
             break
 
@@ -118,12 +119,15 @@ def search(querry, bettersearch, kw=[], lim=10):
 
         data = scan_video(url)
 
-        if not data:
+        if data == "Unauthorized":
+            pass
+        elif not data:
             break
+        else:
+            video.append(data)
+            urls.append(url)
+            count += 1
 
-        video.append(data)
-        urls.append(url)
-        count += 1
     return (video, urls)
 
 
@@ -132,9 +136,13 @@ def scan_video(url):
     try:
         search_tmplt = "http://www.youtube.com/oembed?url={}&format=json"
         search_url = search_tmplt.format(url)
-        data = requests.get(search_url).json()
+        r = requests.get(search_url)
 
-        return data
+        if r.status_code == 200:
+            return r.json()
+        else:
+            return "Unauthorized"
+
     except Exception:
         return False
 
