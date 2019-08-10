@@ -36,7 +36,7 @@ def arguments():
                         action='store_true')
     parser.add_argument('--artist', help="Name of the artist")
     parser.add_argument('--album', help="Name of the album.")
-    parser.add_argument('--version', action='version', version='2019.4.23.2',
+    parser.add_argument('--version', action='version', version='2019.10.8',
                         help='show the program version number and exit')
     parser.add_argument('--url',
                         help="Youtube song link.")
@@ -156,6 +156,7 @@ def main(args):
     if not conv_name:
         prepend.PREPEND(2)
         print('Something went wrong while converting!\a')
+        exit(-1)
 
     prepend.PREPEND(1)
     print('Getting song data...')

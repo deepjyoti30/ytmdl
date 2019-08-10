@@ -1,12 +1,10 @@
 """Definition of functions that are used to interact with youtube."""
 
-from urllib.request import urlopen
 import requests
 from bs4 import BeautifulSoup
 import os
 import youtube_dl
 from ytmdl import defaults, utility, download
-from shutil import copyfileobj
 
 
 def get_youtube_streams(url):
