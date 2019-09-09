@@ -6,24 +6,19 @@
     <img src='https://i.imgur.com/YhEmZwo.gif'>
 </div>
 
-<div align="center">
 
-[![Build Status][img-travis-ci]][travis-ci] [![License][img-mit]][MIT] [![PRs Welcome][prs-badge]][prs]
-
-</div>
-
-<p align="center">
+<!--p align="center">
   <a href="https://pypi.python.org/pypi/ytmdl/"><img src="https://img.shields.io/pypi/v/ytmdl.svg" alt="PyPi Version"/></a>
   <a href="https://pypi.python.org/pypi/ytmdl/"><img src="https://pypip.in/py_versions/ytmdl/badge.svg" alt="PyPI Python Versions"/></a>
   <a href="https://github.com/deepjyoti30/ytmdl/blob/master/LICENSE"><img src="https://img.shields.io/github/license/deepjyoti30/ytmdl.svg" alt="License"/></a>
-</p>
+</p-->
 
-1. [Prerequisites](#prerequisites)
-2. [Important](#important)
-3. [Setup](#setup)
-4. [Usage](#usage)
-5. [Change Defaults](#change-defaults)
-6. [Acknowledgements](#acknowledgements)
+<div align="center">
+<h4>
+[Prerequisites][#prerequisites]&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;[Important][#important]&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;[Setup][#setup]&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;[Usage][#usage]&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;[Change Defaults][#change-defaults]&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;[Acknowledgements][#acknowledgements]&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+</h4>
+</div>
+
 
 ## Prerequisites
 
