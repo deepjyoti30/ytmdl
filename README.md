@@ -14,14 +14,16 @@
 </p-->
 
 <div align="center">
-<h4>
+
 <a href="#prerequisites">Prerequisites</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="#important">Important</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="#setup">Setup</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="#usage">Usage</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="#change-defaults">Change Defaults</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="#acknowledgements">Acknowledgements</a>&nbsp;&nbsp;&nbsp;
-</h4>
+
 </div>
 
 <div align="center">
 
-[![forthebadge made-with-python](http://ForTheBadge.com/images/badges/made-with-python.svg)](https://www.python.org/)&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;[![PyPI download total](https://img.shields.io/pypi/dt/ansicolortags.svg)](https://pypi.python.org/pypi/ansicolortags/)&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;[![PyPI license](https://img.shields.io/pypi/l/ansicolortags.svg)](https://pypi.python.org/pypi/ansicolortags/)&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;[![PyPI status](https://img.shields.io/pypi/status/ansicolortags.svg)](https://pypi.python.org/pypi/ansicolortags/)&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;[![GitHub release](https://img.shields.io/github/release/Naereen/StrapDown.js.svg)](https://GitHub.com/Naereen/StrapDown.js/releases/)
+[![forthebadge made-with-python](http://ForTheBadge.com/images/badges/made-with-python.svg)](https://www.python.org/)<br/><br/>
+[![Code of Conduct][coc-badge]][coc] [![PRs Welcome][prs-badge]][prs]
+<!--[![Build Status][img-travis-ci]][Passing]&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;[![PyPI license](https://img.shields.io/pypi/l/ansicolortags.svg)](https://pypi.python.org/pypi/ansicolortags/)&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;[![PyPI status](https://img.shields.io/pypi/status/ansicolortags.svg)](https://pypi.python.org/pypi/ansicolortags/)&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;[![GitHub release](https://img.shields.io/github/release/Naereen/StrapDown.js.svg)](https://GitHub.com/Naereen/StrapDown.js/releases/)[![PRs Welcome][prs-badge]][prs]-->
 
 
 </div>
