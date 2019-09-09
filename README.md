@@ -3,7 +3,8 @@
 </div>
 
 <div align="center">
-    <img src='https://i.imgur.com/YhEmZwo.gif'>
+    <!--img src='https://i.imgur.com/YhEmZwo.gif'-->
+    <img src="ytmdl.gif">
 </div>
 
 
@@ -15,6 +16,7 @@
 
 <div align="center">
 
+<br/>
 <a href="#prerequisites">Prerequisites</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="#important">Important</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="#setup">Setup</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="#usage">Usage</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="#change-defaults">Change Defaults</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="#acknowledgements">Acknowledgements</a>&nbsp;&nbsp;&nbsp;
 
 </div>
