@@ -15,7 +15,7 @@
 
 <div align="center">
 <h4>
-[Prerequisites][#prerequisites]&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;[Important][#important]&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;[Setup][#setup]&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;[Usage][#usage]&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;[Change Defaults][#change-defaults]&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;[Acknowledgements][#acknowledgements]&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+<a href="#prerequisites">Prerequisites</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="#important">Important</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="#setup">Setup</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="#usage">Usage</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="#change-defaults">Change Defaults</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="#acknowledgements">Acknowledgements</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
 </h4>
 </div>
 
