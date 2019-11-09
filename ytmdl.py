@@ -16,23 +16,11 @@ import sys
 from colorama import init
 from colorama import Fore, Style
 import argparse
-from ytmdl import (
-            dir,
-            song,
-            yt,
-            defaults,
-            prepend,
-            setupConfig,
-            cache,
-            utility,
-            metadata,
-            logger
-)
+from ytmdl import (dir, song, yt, defaults, prepend, setupConfig, cache, utility,
+                   metadata)
 
 # init colorama for windows
 init()
-
-logger = logger.Logger('ytmdl')
 
 
 def arguments():
@@ -40,30 +28,26 @@ def arguments():
     parser = argparse.ArgumentParser()
 
     parser.add_argument('SONG_NAME', help="Name of the song to download.",
-                        type=str, nargs="+")
+                        default=None, nargs='?', type=str)
     parser.add_argument('-q', '--quiet',
                         help="Don't ask the user to select songs\
                         if more than one search result.\
                         The first result in each case will be considered.",
                         action='store_true')
-    parser.add_argument('--choice', help="The choice that the user wants\
-                        to go for. Usefull to pass along with --quiet.\
-                        Choices start at 1", choices=range(1,50),
-                        type=int, default=None, metavar="CHOICE")
     parser.add_argument('--artist', help="Name of the artist")
     parser.add_argument('--album', help="Name of the album.")
     parser.add_argument('--version', action='version', version='2019.10.8',
                         help='show the program version number and exit')
     parser.add_argument('--url',
                         help="Youtube song link.")
-    parser.add_argument('--disable-metaadd', help="Disable addition of\
+    parser.add_argument('--better-search', help="Better search is addition of\
                         passed artist and album keyword to the youtube search\
-                        in order to get a more accurate result. (Default: false)",
-                        action="store_true")
+                        in order to get a more accurate result. (Default: true)",
+                        type=bool, default=True)
     parser.add_argument('-s', '--setup',
                         help='Setup the config file',
                         action='store_true')
-    parser.add_argument('--list', help="Download list of songs.\
+    parser.add_argument('-l', '--list', help="Download list of songs.\
                         The list should have one song name in every line.",
                         default=None)
     parser.add_argument('--nolocal',
@@ -79,12 +63,19 @@ def arguments():
 def main(args):
     """Run on program call."""
     # args = arguments()
-    song_name = ' '.join(args.SONG_NAME)
+    song_name = args.SONG_NAME
 
     # Check if --setup is passed
     if args.setup:
         setupConfig.make_config()
         exit(0)
+
+    # After this part song name is required
+    if song_name is None:
+        prepend.PREPEND(2)
+        print("Please pass a song name. This is necessary",
+              "to search metadata.")
+        exit(1)
 
     if not args.nolocal:
         # Search for the song locally
@@ -93,7 +84,6 @@ def main(args):
 
     is_quiet = args.quiet
     url = args.url
-    passed_choice = args.choice
 
     # If the url is passed then get the data
     if url is not None:
@@ -109,60 +99,69 @@ def main(args):
         choice = 0
     else:
         if is_quiet:
-            logger.info('Quiet is enabled')
+            prepend.PREPEND(1)
+            print('Quiet is enabled')
 
-        logger.info('Searching Youtube for {}{}{}'.format(
-                Fore.LIGHTYELLOW_EX,
-                song_name,
-                Style.RESET_ALL
-        ))
+        prepend.PREPEND(1)
+        print('Searching Youtube for ', end='')
+        print(Fore.LIGHTYELLOW_EX, end='')
+        print(song_name, end='')
+        print(Style.RESET_ALL)
 
-        data, urls = yt.search(song_name, not args.disable_metaadd,
+        data, urls = yt.search(song_name, args.better_search,
                                 kw=[args.artist, args.album])
         
         # Handle the exception if urls has len 0
         if len(urls) == 0:
-            logger.critical("No song found. Please try again with a different keyword.")
+            prepend.PREPEND(2)
+            print("No song found. Please try again with a different keyword.")
+            print(Style.RESET_ALL, end='')
+            exit()
 
         if len(data) > 1 and not is_quiet:
             # Ask for a choice
             choice = song.getChoice(data, 'mp3')
         else:
-            if passed_choice is not None and passed_choice <= len(data):
-                choice = passed_choice - 1
-                logger.info("Using {} as choice".format(passed_choice))
-            else:
-                choice = 0
+            choice = 0
 
         link = 'https://youtube.com{}'.format(urls[int(choice)])
 
     # Declare a var to store the name of the yt video
     yt_title = data[choice]['title']
 
-    logger.info('Downloading {}{}{} in {}{}kbps{}'.format(
-        Fore.LIGHTMAGENTA_EX,
-        yt_title,
-        Style.RESET_ALL,
-        Fore.LIGHTYELLOW_EX,
-        defaults.DEFAULT.SONG_QUALITY,
-        Style.RESET_ALL
-    ))
+    prepend.PREPEND(1)
+    print('Downloading ', end='')
+    print(Fore.LIGHTMAGENTA_EX, end='')
+    print(yt_title, end=' ')
+    print(Style.RESET_ALL, end='')
+    print('in', end=' ')
+    print(Fore.LIGHTYELLOW_EX, end='')
+    print(defaults.DEFAULT.SONG_QUALITY + 'kbps', end='')
+    print(Style.RESET_ALL)
     path = yt.dw(link, yt_title)
 
-    if type(path) is not str:
-        logger.critical("ERROR: {}".format(path))
+    if not path:
+        prepend.PREPEND(2)
+        print('Something went wrong while downloading!\a')
+        sys.exit(0)
     else:
-        logger.info('Downloaded!')
+        prepend.PREPEND(1)
+        print('Downloaded!')
 
-    logger.info('Converting to mp3...')
+    prepend.PREPEND(1)
+    print('Converting to mp3...')
 
     conv_name = utility.convert_to_mp3(path)
 
-    if type(conv_name) is not str:
-        logger.critical('ERROR: {}'.format(conv_name))
+    if not conv_name:
+        prepend.PREPEND(2)
+        print('Something went wrong while converting!\a')
+        exit(-1)
 
-    logger.info('Getting song data...')
+    prepend.PREPEND(1)
+    print('Getting song data...')
 
+    # TRACK_INFO = song.getData(song_name)
     TRACK_INFO = metadata.SEARCH_SONG(song_name, filters=[args.artist, args.album])
 
     # declare a variable to store the option
@@ -174,25 +173,33 @@ def main(args):
         # exit(0)
         pass
     elif len(TRACK_INFO) == 0:
-        logger.critical('No data was found!\a')
+        prepend.PREPEND(2)
+        print('No data was found!\a')
+        sys.exit(0)
     else:
         prepend.PREPEND(1)
         print('Setting data...')
 
-        option = song.setData(TRACK_INFO, is_quiet, conv_name, passed_choice)
+        option = song.setData(TRACK_INFO, is_quiet, conv_name)
 
         if type(option) is not int:
-            logger.critical('ERROR: {}'.format(option))
+            prepend.PREPEND(2)
+            print('Something went wrong while writing data!\a')
+            sys.exit(0)
 
     # Get the directory where song is moved
 
     DIR = dir.cleanup(TRACK_INFO, option)
-    logger.info('Moving to {}...'.format(DIR))
+    prepend.PREPEND(1)
+    print('Moving to {}...'.format(DIR))
 
-    if type(DIR) is not str:
-        logger.critical('ERROR: {}'.format(DIR))
+    if not DIR:
+        prepend.PREPEND(2)
+        print('Something went wrong while moving!\a')
+        sys.exit(0)
     else:
-        logger.info('Done')
+        prepend.PREPEND(1)
+        print('Done')
 
 
 def extract_data():
@@ -202,12 +209,14 @@ def extract_data():
     if args.list is not None:
         songs = utility.get_songs(args.list)
         if len(songs) != 0:
-            logger.info("Downloading songs in {}".format(args.list))
+            prepend.PREPEND(1)
+            print("Downloading songs in {}".format(args.list))
             for song_name in songs:
                 args.SONG_NAME = song_name
                 main(args)
         else:
-            logger.info("{}: is empty".format(args.list))
+            prepend.PREPEND(2)
+            print("{}: is empty".format(args.list))
     else:
         main(args)
 

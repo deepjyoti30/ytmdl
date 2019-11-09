@@ -85,10 +85,9 @@ ytmdl -s
 
 ```console
 
-usage: ytmdl [-h] [-q] [--choice CHOICE] [--artist ARTIST] [--album ALBUM]
-             [--version] [--url URL] [--disable-metaadd] [-s] [--list LIST]
-             [--nolocal]
-             SONG_NAME [SONG_NAME ...]
+usage: ytmdl [-h] [-q] [--artist ARTIST] [--album ALBUM] [--version]
+             [--url URL] [--disable-metaadd] [-s] [--list LIST] [--nolocal]
+             [SONG_NAME]
 
 positional arguments:
   SONG_NAME          Name of the song to download.
@@ -98,8 +97,6 @@ optional arguments:
   -q, --quiet        Don't ask the user to select songs if more than one
                      search result. The first result in each case will be
                      considered.
-  --choice CHOICE    The choice that the user wants to go for. Usefull to pass
-                     along with --quiet. Choices start at 1
   --artist ARTIST    Name of the artist
   --album ALBUM      Name of the album.
   --version          show the program version number and exit
