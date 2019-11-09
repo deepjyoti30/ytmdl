@@ -9,6 +9,7 @@ from mutagen.mp3 import MP3
 import requests
 from ytmdl import prepend, defaults
 import os
+# import traceback
 
 # ----------------------cover--------------------
 
@@ -182,5 +183,6 @@ def setData(SONG_INFO, is_quiet, song_path):
         print('================================')
 
         return option
-    except Exception:
-        return False
+    except Exception as e:
+        # traceback.print_tb(e.__traceback__)
+        return e

@@ -23,11 +23,12 @@ def arguments():
 
 class Download:
 
-    def __init__(self, URL, des=None):
+    def __init__(self, URL, des=None, verbose=False):
         self.URL = URL
         self.des = des
         self.headers = {}
         self.f_size = 0
+        self.verbose = verbose
 
     def _build_headers(self, rem):
         """Build headers according to requirement."""
@@ -142,7 +143,8 @@ class Download:
 
             formatted_file_size, dw_unit = self._format_size(self.f_size)
             print("Size: {} {}".format(round(formatted_file_size), dw_unit))
-            print("Saving as: {}".format(self.des))
+            if self.verbose:
+                print("Saving as: {}".format(self.des))
 
             file_size_dl = 0
             block_sz = 8192
@@ -203,6 +205,7 @@ class Download:
             print("Keyboard Interrupt passed. Exitting peacefully.")
             exit()
         except Exception as e:
+            # traceback.print_exception(value=e)
             print("ERROR: {}".format(e))
             return False
 
