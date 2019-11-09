@@ -17,7 +17,7 @@
 <div align="center">
 
 <br/>
-<a href="#prerequisites">Prerequisites</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="#setup">Setup</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="#usage">Usage</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="#change-defaults">Change Defaults</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="#acknowledgements">Acknowledgements</a>&nbsp;&nbsp;&nbsp;
+<a href="#prerequisites">Prerequisites</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="#important">Important</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="#setup">Setup</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="#usage">Usage</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="#change-defaults">Change Defaults</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="#acknowledgements">Acknowledgements</a>&nbsp;&nbsp;&nbsp;
 <br/>
 </div>
 
@@ -39,17 +39,47 @@
  * Python 3.x
  * ffmpeg  
 
+## Important
+#### _After every update run the following._
+
+```sh
+ytmdl -s
+```
+
 ## Setup
 
 ### Linux
 
- - Available in AUR [here](https://aur.archlinux.org/packages/ytmdl/)
+Run the following commands from you terminal  
 
- - Available in Pypi:
+```sh
+# Install ffmpeg
+sudo apt-get install ffmpeg
 
-  ```sh
-  pip install ytmdl
-  ```
+# Install ytmdl
+sudo pip install ytmdl
+
+# Setup the config file
+ytmdl -s
+```
+
+### Windows
+
+ * Download the repo and extract it.
+
+ * Run the following in cmd
+
+ ```sh
+    # Copy the config
+    python ytmdl.py -s
+```
+
+ * Download ffmpeg from <a href = https://ffmpeg.zeranoe.com/>here.</a>
+
+ * Extract.
+
+ * Copy the three files in bin to C:\users\\{username}\appdata\local\programs\python\python36\scripts\
+
 
 ## Usage
 
