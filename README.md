@@ -83,33 +83,31 @@ ytmdl -s
 
 ## Usage
 
-```sh
+```console
 
 usage: ytmdl [-h] [-q] [--artist ARTIST] [--album ALBUM] [--version]
-             [--url URL] [--better-search BETTER_SEARCH] [-s] [-l LIST]
-             [--nolocal]
+             [--url URL] [--disable-metaadd] [-s] [--list LIST] [--nolocal]
              [SONG_NAME]
 
 positional arguments:
-  SONG_NAME             Name of the song to download.
+  SONG_NAME          Name of the song to download.
 
 optional arguments:
-  -h, --help            show this help message and exit
-  -q, --quiet           Dont ask the user to select songs if more than one
-                        search result. The first result in each case will be
-                        considered.
-  --artist ARTIST       Name of the artist
-  --album ALBUM         Name of the album.
-  --version             show the program version number and exit
-  --url URL             Youtube song link.
-  --better-search BETTER_SEARCH
-                        Better search is addition of passed artist and album
-                        keyword to the youtube search in order to get a more
-                        accurate result. (Default: true)
-  -s, --setup           Setup the config file
-  -l LIST, --list LIST  Download list of songs. The list should have one song
-                        name in every line.
-  --nolocal             Dont search locally for the song before downloading.
+  -h, --help         show this help message and exit
+  -q, --quiet        Don't ask the user to select songs if more than one
+                     search result. The first result in each case will be
+                     considered.
+  --artist ARTIST    Name of the artist
+  --album ALBUM      Name of the album.
+  --version          show the program version number and exit
+  --url URL          Youtube song link.
+  --disable-metaadd  Disable addition of passed artist and album keyword to
+                     the youtube search in order to get a more accurate
+                     result. (Default: false)
+  -s, --setup        Setup the config file
+  --list LIST        Download list of songs. The list should have one song
+                     name in every line.
+  --nolocal          Dont search locally for the song before downloading.
 
 
 ```
