@@ -17,7 +17,7 @@
 <div align="center">
 
 <br/>
-<a href="#prerequisites">Prerequisites</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="#important">Important</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="#setup">Setup</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="#usage">Usage</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="#change-defaults">Change Defaults</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="#acknowledgements">Acknowledgements</a>&nbsp;&nbsp;&nbsp;
+<a href="#prerequisites">Prerequisites</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="#setup">Setup</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="#usage">Usage</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="#change-defaults">Change Defaults</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="#acknowledgements">Acknowledgements</a>&nbsp;&nbsp;&nbsp;
 <br/>
 </div>
 
@@ -39,55 +39,27 @@
  * Python 3.x
  * ffmpeg  
 
-## Important
-#### _After every update run the following._
-
-```sh
-ytmdl -s
-```
-
 ## Setup
 
 ### Linux
 
-Run the following commands from you terminal  
+ - Available in AUR [here](https://aur.archlinux.org/packages/ytmdl/)
 
-```sh
-# Install ffmpeg
-sudo apt-get install ffmpeg
+  ```ytmdl``` is the package name.
 
-# Install ytmdl
-sudo pip install ytmdl
+ - Available in PyPi [here](https://pypi.org/project/ytmdl/)
 
-# Setup the config file
-ytmdl -s
-```
-
-### Windows
-
- * Download the repo and extract it.
-
- * Run the following in cmd
-
- ```sh
-    # Copy the config
-    python ytmdl.py -s
-```
-
- * Download ffmpeg from <a href = https://ffmpeg.zeranoe.com/>here.</a>
-
- * Extract.
-
- * Copy the three files in bin to C:\users\\{username}\appdata\local\programs\python\python36\scripts\
+  ```ytmdl``` is the package name.
 
 
 ## Usage
 
 ```console
 
-usage: ytmdl [-h] [-q] [--artist ARTIST] [--album ALBUM] [--version]
-             [--url URL] [--disable-metaadd] [-s] [--list LIST] [--nolocal]
-             [SONG_NAME]
+usage: ytmdl [-h] [-q] [--choice CHOICE] [--artist ARTIST] [--album ALBUM]
+             [--version] [--url URL] [--disable-metaadd] [-s] [--list LIST]
+             [--nolocal]
+             SONG_NAME [SONG_NAME ...]
 
 positional arguments:
   SONG_NAME          Name of the song to download.
@@ -97,6 +69,8 @@ optional arguments:
   -q, --quiet        Don't ask the user to select songs if more than one
                      search result. The first result in each case will be
                      considered.
+  --choice CHOICE    The choice that the user wants to go for. Usefull to pass
+                     along with --quiet. Choices start at 1
   --artist ARTIST    Name of the artist
   --album ALBUM      Name of the album.
   --version          show the program version number and exit
@@ -108,7 +82,6 @@ optional arguments:
   --list LIST        Download list of songs. The list should have one song
                      name in every line.
   --nolocal          Dont search locally for the song before downloading.
-
 
 ```
 
