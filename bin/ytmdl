@@ -40,12 +40,16 @@ def arguments():
     parser = argparse.ArgumentParser()
 
     parser.add_argument('SONG_NAME', help="Name of the song to download.",
-                        default=None, nargs='?', type=str)
+                        type=str, nargs="+")
     parser.add_argument('-q', '--quiet',
                         help="Don't ask the user to select songs\
                         if more than one search result.\
                         The first result in each case will be considered.",
                         action='store_true')
+    parser.add_argument('--choice', help="The choice that the user wants\
+                        to go for. Usefull to pass along with --quiet.\
+                        Choices start at 1", choices=range(1,50),
+                        type=int, default=None, metavar="CHOICE")
     parser.add_argument('--artist', help="Name of the artist")
     parser.add_argument('--album', help="Name of the album.")
     parser.add_argument('--version', action='version', version='2019.10.8',
@@ -75,17 +79,12 @@ def arguments():
 def main(args):
     """Run on program call."""
     # args = arguments()
-    song_name = args.SONG_NAME
+    song_name = ' '.join(args.SONG_NAME)
 
     # Check if --setup is passed
     if args.setup:
         setupConfig.make_config()
         exit(0)
-
-    # After this part song name is required
-    if song_name is None:
-        logger.critical("Please pass a song name. This is necessary\
-            to search metadata.")
 
     if not args.nolocal:
         # Search for the song locally
@@ -94,6 +93,7 @@ def main(args):
 
     is_quiet = args.quiet
     url = args.url
+    passed_choice = args.choice
 
     # If the url is passed then get the data
     if url is not None:
@@ -124,9 +124,13 @@ def main(args):
         if len(urls) == 0:
             logger.critical("No song found. Please try again with a different keyword.")
 
-        if len(data) > 1 and not is_quiet:
-            # Ask for a choice
-            choice = song.getChoice(data, 'mp3')
+        if len(data) > 1:
+            if not is_quiet:
+                # Ask for a choice
+                choice = song.getChoice(data, 'mp3')
+            elif passed_choice is not None and len(data) >= passed_choice:
+                logger.info("Selecting {} option".format(passed_choice))
+                choice = passed_choice - 1
         else:
             choice = 0
 
