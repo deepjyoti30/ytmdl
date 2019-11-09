@@ -59,19 +59,25 @@ def dw(value, song_name='ytmdl_temp.mp3'):
         # Replace the spaces with hashes
         song_name = song_name.replace(' ', '#')
 
+        # The directory where we will download to.
+        dw_dir = defaults.DEFAULT.SONG_TEMP_DIR
+
+        if not os.path.exists(dw_dir):
+            os.makedirs(dw_dir)
+
         # Name of the temp file
-        name = os.path.join(defaults.DEFAULT.SONG_TEMP_DIR, song_name)
+        name = os.path.join(dw_dir, song_name)
 
         # Start downloading the song
         """response = requests.get(url, stream=True)
         with open(name, 'wb') as out_file:
             copyfileobj(response.raw, out_file)
         """
-        download.download(url, name)
+        download.Download(url, name).download()
 
         return name
-    except Exception:
-        return False
+    except Exception as e:
+        return e
 
 
 def get_href(url):
