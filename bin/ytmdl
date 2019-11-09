@@ -78,121 +78,125 @@ def arguments():
 
 def main(args):
     """Run on program call."""
-    # args = arguments()
-    song_name = ' '.join(args.SONG_NAME)
 
-    # Check if --setup is passed
-    if args.setup:
-        setupConfig.make_config()
-        exit(0)
+    try:
+        song_name = ' '.join(args.SONG_NAME)
 
-    if not args.nolocal:
-        # Search for the song locally
-        if not cache.main(song_name):
-            return 0
+        # Check if --setup is passed
+        if args.setup:
+            setupConfig.make_config()
+            exit(0)
 
-    is_quiet = args.quiet
-    url = args.url
-    passed_choice = args.choice
+        if not args.nolocal:
+            # Search for the song locally
+            if not cache.main(song_name):
+                return 0
 
-    # If the url is passed then get the data
-    if url is not None:
-        data = []
-        # Get video data from youtube
-        temp_data = yt.scan_video(yt.get_href(url))
-        data.append(temp_data)
+        is_quiet = args.quiet
+        url = args.url
+        passed_choice = args.choice
 
-        # link to dw the song
-        link = url
+        # If the url is passed then get the data
+        if url is not None:
+            data = []
+            # Get video data from youtube
+            temp_data = yt.scan_video(yt.get_href(url))
+            data.append(temp_data)
 
-        # In this case choice will be 0
-        choice = 0
-    else:
-        if is_quiet:
-            logger.info('Quiet is enabled')
+            # link to dw the song
+            link = url
 
-        logger.info('Searching Youtube for {}{}{}'.format(
-                Fore.LIGHTYELLOW_EX,
-                song_name,
-                Style.RESET_ALL
-        ))
-
-        data, urls = yt.search(song_name, not args.disable_metaadd,
-                                kw=[args.artist, args.album])
-        
-        # Handle the exception if urls has len 0
-        if len(urls) == 0:
-            logger.critical("No song found. Please try again with a different keyword.")
-
-        if len(data) > 1 and not is_quiet:
-            # Ask for a choice
-            choice = song.getChoice(data, 'mp3')
+            # In this case choice will be 0
+            choice = 0
         else:
-            if passed_choice is not None and passed_choice <= len(data):
-                choice = passed_choice - 1
-                logger.info("Using {} as choice".format(passed_choice))
+            if is_quiet:
+                logger.info('Quiet is enabled')
+
+            logger.info('Searching Youtube for {}{}{}'.format(
+                    Fore.LIGHTYELLOW_EX,
+                    song_name,
+                    Style.RESET_ALL
+            ))
+
+            data, urls = yt.search(song_name, not args.disable_metaadd,
+                                    kw=[args.artist, args.album])
+            
+            # Handle the exception if urls has len 0
+            if len(urls) == 0:
+                logger.critical("No song found. Please try again with a different keyword.")
+
+            if len(data) > 1 and not is_quiet:
+                # Ask for a choice
+                choice = song.getChoice(data, 'mp3')
             else:
-                choice = 0
+                if passed_choice is not None and passed_choice <= len(data):
+                    choice = passed_choice - 1
+                    logger.info("Using {} as choice".format(passed_choice))
+                else:
+                    choice = 0
 
-        link = 'https://youtube.com{}'.format(urls[int(choice)])
+            link = 'https://youtube.com{}'.format(urls[int(choice)])
 
-    # Declare a var to store the name of the yt video
-    yt_title = data[choice]['title']
+        # Declare a var to store the name of the yt video
+        yt_title = data[choice]['title']
 
-    logger.info('Downloading {}{}{} in {}{}kbps{}'.format(
-        Fore.LIGHTMAGENTA_EX,
-        yt_title,
-        Style.RESET_ALL,
-        Fore.LIGHTYELLOW_EX,
-        defaults.DEFAULT.SONG_QUALITY,
-        Style.RESET_ALL
-    ))
-    path = yt.dw(link, yt_title)
+        logger.info('Downloading {}{}{} in {}{}kbps{}'.format(
+            Fore.LIGHTMAGENTA_EX,
+            yt_title,
+            Style.RESET_ALL,
+            Fore.LIGHTYELLOW_EX,
+            defaults.DEFAULT.SONG_QUALITY,
+            Style.RESET_ALL
+        ))
+        path = yt.dw(link, yt_title)
 
-    if type(path) is not str:
-        logger.critical("ERROR: {}".format(path))
-    else:
-        logger.info('Downloaded!')
+        if type(path) is not str:
+            logger.critical("ERROR: {}".format(path))
+        else:
+            logger.info('Downloaded!')
 
-    logger.info('Converting to mp3...')
+        logger.info('Converting to mp3...')
 
-    conv_name = utility.convert_to_mp3(path)
+        conv_name = utility.convert_to_mp3(path)
 
-    if type(conv_name) is not str:
-        logger.critical('ERROR: {}'.format(conv_name))
+        if type(conv_name) is not str:
+            logger.critical('ERROR: {}'.format(conv_name))
 
-    logger.info('Getting song data...')
+        logger.info('Getting song data...')
 
-    TRACK_INFO = metadata.SEARCH_SONG(song_name, filters=[args.artist, args.album])
+        TRACK_INFO = metadata.SEARCH_SONG(song_name, filters=[args.artist, args.album])
 
-    # declare a variable to store the option
-    option = 0
+        # declare a variable to store the option
+        option = 0
 
-    if TRACK_INFO is False:
-        # prepend.PREPEND(2)
-        # print('Data \a')
-        # exit(0)
-        pass
-    elif len(TRACK_INFO) == 0:
-        logger.critical('No data was found!\a')
-    else:
-        prepend.PREPEND(1)
-        print('Setting data...')
+        if TRACK_INFO is False:
+            # prepend.PREPEND(2)
+            # print('Data \a')
+            # exit(0)
+            pass
+        elif len(TRACK_INFO) == 0:
+            logger.critical('No data was found!\a')
+        else:
+            prepend.PREPEND(1)
+            print('Setting data...')
 
-        option = song.setData(TRACK_INFO, is_quiet, conv_name, passed_choice)
+            option = song.setData(TRACK_INFO, is_quiet, conv_name, passed_choice)
 
-        if type(option) is not int:
-            logger.critical('ERROR: {}'.format(option))
+            if type(option) is not int:
+                logger.critical('ERROR: {}'.format(option))
 
-    # Get the directory where song is moved
+        # Get the directory where song is moved
 
-    DIR = dir.cleanup(TRACK_INFO, option)
-    logger.info('Moving to {}...'.format(DIR))
+        DIR = dir.cleanup(TRACK_INFO, option)
+        logger.info('Moving to {}...'.format(DIR))
 
-    if type(DIR) is not str:
-        logger.critical('ERROR: {}'.format(DIR))
-    else:
-        logger.info('Done')
+        if type(DIR) is not str:
+            logger.critical('ERROR: {}'.format(DIR))
+        else:
+            logger.info('Done')
+    except KeyboardInterrupt:
+        logger.info("Exitting..!")
+        exit(0)
 
 
 def extract_data():
