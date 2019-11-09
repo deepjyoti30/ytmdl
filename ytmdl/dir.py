@@ -29,8 +29,8 @@ def cleanup(TRACK_INFO, index):
         shutil.move(SONG, os.path.join(DIR, SONG_NAME))
 
         return DIR
-    except Exception:
-        return False
+    except Exception as e:
+        return e
 
 
 def ret_proper_names(ordered_names):

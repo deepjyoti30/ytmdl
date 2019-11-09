@@ -115,15 +115,18 @@ def getChoice(SONG_INFO, type):
     return choice
 
 
-def setData(SONG_INFO, is_quiet, song_path):
+def setData(SONG_INFO, is_quiet, song_path, choice=None):
     """Add the metadata to the song."""
     # A variable to see if cover image was added.
     IS_IMG_ADDED = False
 
     try:
         # If more than one choice then call getChoice
-        if len(SONG_INFO) > 1 and not is_quiet:
-            option = getChoice(SONG_INFO, 'metadata')
+        if len(SONG_INFO) > 1:
+            if not is_quiet:
+                option = getChoice(SONG_INFO, 'metadata')
+            elif choice is not None and choice in range(1,len(SONG_INFO)):
+                option = choice
         else:
             option = 0
 

@@ -40,8 +40,8 @@ def convert_to_mp3(path):
         # Delete the temp file now
         remove(path)
         return new_name
-    except Exception:
-        return False
+    except Exception as e:
+        return e
 
 
 def is_valid(dir_path):

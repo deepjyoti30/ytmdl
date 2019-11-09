@@ -124,15 +124,15 @@ def main(args):
         if len(urls) == 0:
             logger.critical("No song found. Please try again with a different keyword.")
 
-        if len(data) > 1:
-            if not is_quiet:
-                # Ask for a choice
-                choice = song.getChoice(data, 'mp3')
-            elif passed_choice is not None and len(data) >= passed_choice:
-                logger.info("Selecting {} option".format(passed_choice))
-                choice = passed_choice - 1
+        if len(data) > 1 and not is_quiet:
+            # Ask for a choice
+            choice = song.getChoice(data, 'mp3')
         else:
-            choice = 0
+            if passed_choice is not None and passed_choice <= len(data):
+                choice = passed_choice - 1
+                logger.info("Using {} as choice".format(passed_choice))
+            else:
+                choice = 0
 
         link = 'https://youtube.com{}'.format(urls[int(choice)])
 
@@ -149,7 +149,7 @@ def main(args):
     ))
     path = yt.dw(link, yt_title)
 
-    if not path:
+    if type(path) is not str:
         logger.critical("ERROR: {}".format(path))
     else:
         logger.info('Downloaded!')
@@ -158,12 +158,11 @@ def main(args):
 
     conv_name = utility.convert_to_mp3(path)
 
-    if not conv_name:
-        logger.critical('Something went wrong while converting!\a')
+    if type(conv_name) is not str:
+        logger.critical('ERROR: {}'.format(conv_name))
 
     logger.info('Getting song data...')
 
-    # TRACK_INFO = song.getData(song_name)
     TRACK_INFO = metadata.SEARCH_SONG(song_name, filters=[args.artist, args.album])
 
     # declare a variable to store the option
@@ -180,18 +179,18 @@ def main(args):
         prepend.PREPEND(1)
         print('Setting data...')
 
-        option = song.setData(TRACK_INFO, is_quiet, conv_name)
+        option = song.setData(TRACK_INFO, is_quiet, conv_name, passed_choice)
 
         if type(option) is not int:
-            logger.critical('Something went wrong while writing data!\a')
+            logger.critical('ERROR: {}'.format(option))
 
     # Get the directory where song is moved
 
     DIR = dir.cleanup(TRACK_INFO, option)
     logger.info('Moving to {}...'.format(DIR))
 
-    if not DIR:
-        logger.critical('Something went wrong while moving!\a')
+    if type(DIR) is not str:
+        logger.critical('ERROR: {}'.format(DIR))
     else:
         logger.info('Done')
 
