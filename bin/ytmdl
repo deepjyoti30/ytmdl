@@ -40,14 +40,14 @@ def arguments():
                         help='show the program version number and exit')
     parser.add_argument('--url',
                         help="Youtube song link.")
-    parser.add_argument('--better-search', help="Better search is addition of\
+    parser.add_argument('--disable-metaadd', help="Disable addition of\
                         passed artist and album keyword to the youtube search\
-                        in order to get a more accurate result. (Default: true)",
-                        type=bool, default=True)
+                        in order to get a more accurate result. (Default: false)",
+                        action="store_true")
     parser.add_argument('-s', '--setup',
                         help='Setup the config file',
                         action='store_true')
-    parser.add_argument('-l', '--list', help="Download list of songs.\
+    parser.add_argument('--list', help="Download list of songs.\
                         The list should have one song name in every line.",
                         default=None)
     parser.add_argument('--nolocal',
@@ -108,7 +108,7 @@ def main(args):
         print(song_name, end='')
         print(Style.RESET_ALL)
 
-        data, urls = yt.search(song_name, args.better_search,
+        data, urls = yt.search(song_name, not args.disable_metaadd,
                                 kw=[args.artist, args.album])
         
         # Handle the exception if urls has len 0
