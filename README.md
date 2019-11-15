@@ -2,9 +2,8 @@
 <h1>YouTube Music Downloader</h1>
 </div>
 
-<div align="center">
-    <!--img src='https://i.imgur.com/YhEmZwo.gif'-->
-    <img src="ytmdl.gif">
+<div align="center" width="80%" height="auto">
+    <img src=".github/ytmdl.gif">
 </div>
 
 
