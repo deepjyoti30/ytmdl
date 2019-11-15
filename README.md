@@ -43,13 +43,18 @@
 
 ### Linux
 
- - Available in AUR [here](https://aur.archlinux.org/packages/ytmdl/)
+Available in **AUR** [here](https://aur.archlinux.org/packages/ytmdl/)
 
-  ```ytmdl``` is the package name.
+```sh
+yay -S ytmdl
+```
 
- - Available in PyPi [here](https://pypi.org/project/ytmdl/)
+Available in **PyPi** [here](https://pypi.org/project/ytmdl/)
 
-  ```ytmdl``` is the package name.
+
+```sh
+pip install ytmdl
+```
 
 
 ## Usage
@@ -84,8 +89,6 @@ optional arguments:
   --nolocal          Dont search locally for the song before downloading.
 
 ```
-
-_In case of windows, use ```python ytmdl.py``` instead of ```ytmdl``` above_
 
 ## Change Defaults
 
