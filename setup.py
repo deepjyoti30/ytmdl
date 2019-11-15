@@ -29,6 +29,7 @@ if __name__ == '__main__':
             'itunespy',
             'requests',
             'colorama',
-            'bs4'
+            'bs4',
+            'downloader-cli'
         ]
     )

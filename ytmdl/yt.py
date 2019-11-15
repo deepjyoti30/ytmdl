@@ -4,7 +4,8 @@ import requests
 from bs4 import BeautifulSoup
 import os
 import youtube_dl
-from ytmdl import defaults, utility, download
+from ytmdl import defaults, utility
+from downloader_cli.download import Download
 
 
 def get_youtube_streams(url):
@@ -73,7 +74,7 @@ def dw(value, song_name='ytmdl_temp.mp3'):
         with open(name, 'wb') as out_file:
             copyfileobj(response.raw, out_file)
         """
-        download.Download(url, name).download()
+        Download(url, name).download()
 
         return name
     except Exception as e:
