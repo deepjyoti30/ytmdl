@@ -60,6 +60,10 @@ def filterSongs(data, filters={}):
     In the passed filters the first element is artist.
     The second element is album."""
 
+    # In some cases the data can be None, then just return 
+    if data is None:
+        return data
+
     new_tuple = []
     rest = []
 

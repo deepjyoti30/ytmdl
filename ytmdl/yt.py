@@ -70,10 +70,6 @@ def dw(value, song_name='ytmdl_temp.mp3'):
         name = os.path.join(dw_dir, song_name)
 
         # Start downloading the song
-        """response = requests.get(url, stream=True)
-        with open(name, 'wb') as out_file:
-            copyfileobj(response.raw, out_file)
-        """
         Download(url, name).download()
 
         return name
