@@ -213,4 +213,7 @@ def extract_data():
 
 
 if __name__ == '__main__':
-    extract_data()
+    try:
+        extract_data()
+    except KeyboardInterrupt:
+        logger.info("Exiting..!")
