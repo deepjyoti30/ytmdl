@@ -59,6 +59,7 @@ def dw(value, song_name='ytmdl_temp.mp3'):
 
         # Replace the spaces with hashes
         song_name = song_name.replace(' ', '#')
+        song_name = song_name.replace('/', '#')
 
         # The directory where we will download to.
         dw_dir = defaults.DEFAULT.SONG_TEMP_DIR
