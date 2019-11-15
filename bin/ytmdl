@@ -52,7 +52,7 @@ def arguments():
                         type=int, default=None, metavar="CHOICE")
     parser.add_argument('--artist', help="Name of the artist")
     parser.add_argument('--album', help="Name of the album.")
-    parser.add_argument('--version', action='version', version='2019.10.8',
+    parser.add_argument('--version', action='version', version='2019.11.15',
                         help='show the program version number and exit')
     parser.add_argument('--url',
                         help="Youtube song link.")
