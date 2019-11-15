@@ -6,6 +6,17 @@ import setuptools
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
+req_pkgs = [
+            'youtube_dl',
+            'mutagen',
+            'itunespy',
+            'requests',
+            'colorama',
+            'bs4',
+            'downloader-cli'
+        ]
+
+
 if __name__ == '__main__':
     setuptools.setup(
         name="ytmdl",
@@ -23,13 +34,6 @@ if __name__ == '__main__':
             "Operating System :: OS Independent",
         ),
         scripts=['bin/ytmdl'],
-        install_requires=[
-            'youtube_dl',
-            'mutagen',
-            'itunespy',
-            'requests',
-            'colorama',
-            'bs4',
-            'downloader-cli'
-        ]
+        install_requires=req_pkgs,
+        setup_requires=req_pkgs
     )

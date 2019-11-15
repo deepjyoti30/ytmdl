@@ -48,6 +48,8 @@ Available in **AUR** [here](https://aur.archlinux.org/packages/ytmdl/)
 yay -S ytmdl
 ```
 
+**NOTE**: Please install [itunespy](https://pypi.org/project/itunespy/) manually using either pip or using the setup.py because it's not available in AUR at the moment.
+
 Available in **PyPi** [here](https://pypi.org/project/ytmdl/)
 
 
