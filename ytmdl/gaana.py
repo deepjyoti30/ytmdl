@@ -24,6 +24,12 @@ class GaanaSongs():
         self.primary_genre_name = SONG['gener'][0]['name']
         self.track_number = '1'
         self.artwork_url_100 = SONG['artwork_large']
+        self.track_time = self._convert_time(SONG['duration'])
+
+    def _convert_time(self, duration):
+        in_min = int(duration)
+        in_time = int(in_min / 60) + (0.01 * (in_min % 60))
+        return in_time
 
 
 def searchSong(querry, lim=40):
