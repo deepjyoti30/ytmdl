@@ -13,6 +13,9 @@ def get_from_itunes(SONG_NAME):
     # Try to get the song data from itunes
     try:
         SONG_INFO = itunespy.search_track(SONG_NAME)
+        # Before returning convert all the track_time values to minutes.
+        for song in SONG_INFO:
+            song.track_time = round(song.track_time / 60000, 2)
         return SONG_INFO
     except Exception:
         pass
