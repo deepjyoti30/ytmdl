@@ -13,7 +13,10 @@ from ytmdl.stringutils import (
 )
 from ytmdl.defaults import DEFAULT
 from ytmdl.prepend import PREPEND
+from ytmdl.logger import Logger
 from colorama import Fore, Style
+
+logger = Logger("cache")
 
 
 class Cache:
@@ -52,6 +55,7 @@ class Cache:
         return self.directory + "/" + song_name
 
     def search(self, song_name):
+        logger.info("Searching to see if already present in {}".format(self.directory))
         return self._search_tokens(song_name)
 
     def _search_tokens(self, song_name):
@@ -80,7 +84,7 @@ class Cache:
 
 def main(SONG_NAME=''):
     """Run on program call."""
-    cache = Cache("~/Music")
+    cache = Cache()
     match = cache.search(SONG_NAME)
     if match is not None:
         PREPEND(1)

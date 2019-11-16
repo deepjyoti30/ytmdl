@@ -7,6 +7,11 @@ import youtube_dl
 from ytmdl import defaults, utility
 from downloader_cli.download import Download
 
+from ytmdl.logger import Logger
+
+
+logger = Logger("yt")
+
 
 def get_youtube_streams(url):
     """Get both audio & vidoe stream urls for youtube using youtube-dl.
@@ -63,6 +68,7 @@ def dw(value, song_name='ytmdl_temp.mp3'):
 
         # The directory where we will download to.
         dw_dir = defaults.DEFAULT.SONG_TEMP_DIR
+        logger.info("Saving the files to: {}".format(dw_dir))
 
         if not os.path.exists(dw_dir):
             os.makedirs(dw_dir)

@@ -1,6 +1,8 @@
 """Functions used in setting up the config file are defined here."""
 
 import os
+import re
+from ytmdl.logger import Logger
 
 config_text = '#*****************************************#\n\
 #*-------------config for ytmdl ----------#\n\
@@ -49,42 +51,77 @@ config_text = '#*****************************************#\n\
 #'
 
 
+logger = Logger("config")
+
+
 class DEFAULTS:
     """Some default stuff defined."""
 
-    # The home dir
-    HOME_DIR = os.path.expanduser('~')
+    def __init__(self):
+        # The home dir
+        self.HOME_DIR = os.path.expanduser('~')
 
-    # The default song dir
-    SONG_DIR = os.path.join(HOME_DIR, 'Music')
+        # The default song dir
+        self.SONG_DIR = self._get_music_dir()
 
-    # The temp dir
-    SONG_TEMP_DIR = os.path.join(SONG_DIR, 'ytmdl')
+        # The temp dir
+        self.SONG_TEMP_DIR = os.path.join(self.SONG_DIR, 'ytmdl')
 
-    # The default song quality
-    SONG_QUALITY = '320'
+        # The default song quality
+        self.SONG_QUALITY = '320'
 
-    # The config path
-    CONFIG_PATH = os.path.join(HOME_DIR, '.config', 'ytmdl')
+        # The config path
+        self.CONFIG_PATH = os.path.join(self.HOME_DIR, '.config', 'ytmdl')
+
+    def _get_music_dir(self):
+        """Get the dir the file will be saved to."""
+        # The first preference will be ~/Music.
+        # If that is not present, try checking the XDG_MUSIC_DIR
+        # If still not, then use the current directory.
+        music_dir = self._get_xdg_dir()
+
+        if music_dir is None:
+            music_dir = os.path.join(self.HOME_DIR, 'Music')
+
+        if not os.path.exists(music_dir):
+            music_dir = os.getcwd()
+
+        return music_dir
+
+    def _get_xdg_dir(self):
+        """Get the xdg dir."""
+        file_path = os.path.expanduser('~/.config/user-dirs.dirs')
+
+        if not os.path.exists(file_path):
+            return None
+
+        with open(file_path, 'r') as RSTREAM:
+            data = RSTREAM.read()
+            path = re.findall(r'\nXDG_MUSIC_DIR.*?\n', str(data))
+            if not path:
+                return None
+            path = re.sub(r'\n|XDG_MUSIC_DIR|=|"', '', path[0])
+            path = os.path.expandvars(path)
+            return path
 
 
 def make_config():
     """Copy the config file to .config folder."""
     # Remove the current config from SONG_TEMP_DIR
-    config_path = os.path.join(DEFAULTS.CONFIG_PATH, 'config')
+    config_path = os.path.join(DEFAULTS().CONFIG_PATH, 'config')
 
     # Check if the ytmdl folder is present in config
-    if not os.path.isdir(DEFAULTS.CONFIG_PATH):
+    if not os.path.isdir(DEFAULTS().CONFIG_PATH):
         # Make the ytmdl folder
-        os.makedirs(DEFAULTS.CONFIG_PATH)
-    
+        os.makedirs(DEFAULTS().CONFIG_PATH)
+
     elif os.path.isfile(config_path):
         os.remove(config_path)
-        
+
     # Check if the ytmdl folder is present in Music directory
-    if not os.path.isdir(DEFAULTS.SONG_TEMP_DIR):
+    if not os.path.isdir(DEFAULTS().SONG_TEMP_DIR):
         # Make the ytmdl folder
-        os.makedirs(DEFAULTS.SONG_TEMP_DIR)
+        os.makedirs(DEFAULTS().SONG_TEMP_DIR)
 
 
     # Now write the config text to config file
@@ -99,8 +136,8 @@ def checkConfig():
     """
     # Try to see if the config is present in the SONG_TEMP_DIR
 
-    if os.path.isdir(DEFAULTS.CONFIG_PATH):
-        DIR_CONTENTS = os.listdir(DEFAULTS.CONFIG_PATH)
+    if os.path.isdir(DEFAULTS().CONFIG_PATH):
+        DIR_CONTENTS = os.listdir(DEFAULTS().CONFIG_PATH)
     else:
         return False
 
@@ -137,9 +174,9 @@ def checkExistence(keyword, value):
 def retDefault(keyword):
     """Return the DEFAULT value of keyword."""
     if keyword == 'QUALITY':
-        return DEFAULTS.SONG_QUALITY
+        return DEFAULTS().SONG_QUALITY
     elif keyword == 'SONG_DIR':
-        return DEFAULTS.SONG_DIR
+        return DEFAULTS().SONG_DIR
 
 
 def GIVE_DEFAULT(self, keyword):
@@ -152,7 +189,7 @@ def GIVE_DEFAULT(self, keyword):
         return retDefault(keyword)
     else:
         # Then read from it
-        READ_STREAM = open(os.path.join(DEFAULTS.CONFIG_PATH, 'config'), 'r')
+        READ_STREAM = open(os.path.join(DEFAULTS().CONFIG_PATH, 'config'), 'r')
 
         while True:
             line = READ_STREAM.readline()
@@ -175,6 +212,7 @@ def GIVE_DEFAULT(self, keyword):
                 if checkExistence(keyword, newDEFAULT):
                     return newDEFAULT
                 else:
+                    logger.warning("{}: doesn't exist.")
                     return retDefault(keyword)
 
 

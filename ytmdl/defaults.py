@@ -13,7 +13,7 @@ class DEFAULT:
     SONG_DIR = setupConfig.GIVE_DEFAULT(1, 'SONG_DIR')
 
     # the temp directory where songs will be modded
-    SONG_TEMP_DIR = os.path.join(HOME_DIR, 'Music', 'ytmdl')
+    SONG_TEMP_DIR = os.path.join(HOME_DIR, '.cache', 'ytmdl')
 
     # The path to keep cover image
     COVER_IMG = os.path.join(SONG_TEMP_DIR, 'cover.jpg')

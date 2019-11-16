@@ -7,12 +7,6 @@
 </div>
 
 
-<!--p align="center">
-  <a href="https://pypi.python.org/pypi/ytmdl/"><img src="https://img.shields.io/pypi/v/ytmdl.svg" alt="PyPi Version"/></a>
-  <a href="https://pypi.python.org/pypi/ytmdl/"><img src="https://pypip.in/py_versions/ytmdl/badge.svg" alt="PyPI Python Versions"/></a>
-  <a href="https://github.com/deepjyoti30/ytmdl/blob/master/LICENSE"><img src="https://img.shields.io/github/license/deepjyoti30/ytmdl.svg" alt="License"/></a>
-</p-->
-
 <div align="center">
 
 <br/>
