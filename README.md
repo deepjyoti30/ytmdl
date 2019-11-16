@@ -34,23 +34,29 @@
 
 ## Setup
 
-### Linux
+- **Hate your stable life? Love living on the bleeding edge?**
 
-Available in **AUR** [here](https://aur.archlinux.org/packages/ytmdl/)
+    - Clone the repo and install manually.
+    ```sh
+    git clone https://github.com/deepjyoti30/ytmdl && cd ytmdl && sudo python setup.py install
+    ```
 
-```sh
-yay -S ytmdl
-```
+- **Get the last released version?**
 
-**NOTE**: Please install [itunespy](https://pypi.org/project/itunespy/) manually using either pip or using the setup.py because it's not available in AUR at the moment.
+    Available in **AUR** [here](https://aur.archlinux.org/packages/ytmdl/)
 
-Available in **PyPi** [here](https://pypi.org/project/ytmdl/)
+    ```sh
+    yay -S ytmdl
+    ```
+
+    **NOTE**: Please install [itunespy](https://pypi.org/project/itunespy/) manually using either pip or using the setup.py because it's not available in AUR at the moment.
+
+    Available in **PyPi** [here](https://pypi.org/project/ytmdl/)
 
 
-```sh
-pip install ytmdl
-```
-
+    ```sh
+    pip install ytmdl
+    ```
 
 ## Usage
 
