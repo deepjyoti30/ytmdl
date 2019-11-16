@@ -36,7 +36,8 @@
 
 - **Hate your stable life? Love living on the bleeding edge?**
 
-    - Clone the repo and install manually.
+    Clone the repo and install manually.
+
     ```sh
     git clone https://github.com/deepjyoti30/ytmdl && cd ytmdl && sudo python setup.py install
     ```
