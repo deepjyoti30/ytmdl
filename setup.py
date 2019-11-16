@@ -33,6 +33,7 @@ if __name__ == '__main__':
             "License :: OSI Approved :: MIT License",
             "Operating System :: OS Independent",
         ),
+        python_requires=">=3.*",
         scripts=['bin/ytmdl'],
         install_requires=req_pkgs,
         setup_requires=req_pkgs
