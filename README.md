@@ -61,33 +61,32 @@ pip install ytmdl
 ## Usage
 
 ```console
-
 usage: ytmdl [-h] [-q] [--choice CHOICE] [--artist ARTIST] [--album ALBUM]
-             [--version] [--url URL] [--disable-metaadd] [-s] [--list LIST]
-             [--nolocal]
-             SONG_NAME [SONG_NAME ...]
+             [--version] [--url URL] [--disable-metaadd] [-s]
+             [--list PATH TO LIST] [--nolocal]
+             [SONG_NAME]
 
 positional arguments:
-  SONG_NAME          Name of the song to download.
+  SONG_NAME            Name of the song to download.
 
 optional arguments:
-  -h, --help         show this help message and exit
-  -q, --quiet        Don't ask the user to select songs if more than one
-                     search result. The first result in each case will be
-                     considered.
-  --choice CHOICE    The choice that the user wants to go for. Usefull to pass
-                     along with --quiet. Choices start at 1
-  --artist ARTIST    Name of the artist
-  --album ALBUM      Name of the album.
-  --version          show the program version number and exit
-  --url URL          Youtube song link.
-  --disable-metaadd  Disable addition of passed artist and album keyword to
-                     the youtube search in order to get a more accurate
-                     result. (Default: false)
-  -s, --setup        Setup the config file
-  --list LIST        Download list of songs. The list should have one song
-                     name in every line.
-  --nolocal          Dont search locally for the song before downloading.
+  -h, --help           show this help message and exit
+  -q, --quiet          Don't ask the user to select songs if more than one
+                       search result. The first result in each case will be
+                       considered.
+  --choice CHOICE      The choice that the user wants to go for. Usefull to
+                       pass along with --quiet. Choices start at 1
+  --artist ARTIST      Name of the artist
+  --album ALBUM        Name of the album.
+  --version            show the program version number and exit
+  --url URL            Youtube song link.
+  --disable-metaadd    Disable addition of passed artist and album keyword to
+                       the youtube search in order to get a more accurate
+                       result. (Default: false)
+  -s, --setup          Setup the config file
+  --list PATH TO LIST  Download list of songs. The list should have one song
+                       name in every line.
+  --nolocal            Dont search locally for the song before downloading.
 
 ```
 
