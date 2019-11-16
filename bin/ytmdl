@@ -40,7 +40,7 @@ def arguments():
     parser = argparse.ArgumentParser()
 
     parser.add_argument('SONG_NAME', help="Name of the song to download.",
-                        type=str, nargs="+")
+                        type=str, default=None, nargs="?")
     parser.add_argument('-q', '--quiet',
                         help="Don't ask the user to select songs\
                         if more than one search result.\
@@ -52,7 +52,7 @@ def arguments():
                         type=int, default=None, metavar="CHOICE")
     parser.add_argument('--artist', help="Name of the artist")
     parser.add_argument('--album', help="Name of the album.")
-    parser.add_argument('--version', action='version', version='2019.11.15',
+    parser.add_argument('--version', action='version', version='2019.11.15-2',
                         help='show the program version number and exit')
     parser.add_argument('--url',
                         help="Youtube song link.")
@@ -79,12 +79,15 @@ def arguments():
 def main(args):
     """Run on program call."""
     # args = arguments()
-    song_name = ' '.join(args.SONG_NAME)
+    song_name = args.SONG_NAME
 
     # Check if --setup is passed
     if args.setup:
         setupConfig.make_config()
         exit(0)
+
+    if song_name is None:
+        logger.critical("Song Name is required. Check 'ytmdl --help' for help.")
 
     if not args.nolocal:
         # Search for the song locally
