@@ -63,6 +63,10 @@ def print_choice(beg, end, SONG_INFO, type):
             print(SONG_INFO[beg].artist_name, end='')
         if type == 'mp3':
             print(SONG_INFO[beg]['author_name'], end='')
+            print(Style.RESET_ALL, end='')
+            print(' with dur ', end='')
+            print(Fore.GREEN, end='')
+            print("{}".format(SONG_INFO[beg]['duration']), end='')
         print(Style.RESET_ALL)
 
         beg += 1
