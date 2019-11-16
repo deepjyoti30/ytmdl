@@ -120,14 +120,14 @@ def main(args):
                 Style.RESET_ALL
         ))
 
-        data, urls = yt.search(song_name, not args.disable_metaadd,
+        data = yt.search(song_name, not args.disable_metaadd,
                                 kw=[args.artist, args.album])
         
         # Handle the exception if urls has len 0
-        if len(urls) == 0:
+        if len(data) == 0:
             logger.critical("No song found. Please try again with a different keyword.")
 
-        if len(data) > 1 and not is_quiet:
+        if not is_quiet:
             # Ask for a choice
             choice = song.getChoice(data, 'mp3')
         else:
@@ -137,7 +137,7 @@ def main(args):
             else:
                 choice = 0
 
-        link = 'https://youtube.com{}'.format(urls[int(choice)])
+        link = 'https://youtube.com{}'.format(data[int(choice)]['href'])
 
     # Declare a var to store the name of the yt video
     yt_title = data[choice]['title']

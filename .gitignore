@@ -2,3 +2,4 @@ build/*
 dist/*
 ytmdl.egg-info
 .eggs/*
+ytmdl/__pycache__/*

@@ -13,7 +13,8 @@ req_pkgs = [
             'requests',
             'colorama',
             'bs4',
-            'downloader-cli'
+            'downloader-cli',
+            'lxml'
         ]
 
 

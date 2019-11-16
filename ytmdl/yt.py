@@ -4,8 +4,10 @@ import requests
 from bs4 import BeautifulSoup
 import os
 import youtube_dl
+import re
 from ytmdl import defaults, utility
 from downloader_cli.download import Download
+import traceback
 
 from ytmdl.logger import Logger
 
@@ -81,6 +83,7 @@ def dw(value, song_name='ytmdl_temp.mp3'):
 
         return name
     except Exception as e:
+        traceback.print_exception(e)
         return e
 
 
@@ -99,9 +102,6 @@ def search(querry, bettersearch, kw=[], lim=10):
     Querry is the keyword, i:e name of the song
     lim is the number of songs that will be added to video array and returned
     """
-    # Initialize some tuples
-    video = []
-    urls = []
 
     # Add keywords if better search is enabled
     if bettersearch:
@@ -115,28 +115,30 @@ def search(querry, bettersearch, kw=[], lim=10):
     url = "https://www.youtube.com/results?search_query={}".format(querry)
 
     response = requests.get(url)
-    soup = BeautifulSoup(response.text, "html.parser")
-    count = 0
-    videos = soup.findAll('a', attrs={'class': 'yt-uix-tile-link'})
+    soup = BeautifulSoup(response.text, "lxml")
+    videos = soup.findAll('div', attrs={'class': 'yt-lockup-content'})
 
-    for vid in videos:
-        if lim == count:
-            break
+    if not videos:
+        return []
 
-        url = vid['href']
+    if len(videos) > lim:
+        videos = videos[:lim]
 
-        data = scan_video(url)
+    extracted_data = []
 
-        if data == "Unauthorized":
-            pass
-        elif not data:
-            break
-        else:
-            video.append(data)
-            urls.append(url)
-            count += 1
+    for video in videos:
+        a = video.find_all('a')
+        data = {}
+        data['title'] = a[0]['title']
+        data['href'] = a[0]['href']
+        data['author_name'] = a[1].text
+        duration_unprocessed = video.span.text
+        duration = re.sub(r'\ |\-|\.|Duration', '', duration_unprocessed)
+        data['duration'] = re.subn(r':', '', duration, 1)[0]
 
-    return (video, urls)
+        extracted_data.append(data)
+
+    return extracted_data
 
 
 def scan_video(url):
