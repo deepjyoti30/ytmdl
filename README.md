@@ -115,7 +115,7 @@ optional arguments:
                                     |--Song.mp3
 ```
 
-#### Adding any tag at the end of the SONG_DIR between [] will be considerd the name of the song.
+#### Adding any tag at the end of the SONG_DIR between [] will be considered the name of the song.
 ##### Example format is `/your/desired/path$Album->Artist->[Title]` to save in the following way
 
 ```sh
