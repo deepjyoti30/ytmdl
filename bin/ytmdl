@@ -65,7 +65,7 @@ def arguments():
                         action='store_true')
     parser.add_argument('--list', help="Download list of songs.\
                         The list should have one song name in every line.",
-                        default=None)
+                        default=None, metavar="path to list".upper())
     parser.add_argument('--nolocal',
                         help='Dont search locally for the song before\
                         downloading.',
