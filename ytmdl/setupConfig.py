@@ -3,6 +3,8 @@
 import os
 import re
 from ytmdl.logger import Logger
+from xdg.BaseDirectory import xdg_config_home
+
 
 config_text = '#*****************************************#\n\
 #*-------------config for ytmdl ----------#\n\
@@ -71,7 +73,7 @@ class DEFAULTS:
         self.SONG_QUALITY = '320'
 
         # The config path
-        self.CONFIG_PATH = os.path.join(self.HOME_DIR, '.config', 'ytmdl')
+        self.CONFIG_PATH = os.path.join(xdg_config_home, 'ytmdl')
 
     def _get_music_dir(self):
         """Get the dir the file will be saved to."""

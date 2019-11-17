@@ -4,6 +4,8 @@ import datetime
 import os
 from ytmdl.prepend import PREPEND
 
+from xdg.BaseDirectory import xdg_cache_home
+
 
 class Logger:
     """
@@ -14,7 +16,7 @@ class Logger:
         self.name = name
         self._file_format = ''
         self._console_format = ''
-        self._log_file = Path('~/.cache/ytmdl/logs/log.cat').expanduser()
+        self._log_file = Path(os.path.join(xdg_cache_home, 'ytmdl/logs/log.cat'))
         self._check_logfile()
         self._level_number = {
                                 'DEBUG': 0,
@@ -31,6 +33,7 @@ class Logger:
         If not present then create it.
         """
         if not self._log_file.exists():
+            print(self._log_file)
             if not self._log_file.parent.exists():
                 os.makedirs(self._log_file.parent)
             f = open(self._log_file, 'w')
