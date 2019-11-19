@@ -6,51 +6,51 @@ from ytmdl.logger import Logger
 from xdg.BaseDirectory import xdg_config_home
 
 
-config_text = '#*****************************************#\n\
-#*-------------config for ytmdl ----------#\n\
-#\n\
-#-----------------------------------------#\n\
-#------PLEASE DONT LEAVE ANY BLANK LINE---#\n\
-#-----------------------------------------#\n\
-#\n\
-# To change defaults just remove the hash(#)\n\
-# from thw beginning of the line.\n\
-# The will be read as a single line comment.\n\
-#\n\
-#*****************************************\n\
-# The SONG_DIR is the directory where all the songs will be saved.\n\
-# In order to change it, simply remove the hash from beginning\n\
-# And change the path to your desired one.\n\
-# In case the path has spaces in in, include it in a " "\n\
-# Following is a simple folder path example\n\
-#\n\
-#SONG_DIR = "path/to/your/desired/folder"\n\
-#\n\
-#************--------ADVANCED-------*********\n\
-# If you want to save the song in custom folders than those can be\n\
-# added to the name like the following example.\n\
-# The possible values are following\n\
-#\n\
-# Artist --> Song Artist\n\
-# Album  --> Song Album Name\n\
-# Title  --> Song Name\n\
-# Genre  --> Song Genre\n\
-# TrackNumber --> Song Number in the album\n\
-# ReleaseDate --> Song Release date\n\
-#\n\
-# Following is an example of the format\n\
-#SONG_DIR = "/home/deepjyoti30/Music$Artist->Album->Title"\n\
-#\n\
-#*****************************************#\n\
-# The QUALITY is the quality of the song in kbps\n\
-# By default it is set to 320kbps\n\
-# In case you want to change it to something else,\n\
-# Uncomment the following line and change it\n\
-#\n\
-# Supported values are 320 and 192\n\
-#\n\
-#QUALITY = "320"\n\
-#'
+config_text = '''#*****************************************#
+#*-------------config for ytmdl ----------#
+#
+#-----------------------------------------#
+#------PLEASE DON\'T LEAVE ANY BLANK LINE---#
+#-----------------------------------------#
+#
+# To change defaults just remove the hash(#)
+# from thw beginning of the line.
+# The will be read as a single line comment.
+#
+#*****************************************
+# The SONG_DIR is the directory where all the songs will be saved.
+# In order to change it, simply remove the hash from beginning
+# And change the path to your desired one.
+# In case the path has spaces in in, include it in a " "
+# Following is a simple folder path example
+#
+#SONG_DIR = "path/to/your/desired/folder"
+#
+#************--------ADVANCED-------*********
+# If you want to save the song in custom folders than those can be
+# added to the name like the following example.
+# The possible values are following
+#
+# Artist --> Song Artist
+# Album  --> Song Album Name
+# Title  --> Song Name
+# Genre  --> Song Genre
+# TrackNumber --> Song Number in the album
+# ReleaseDate --> Song Release date
+#
+# Following is an example of the format
+#SONG_DIR = "/home/user/Music$Artist->Album->Title"
+#
+#*****************************************#
+# The QUALITY is the quality of the song in kbps
+# By default it is set to 320kbps
+# In case you want to change it to something else,
+# Uncomment the following line and change it
+#
+# Supported values are 320 and 192
+#
+#QUALITY = "320"
+#'''
 
 
 logger = Logger("config")
@@ -157,7 +157,7 @@ def checkConfig():
 def checkExistence(keyword, value):
     """Check if the user specified value in config is possible."""
     if keyword == 'SONG_DIR':
-        # In this case check if $ and -> are presnt
+        # In this case check if $ and -> are present
         # If they are then only check if the base dir exists
         if '$' in value:
             pos = value.find('$')
