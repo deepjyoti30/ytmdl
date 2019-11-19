@@ -120,6 +120,10 @@ def make_config():
     elif os.path.isfile(config_path):
         os.remove(config_path)
 
+    # Make sure that the Music folder is present in the OS
+    if not os.path.isdir(DEFAULTS().SONG_DIR):
+        os.makedirs(DEFAULTS.SONG_DIR)
+
     # Check if the ytmdl folder is present in Music directory
     if not os.path.isdir(DEFAULTS().SONG_TEMP_DIR):
         # Make the ytmdl folder
