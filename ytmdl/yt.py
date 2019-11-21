@@ -128,6 +128,7 @@ def search(querry, bettersearch, kw=[], lim=10):
 
     for video in videos:
         a = video.find_all('a')
+        if len(a) <= 1: continue
         data = {}
         data['title'] = a[0]['title']
         data['href'] = a[0]['href']
