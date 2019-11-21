@@ -5,7 +5,7 @@
 ----------------------------------------------------
      A simple script to download songs in mp3 format
      from Youtube.
-     Users pass the song name as arguement.
+     Users pass the song name as arguments.
 ----------------------------------------------------
     --> Deepjyoti Barman
     --> deepjyoti30@github.com
@@ -67,7 +67,7 @@ def arguments():
                         The list should have one song name in every line.",
                         default=None, metavar="path to list".upper())
     parser.add_argument('--nolocal',
-                        help='Dont search locally for the song before\
+                        help='Don\'t search locally for the song before\
                         downloading.',
                         action='store_true')
 
