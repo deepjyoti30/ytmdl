@@ -54,7 +54,7 @@ def ret_proper_names(ordered_names):
 
 
 def seperate_kw(uns_kw):
-    """Seperate the keywords and return a list."""
+    """Separate the keywords and return a list."""
     sep_kw = []
 
     # Check if -> is present in the name

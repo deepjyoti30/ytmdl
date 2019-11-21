@@ -71,15 +71,15 @@ def filterSongs(data, filters={}):
     rest = []
 
     for songData in data:
-        aritstMatch = True
+        artistMatch = True
         albumMatch = True
 
         if filters[0] is not None:
-            aritstMatch = (songData.artist_name == filters[0])
+            artistMatch  = (songData.artist_name == filters[0])
         if filters[1] is not None:
             albumMatch = (songData.collection_name == filters[1])
 
-        if aritstMatch and albumMatch:
+        if artistMatch and albumMatch:
             new_tuple.append(songData)
         else:
             rest.append(songData)
