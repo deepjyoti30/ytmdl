@@ -178,7 +178,7 @@ def setData(SONG_INFO, is_quiet, song_path, choice=None):
         print('================================')
         print('  || YEAR: ' + SONG_INFO[option].release_date)
         print('  || TITLE: ' + SONG_INFO[option].track_name)
-        print('  || ARITST: ' + SONG_INFO[option].artist_name)
+        print('  || ARTIST: ' + SONG_INFO[option].artist_name)
         print('  || ALBUM: ' + SONG_INFO[option].collection_name)
         print('  || GENRE: ' + SONG_INFO[option].primary_genre_name)
         print('  || TRACK NO: ' + str(SONG_INFO[option].track_number))

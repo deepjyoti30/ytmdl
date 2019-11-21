@@ -16,7 +16,7 @@ logger = Logger("yt")
 
 
 def get_youtube_streams(url):
-    """Get both audio & vidoe stream urls for youtube using youtube-dl.
+    """Get both audio & video stream urls for youtube using youtube-dl.
 
     PS: I don't know how youtube-dl does the magic
     """
@@ -60,7 +60,7 @@ def dw(value, song_name='ytmdl_temp.mp3'):
         # Get the audio stream link
         url = get_youtube_streams(value)
 
-        # If song_name doesnt have mp3 extension, add it
+        # If song_name doesn't have mp3 extension, add it
         if not song_name.endswith('.mp3'):
             song_name += '.mp3'
 
@@ -96,10 +96,10 @@ def get_href(url):
     return part
 
 
-def search(querry, bettersearch, kw=[], lim=10):
-    """Search the querry in youtube and return lim number of results.
+def search(query, bettersearch, kw=[], lim=10):
+    """Search the query in youtube and return lim number of results.
 
-    Querry is the keyword, i:e name of the song
+    Query is the keyword, i:e name of the song
     lim is the number of songs that will be added to video array and returned
     """
 
@@ -107,12 +107,12 @@ def search(querry, bettersearch, kw=[], lim=10):
     if bettersearch:
         for keyword in kw:
             if keyword is not None:
-                querry += ' ' + keyword
+                query += ' ' + keyword
 
     # Replace all the spaces with +
-    querry = querry.replace(' ', '+')
+    query = query.replace(' ', '+')
 
-    url = "https://www.youtube.com/results?search_query={}".format(querry)
+    url = "https://www.youtube.com/results?search_query={}".format(query)
     videos = []
 
     try:
