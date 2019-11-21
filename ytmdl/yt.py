@@ -113,10 +113,18 @@ def search(querry, bettersearch, kw=[], lim=10):
     querry = querry.replace(' ', '+')
 
     url = "https://www.youtube.com/results?search_query={}".format(querry)
+    videos = []
 
-    response = requests.get(url)
-    soup = BeautifulSoup(response.text, "lxml")
-    videos = soup.findAll('div', attrs={'class': 'yt-lockup-content'})
+    try:
+        response = requests.get(url)
+        soup = BeautifulSoup(response.text, "lxml")
+        videos = soup.findAll('div', attrs={'class': 'yt-lockup-content'})
+    except requests.exceptions.ConnectionError:
+        logger.critical("Connection Error! Are you connected to internet?")
+    except requests.exceptions.Timeout:
+        logger.critical("Timed Out! Are you connected to internet?")
+    except Exception:
+        traceback.print_exc()
 
     if not videos:
         return []
