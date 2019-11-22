@@ -94,6 +94,10 @@ def main(args):
         if not cache.main(song_name):
             return 0
 
+    # Check if ffmpeg is installed.
+    if not utility.is_present('ffmpeg'):
+        logger.critical("ffmpeg is not installed. Please install it!")
+
     is_quiet = args.quiet
     url = args.url
     passed_choice = args.choice

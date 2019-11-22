@@ -3,7 +3,8 @@
 import subprocess
 from os import remove, path, popen
 from ytmdl import defaults
-    
+from shutil import which
+
 
 def exe(command):
     """Execute the command externally.
@@ -68,3 +69,8 @@ def get_songs(file_path):
             song_tup.append(line)
 
     return song_tup
+
+
+def is_present(app):
+    """Check if the passed app is installed in the machine."""
+    return which(app) is not None
