@@ -56,6 +56,8 @@
     pip install ytmdl
     ```
 
+    **Please install ffmpeg manually**
+
 ## Usage
 
 ```console
