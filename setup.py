@@ -15,7 +15,8 @@ req_pkgs = [
             'bs4',
             'downloader-cli',
             'lxml',
-            'pyxdg'
+            'pyxdg',
+            'ffmpeg'
         ]
 
 

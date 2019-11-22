@@ -4,6 +4,7 @@ import subprocess
 from os import remove, path, popen
 from ytmdl import defaults
 from shutil import which
+import ffmpeg
 
 
 def exe(command):
@@ -28,7 +29,7 @@ def get_terminal_length():
     return int(cols)
 
 
-def convert_to_mp3(path):
+def convert_to_mp3r(path):
     """Convert the file to mp3 using ffmpeg."""
     try:
         new_name = path + '_new.mp3'
@@ -43,6 +44,20 @@ def convert_to_mp3(path):
         return new_name
     except Exception as e:
         return e
+
+
+def convert_to_mp3(path):
+    """Covert to mp3 using the python ffmpeg module."""
+    new_name = path + '_new.mp3'
+    ffmpeg.input(path).output(
+                        new_name,
+                        loglevel='panic',
+                        ar=44100,
+                        ac=2,
+                        ab='{}k'.format(defaults.DEFAULT.SONG_QUALITY),
+                        f='mp3'
+                    ).run()
+    return new_name
 
 
 def is_valid(dir_path):
