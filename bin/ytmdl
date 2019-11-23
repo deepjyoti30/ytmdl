@@ -50,8 +50,10 @@ def arguments():
                         to go for. Usefull to pass along with --quiet.\
                         Choices start at 1", choices=range(1,50),
                         type=int, default=None, metavar="CHOICE")
-    parser.add_argument('--artist', help="Name of the artist")
-    parser.add_argument('--album', help="Name of the album.")
+    parser.add_argument('--artist', help="The name of the song's artist.\
+                        Pass it with a song name.")
+    parser.add_argument('--album', help="The name of the song's album.\
+                        Pass it with a song name.")
     parser.add_argument('--version', action='version', version='2019.11.15-2',
                         help='show the program version number and exit')
     parser.add_argument('--url',
