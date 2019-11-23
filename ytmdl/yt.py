@@ -7,7 +7,7 @@ import youtube_dl
 import re
 from ytmdl import defaults, utility
 from downloader_cli.download import Download
-# import traceback
+import traceback
 
 from ytmdl.logger import Logger
 
@@ -136,6 +136,8 @@ def search(query, bettersearch, kw=[], lim=10):
 
     for video in videos:
         a = video.find_all('a')
+        # This check is necessary because in some cases the search results
+        # contain channel names etc.
         if len(a) <= 1: continue
         data = {}
         data['title'] = a[0]['title']
