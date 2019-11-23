@@ -7,7 +7,7 @@ import youtube_dl
 import re
 from ytmdl import defaults, utility
 from downloader_cli.download import Download
-import traceback
+# import traceback
 
 from ytmdl.logger import Logger
 
@@ -83,7 +83,7 @@ def dw(value, song_name='ytmdl_temp.mp3'):
 
         return name
     except Exception as e:
-        traceback.print_exception(e)
+        # traceback.print_exception(e)
         return e
 
 
