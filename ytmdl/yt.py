@@ -5,7 +5,7 @@ from bs4 import BeautifulSoup
 import os
 import youtube_dl
 import re
-from ytmdl import defaults, utility
+from ytmdl import defaults, utility, stringutils
 from downloader_cli.download import Download
 import traceback
 
@@ -54,8 +54,7 @@ def dw(value, song_name='ytmdl_temp.mp3'):
             song_name += '.mp3'
 
         # Replace the spaces with hashes
-        song_name = song_name.replace(' ', '#')
-        song_name = song_name.replace('/', '#')
+        song_name = stringutils.remove_unwanted_chars(song_name)
 
         # The directory where we will download to.
         dw_dir = defaults.DEFAULT.SONG_TEMP_DIR

@@ -8,9 +8,11 @@ import json
 import re
 import urllib.parse
 
+
 def get_closest_match(string_list, string):
     closest_matches = difflib.get_close_matches(string, string_list, len(string_list), 0.3)
     return closest_matches[0] if len(closest_matches)>0 else None
+
 
 def get_closest_match_ignorecase(string_list, string):
     """
@@ -53,6 +55,11 @@ def compute_jaccard(tokens1, tokens2):
     union = set(tokens1).union(tokens2)
     intersect = set(tokens1).intersection(tokens2)
     return len(intersect)/len(union)
+
+
+def remove_unwanted_chars(string):
+    return re.sub(r" |/", "#", string)
+
 
 def urlencode(text):
     """
