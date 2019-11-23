@@ -28,37 +28,26 @@ def get_youtube_streams(url):
     return url
 
 
-def GRAB_SONG(link):
+def get_audio_URL(link):
     """Return true if the song is downloaded else false."""
-    ydl_opts = {
-        'format': 'bestaudio',
-        'quiet': True,
-        'outtmpl': os.path.join(defaults.DEFAULT.SONG_TEMP_DIR,
-                                '%(title)s.%(ext)s'),
-        'postprocessors': [{
-            'key': 'FFmpegExtractAudio',
-            'preferredcodec':  'mp3',
-            'preferredquality': defaults.DEFAULT.SONG_QUALITY
-        }]
-    }
+    ydl_opts = {}
+    ydl_opts['quiet'] = True
+    ydl_opts['nocheckcertificate'] = True
 
-    # Download the song with youtube-dl
+    ydl = youtube_dl.YoutubeDL(ydl_opts)
+    info = ydl.extract_info(link, download=False)
     try:
-        ydl = youtube_dl.YoutubeDL(ydl_opts)
-        ydl.download([link])
-        return True
-    except TimeoutError:
-        print('Timed Out! Are you connected to internet?\a')
-        return False
-    else:
-        return False
+        audio_url = info['formats'][1]['url']
+        return audio_url
+    except Exception as e:
+        logger.critical("Could not extract the audio URL: {}".format(e))
 
 
 def dw(value, song_name='ytmdl_temp.mp3'):
     """Download the song."""
     try:
         # Get the audio stream link
-        url = get_youtube_streams(value)
+        url = get_audio_URL(value)
 
         # If song_name doesn't have mp3 extension, add it
         if not song_name.endswith('.mp3'):
