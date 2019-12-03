@@ -67,9 +67,13 @@ def dw(value, song_name='ytmdl_temp.mp3'):
         name = os.path.join(dw_dir, song_name)
 
         # Start downloading the song
-        Download(url, name).download()
+        status = Download(url, name).download()
 
-        return name
+        if status:
+            return name
+        else:
+            raise "Downloader returned False"
+
     except Exception as e:
         # traceback.print_exception(e)
         return e
