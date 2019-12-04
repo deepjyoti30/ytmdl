@@ -233,4 +233,4 @@ if __name__ == '__main__':
     try:
         extract_data()
     except KeyboardInterrupt:
-        logger.info("/nExiting..!")
+        logger.info("\nExiting..!")
