@@ -116,7 +116,7 @@ def main(args):
     if url is not None:
         data = []
         # Get video data from youtube
-        temp_data = yt.scan_video(yt.get_href(url))
+        temp_data = yt.scan_video(yt.get_href(url), args.proxy)
         data.append(temp_data)
 
         # link to dw the song
@@ -135,6 +135,7 @@ def main(args):
         ))
 
         data = yt.search(song_name, not args.disable_metaadd,
+                                args.proxy,
                                 kw=[args.artist, args.album])
         
         # Handle the exception if urls has len 0

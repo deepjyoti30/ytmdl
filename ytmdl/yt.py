@@ -91,7 +91,7 @@ def get_href(url):
     return part
 
 
-def search(query, bettersearch, kw=[], lim=10):
+def search(query, bettersearch, proxy, kw=[], lim=10):
     """Search the query in youtube and return lim number of results.
 
     Query is the keyword, i:e name of the song
@@ -104,6 +104,11 @@ def search(query, bettersearch, kw=[], lim=10):
             if keyword is not None:
                 query += ' ' + keyword
 
+    # Check if proxy is passed.
+    proxies = []
+    if proxy is not None:
+        proxies.append(proxy)
+
     # Replace all the spaces with +
     query = query.replace(' ', '+')
 
@@ -111,7 +116,7 @@ def search(query, bettersearch, kw=[], lim=10):
     videos = []
 
     try:
-        response = requests.get(url)
+        response = requests.get(url, proxies=proxies)
         soup = BeautifulSoup(response.text, "lxml")
         videos = soup.findAll('div', attrs={'class': 'yt-lockup-content'})
     except requests.exceptions.ConnectionError:
@@ -147,12 +152,15 @@ def search(query, bettersearch, kw=[], lim=10):
     return extracted_data
 
 
-def scan_video(url):
+def scan_video(url, proxy):
     """Scan the link of the video and return data and."""
+    proxies = []
+    if proxy is not None:
+        proxies.append(proxy)
     try:
         search_tmplt = "http://www.youtube.com/oembed?url={}&format=json"
         search_url = search_tmplt.format(url)
-        r = requests.get(search_url)
+        r = requests.get(search_url, proxies=proxies)
 
         if r.status_code == 200:
             return r.json()
