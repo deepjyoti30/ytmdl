@@ -72,7 +72,7 @@ def dw(value, song_name='ytmdl_temp.mp3'):
         if status:
             return name
         else:
-            raise "Downloader returned False"
+            logger.critical("Downloader returned false!")
 
     except Exception as e:
         # traceback.print_exception(e)
