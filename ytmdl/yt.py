@@ -105,9 +105,9 @@ def search(query, bettersearch, proxy, kw=[], lim=10):
                 query += ' ' + keyword
 
     # Check if proxy is passed.
-    proxies = []
+    proxies = {}
     if proxy is not None:
-        proxies.append(proxy)
+        proxies['http'] = proxy
 
     # Replace all the spaces with +
     query = query.replace(' ', '+')
@@ -154,9 +154,9 @@ def search(query, bettersearch, proxy, kw=[], lim=10):
 
 def scan_video(url, proxy):
     """Scan the link of the video and return data and."""
-    proxies = []
+    proxies = {}
     if proxy is not None:
-        proxies.append(proxy)
+        proxies['http'] = proxy
     try:
         search_tmplt = "http://www.youtube.com/oembed?url={}&format=json"
         search_url = search_tmplt.format(url)
