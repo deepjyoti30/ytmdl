@@ -28,11 +28,14 @@ def get_youtube_streams(url):
     return url
 
 
-def get_audio_URL(link):
+def get_audio_URL(link, proxy):
     """Return true if the song is downloaded else false."""
     ydl_opts = {}
     ydl_opts['quiet'] = True
     ydl_opts['nocheckcertificate'] = True
+
+    if proxy is not None:
+        ydl_opts['proxy'] = proxy
 
     ydl = youtube_dl.YoutubeDL(ydl_opts)
     info = ydl.extract_info(link, download=False)
@@ -43,11 +46,11 @@ def get_audio_URL(link):
         logger.critical("Could not extract the audio URL: {}".format(e))
 
 
-def dw(value, song_name='ytmdl_temp.mp3'):
+def dw(value, proxy=None, song_name='ytmdl_temp.mp3'):
     """Download the song."""
     try:
         # Get the audio stream link
-        url = get_audio_URL(value)
+        url = get_audio_URL(value, proxy)
 
         # If song_name doesn't have mp3 extension, add it
         if not song_name.endswith('.mp3'):

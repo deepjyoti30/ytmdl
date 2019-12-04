@@ -54,8 +54,10 @@ def arguments():
                         Pass it with a song name.")
     parser.add_argument('--album', help="The name of the song's album.\
                         Pass it with a song name.")
-    parser.add_argument('--version', action='version', version='2019.11.15-2',
-                        help='show the program version number and exit')
+    parser.add_argument('--proxy', help='Use the specified HTTP/HTTPS/SOCKS proxy. To enable '
+             'SOCKS proxy, specify a proper scheme. For example '
+             'socks5://127.0.0.1:1080/. Pass in an empty string (--proxy "") '
+             'for direct connection', default=None, metavar='URL')
     parser.add_argument('--url',
                         help="Youtube song link.")
     parser.add_argument('--disable-metaadd', help="Disable addition of\
@@ -72,6 +74,8 @@ def arguments():
                         help='Don\'t search locally for the song before\
                         downloading.',
                         action='store_true')
+    parser.add_argument('--version', action='version', version='2019.11.15-2',
+                        help='show the program version number and exit')
 
     args = parser.parse_args()
 
@@ -160,7 +164,7 @@ def main(args):
         defaults.DEFAULT.SONG_QUALITY,
         Style.RESET_ALL
     ))
-    path = yt.dw(link, yt_title)
+    path = yt.dw(link, args.proxy, yt_title)
 
     if type(path) is not str:
         logger.critical("ERROR: {}".format(path))
