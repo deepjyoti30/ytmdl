@@ -55,9 +55,9 @@ def arguments():
     parser.add_argument('--album', help="The name of the song's album.\
                         Pass it with a song name.")
     parser.add_argument('--proxy', help='Use the specified HTTP/HTTPS/SOCKS proxy. To enable '
-             'SOCKS proxy, specify a proper scheme. For example '
-             'socks5://127.0.0.1:1080/. Pass in an empty string (--proxy "") '
-             'for direct connection', default=None, metavar='URL')
+                        'SOCKS proxy, specify a proper scheme. For example '
+                        'socks5://127.0.0.1:1080/. Pass in an empty string (--proxy "") '
+                        'for direct connection', default=None, metavar='URL')
     parser.add_argument('--url',
                         help="Youtube song link.")
     parser.add_argument('--disable-metaadd', help="Disable addition of\

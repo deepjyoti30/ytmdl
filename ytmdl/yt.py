@@ -51,6 +51,8 @@ def dw(value, proxy=None, song_name='ytmdl_temp.mp3'):
     try:
         # Get the audio stream link
         url = get_audio_URL(value, proxy)
+        logger.debug("Audio URL is: {}".format(url))
+        logger.hold()
 
         # If song_name doesn't have mp3 extension, add it
         if not song_name.endswith('.mp3'):
