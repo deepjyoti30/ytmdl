@@ -16,7 +16,8 @@ req_pkgs = [
             'downloader-cli',
             'lxml',
             'pyxdg',
-            'ffmpeg-python'
+            'ffmpeg-python',
+            'pysocks'
         ]
 
 

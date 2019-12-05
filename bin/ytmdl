@@ -116,6 +116,8 @@ def main(args):
     url = args.url
     passed_choice = args.choice
 
+    logger.debug("proxy passed: {}".format(args.proxy))
+
     if args.song is not None:
         song_metadata = args.song
     else:
