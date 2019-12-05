@@ -61,34 +61,37 @@
 ## Usage
 
 ```console
-usage: ytmdl [-h] [-q] [--choice CHOICE] [--artist ARTIST] [--album ALBUM] [--proxy URL]
-             [--url URL] [--disable-metaadd] [-s] [--list PATH TO LIST] [--nolocal]
-             [--version]
+usage: ytmdl [-h] [-q] [--song SONG-METADATA] [--choice CHOICE] [--artist ARTIST]
+             [--album ALBUM] [--proxy URL] [--url URL] [--disable-metaadd] [-s]
+             [--list PATH TO LIST] [--nolocal] [--version]
              [SONG_NAME [SONG_NAME ...]]
 
 positional arguments:
-  SONG_NAME            Name of the song to download.
+  SONG_NAME             Name of the song to download.
 
 optional arguments:
-  -h, --help           show this help message and exit
-  -q, --quiet          Don't ask the user to select songs if more than one search
-                       result. The first result in each case will be considered.
-  --choice CHOICE      The choice that the user wants to go for. Usefull to pass along
-                       with --quiet. Choices start at 1
-  --artist ARTIST      The name of the song's artist. Pass it with a song name.
-  --album ALBUM        The name of the song's album. Pass it with a song name.
-  --proxy URL          Use the specified HTTP/HTTPS/SOCKS proxy. To enable SOCKS proxy,
-                       specify a proper scheme. For example socks5://127.0.0.1:1080/.
-                       Pass in an empty string (--proxy "") for direct connection
-  --url URL            Youtube song link.
-  --disable-metaadd    Disable addition of passed artist and album keyword to the
-                       youtube search in order to get a more accurate result. (Default:
-                       false)
-  -s, --setup          Setup the config file
-  --list PATH TO LIST  Download list of songs. The list should have one song name in
-                       every line.
-  --nolocal            Don't search locally for the song before downloading.
-  --version            show the program version number and exit
+  -h, --help            show this help message and exit
+  -q, --quiet           Don't ask the user to select songs if more than one search
+                        result. The first result in each case will be considered.
+  --song SONG-METADATA  The song to search in Metadata. Particularly useful for songs
+                        that have the names in a different language in YouTube. For
+                        Example, greek songs.
+  --choice CHOICE       The choice that the user wants to go for. Usefull to pass along
+                        with --quiet. Choices start at 1
+  --artist ARTIST       The name of the song's artist. Pass it with a song name.
+  --album ALBUM         The name of the song's album. Pass it with a song name.
+  --proxy URL           Use the specified HTTP/HTTPS/SOCKS proxy. To enable SOCKS proxy,
+                        specify a proper scheme. For example socks5://127.0.0.1:1080/.
+                        Pass in an empty string (--proxy "") for direct connection
+  --url URL             Youtube song link.
+  --disable-metaadd     Disable addition of passed artist and album keyword to the
+                        youtube search in order to get a more accurate result. (Default:
+                        false)
+  -s, --setup           Setup the config file
+  --list PATH TO LIST   Download list of songs. The list should have one song name in
+                        every line.
+  --nolocal             Don't search locally for the song before downloading.
+  --version             show the program version number and exit
 
 ```
 
