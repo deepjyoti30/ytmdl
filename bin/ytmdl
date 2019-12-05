@@ -46,6 +46,10 @@ def arguments():
                         if more than one search result.\
                         The first result in each case will be considered.",
                         action='store_true')
+    parser.add_argument('--song', help="The song to search in Metadata. \
+                        Particularly useful for songs that have the names in a\
+                        different language in YouTube. For Example, greek songs.",
+                        metavar='SONG-METADATA', default=None)
     parser.add_argument('--choice', help="The choice that the user wants\
                         to go for. Usefull to pass along with --quiet.\
                         Choices start at 1", choices=range(1,50),
@@ -111,6 +115,11 @@ def main(args):
     is_quiet = args.quiet
     url = args.url
     passed_choice = args.choice
+
+    if args.song is not None:
+        song_metadata = args.song
+    else:
+        song_metadata = song_name
 
     # If the url is passed then get the data
     if url is not None:
@@ -179,9 +188,9 @@ def main(args):
     if type(conv_name) is not str:
         logger.critical('ERROR: {}'.format(conv_name))
 
-    logger.info('Getting song data...')
+    logger.info('Getting song data for {}...'.format(song_metadata))
 
-    TRACK_INFO = metadata.SEARCH_SONG(song_name, filters=[args.artist, args.album])
+    TRACK_INFO = metadata.SEARCH_SONG(song_metadata, filters=[args.artist, args.album])
 
     # declare a variable to store the option
     option = 0
