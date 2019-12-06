@@ -89,7 +89,13 @@ def arguments():
 def main(args):
     """Run on program call."""
     # args = arguments()
-    song_name = ' '.join(args.SONG_NAME)
+    logger.debug(len(args.SONG_NAME))
+    if len(args.SONG_NAME) > 1:
+        song_name = ' '.join(args.SONG_NAME)
+    else:
+        song_name = args.SONG_NAME[0]
+
+    logger.debug(song_name)
 
     # Check if --setup is passed
     if args.setup:
@@ -230,10 +236,12 @@ def extract_data():
 
     if args.list is not None:
         songs = utility.get_songs(args.list)
+        logger.debug(str(songs))
         if len(songs) != 0:
             logger.info("Downloading songs in {}".format(args.list))
             for song_name in songs:
-                args.SONG_NAME = song_name
+                logger.debug(song_name)
+                args.SONG_NAME = [song_name]
                 main(args)
         else:
             logger.info("{}: is empty".format(args.list))

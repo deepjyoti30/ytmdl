@@ -70,20 +70,15 @@ def is_valid(dir_path):
 
 def get_songs(file_path):
     """Extract the songs from the provided list."""
-    song_tup = []
 
     if is_valid(file_path):
-        STREAM = open(file_path, 'r')
+        RSTREAM = open(file_path, 'r')
 
-        while True:
-            line = STREAM.readline()
-            if not line:
-                break
-            # Remove the \n
-            line = line.replace('\n', '')
-            song_tup.append(line)
+        song_tup = RSTREAM.read().split("\n")
 
-    return song_tup
+        return song_tup
+    else:
+        return []
 
 
 def is_present(app):

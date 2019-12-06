@@ -84,7 +84,6 @@ class Logger:
         Add the message if the level is debug.
         """
         LEVEL_NUMBER = 0
-        PREPEND(1)
         self._write(message, LEVEL_NUMBER)
 
     def info(self, message):
