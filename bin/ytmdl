@@ -89,6 +89,15 @@ def arguments():
 def main(args):
     """Run on program call."""
     # args = arguments()
+
+    # Check if --setup is passed
+    if args.setup:
+        setupConfig.make_config()
+        exit(0)
+
+    if not args.SONG_NAME:
+        logger.critical("Song Name is required. Check 'ytmdl --help' for help.")
+
     logger.debug(len(args.SONG_NAME))
     if len(args.SONG_NAME) > 1:
         song_name = ' '.join(args.SONG_NAME)
@@ -96,14 +105,6 @@ def main(args):
         song_name = args.SONG_NAME[0]
 
     logger.debug(song_name)
-
-    # Check if --setup is passed
-    if args.setup:
-        setupConfig.make_config()
-        exit(0)
-
-    if not song_name:
-        logger.critical("Song Name is required. Check 'ytmdl --help' for help.")
 
     if not args.nolocal:
         # Search for the song locally
