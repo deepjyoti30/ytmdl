@@ -57,6 +57,8 @@ def convert_to_mp3(path):
                         ab='{}k'.format(defaults.DEFAULT.SONG_QUALITY),
                         f='mp3'
                     ).run()
+    # Delete the temp file now
+    remove(path)
     return new_name
 
 
