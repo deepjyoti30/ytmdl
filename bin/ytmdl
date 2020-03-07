@@ -80,6 +80,26 @@ def arguments():
                         action='store_true')
     parser.add_argument('--version', action='version', version='2019.11.15-2',
                         help='show the program version number and exit')
+    
+    logger_group = parser.add_argument_group("Logger")
+    logger_group.add_argument(
+        "--level",
+        help="The level of the logger that will be used while verbosing.\
+            Use `--list-level` to check available options." + "\n",
+        default="INFO",
+        type=str
+    )
+    logger_group.add_argument(
+        "--disable-file",
+        help="Disable logging to files",
+        default=False,
+        action="store_true",
+    )
+    logger_group.add_argument(
+        "--list-level",
+        help="List all the available logger levels.",
+        action="store_true"
+    )
 
     args = parser.parse_args()
 
@@ -88,12 +108,26 @@ def arguments():
 
 def main(args):
     """Run on program call."""
-    # args = arguments()
 
     # Check if --setup is passed
     if args.setup:
         setupConfig.make_config()
         exit(0)
+
+    if args.list_level:
+        logger.list_available_levels()
+        exit(0)
+
+    # Update the logger flags, in case those are not the default ones.
+    if args.level.lower != "info":
+        logger.update_level(args.level.upper())
+
+    if args.disable_file:
+        logger.update_disable_file(True)
+        logger.debug("Writing logs to file disabled")
+
+    # Just a message to make the user aware of the current running state
+    logger.debug("Logger running in DEBUG mode")
 
     if not args.SONG_NAME:
         logger.critical("Song Name is required. Check 'ytmdl --help' for help.")
