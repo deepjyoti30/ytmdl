@@ -46,28 +46,34 @@ def arguments():
                         if more than one search result.\
                         The first result in each case will be considered.",
                         action='store_true')
-    parser.add_argument('--song', help="The song to search in Metadata. \
+    metadata_group = parser.add_argument_group("Metadata")
+    metadata_group.add_argument(
+                        '--song', help="The song to search in Metadata. \
                         Particularly useful for songs that have the names in a\
                         different language in YouTube. For Example, greek songs.",
                         metavar='SONG-METADATA', default=None)
-    parser.add_argument('--choice', help="The choice that the user wants\
+    metadata_group.add_argument(
+                        '--choice', help="The choice that the user wants\
                         to go for. Usefull to pass along with --quiet.\
                         Choices start at 1", choices=range(1,50),
                         type=int, default=None, metavar="CHOICE")
-    parser.add_argument('--artist', help="The name of the song's artist.\
+    metadata_group.add_argument(
+                        '--artist', help="The name of the song's artist.\
                         Pass it with a song name.")
-    parser.add_argument('--album', help="The name of the song's album.\
+    metadata_group.add_argument(
+                        '--album', help="The name of the song's album.\
                         Pass it with a song name.")
+    metadata_group.add_argument('--disable-metaadd', help="Disable addition of\
+                        passed artist and album keyword to the youtube search\
+                        in order to get a more accurate result. (Default: false)",
+                        action="store_true")
+
     parser.add_argument('--proxy', help='Use the specified HTTP/HTTPS/SOCKS proxy. To enable '
                         'SOCKS proxy, specify a proper scheme. For example '
                         'socks5://127.0.0.1:1080/. Pass in an empty string (--proxy "") '
                         'for direct connection', default=None, metavar='URL')
     parser.add_argument('--url',
                         help="Youtube song link.")
-    parser.add_argument('--disable-metaadd', help="Disable addition of\
-                        passed artist and album keyword to the youtube search\
-                        in order to get a more accurate result. (Default: false)",
-                        action="store_true")
     parser.add_argument('-s', '--setup',
                         help='Setup the config file',
                         action='store_true')
