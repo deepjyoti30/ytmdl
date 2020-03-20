@@ -8,6 +8,7 @@ import re
 from ytmdl import defaults, utility, stringutils
 from downloader_cli.download import Download
 import traceback
+from sys import stdout
 
 from ytmdl.logger import Logger
 
@@ -28,32 +29,73 @@ def get_youtube_streams(url):
     return url
 
 
-def get_audio_URL(link, proxy):
-    """Return true if the song is downloaded else false."""
-    ydl_opts = {}
-    ydl_opts['quiet'] = True
-    ydl_opts['nocheckcertificate'] = True
+# Function to be called by ytdl progress hook.
+def progress_handler(d):
+    d_obj = Download('', '')
+
+    if d['status'] == 'downloading':
+        length = d_obj._get_terminal_length()
+        time_left = d['eta']
+        f_size_disp, dw_unit = d_obj._format_size(d['downloaded_bytes'])
+        percent = d['downloaded_bytes'] / d['total_bytes'] * 100
+        speed, s_unit, time_left, time_unit = d_obj._get_speed_n_time(
+                    d['downloaded_bytes'],
+                    0,
+                    cur_time=d['elapsed'] - 6
+                )
+
+        status = r"%-7s" % ("%s %s" % (round(f_size_disp), dw_unit))
+        if d['speed'] is not None:
+            speed, s_unit = d_obj._format_speed(d['speed'] / 1000)
+            status += r"| %-3s " % ("%s %s" % (round(speed), s_unit))
+
+        status += r"|| ETA: %-4s " % (
+                                    "%s %s" %
+                                    (round(time_left), time_unit))
+
+        status = d_obj._get_bar(status, length, percent)
+        status += r" %-4s" % ("{}%".format(round(percent)))
+
+        stdout.write('\r')
+        stdout.write(status)
+        stdout.flush()
+
+    if d['status'] == "finished":
+        print(d["filename"])
+        f_size, f_unit = d_obj._format_size(d['total_bytes'])
+        print(r"%.2f %s" % (round(f_size), f_unit))
+
+
+def dw_using_yt(link, proxy, song_name):
+    """
+    Download the song using YTDL downloader and use downloader CLI's
+    functions to be used to display a progressbar.
+
+    The function will be called by using hooks.
+    """
+
+    ydl_opts = {
+        'quiet': True,
+        'outtmpl': song_name,
+        'format': 'bestaudio/best',
+        'nocheckcertificate': True,
+        'progress_hooks': [progress_handler],
+    }
 
     if proxy is not None:
         ydl_opts['proxy'] = proxy
 
     ydl = youtube_dl.YoutubeDL(ydl_opts)
-    info = ydl.extract_info(link, download=False)
+
     try:
-        audio_url = info['formats'][1]['url']
-        return audio_url
+        ydl.download([link])
     except Exception as e:
-        logger.critical("Could not extract the audio URL: {}".format(e))
+        logger.critical("{}".format(e))
 
 
 def dw(value, proxy=None, song_name='ytmdl_temp.mp3'):
     """Download the song."""
     try:
-        # Get the audio stream link
-        url = get_audio_URL(value, proxy)
-        logger.debug("Audio URL is: {}".format(url))
-        logger.hold()
-
         # If song_name doesn't have mp3 extension, add it
         if not song_name.endswith('.mp3'):
             song_name += '.mp3'
@@ -70,14 +112,12 @@ def dw(value, proxy=None, song_name='ytmdl_temp.mp3'):
 
         # Name of the temp file
         name = os.path.join(dw_dir, song_name)
+        logger.debug(name)
 
         # Start downloading the song
-        status = Download(url, name).download()
+        dw_using_yt(value, proxy, name)
 
-        if status:
-            return name
-        else:
-            logger.critical("Downloader returned false!")
+        return name
 
     except Exception as e:
         # traceback.print_exception(e)
