@@ -84,7 +84,7 @@ def arguments():
                         help='Don\'t search locally for the song before\
                         downloading.',
                         action='store_true')
-    parser.add_argument('--version', action='version', version='2019.11.15-2',
+    parser.add_argument('--version', action='version', version='2020.03.21',
                         help='show the program version number and exit')
     
     logger_group = parser.add_argument_group("Logger")
