@@ -10,8 +10,8 @@ import urllib.parse
 
 
 def get_closest_match(string_list, string):
-    closest_matches = difflib.get_close_matches(string, string_list, len(string_list), 0.3)
-    return closest_matches[0] if len(closest_matches)>0 else None
+    closest_matches = difflib.get_close_matches(string, string_list, len(string_list), 0.6)
+    return closest_matches if len(closest_matches)>0 else None
 
 
 def get_closest_match_ignorecase(string_list, string):
@@ -46,7 +46,7 @@ def replace_space(string, replacer):
     return re.sub(r"\s", replacer, string)
 
 def remove_punct(string):
-    return re.sub(r"[-:_!,'()]+", ' ', string)
+    return re.sub(r"[-:_!,'()’]+", '', string)
 
 def replace_character(string, character, replacer):
     return re.sub(r"{}".format(character), replacer, string)

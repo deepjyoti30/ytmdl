@@ -32,23 +32,25 @@ def get_from_gaana(SONG_NAME):
 
 def _search_tokens(song_name, song_list):
     """Search song in the cache based on simple each word matching."""
-    song_name = remove_stopwords(remove_multiple_spaces(song_name).lower())
+    song_name = remove_punct(
+                    remove_stopwords(
+                        remove_multiple_spaces(song_name).lower()
+                    ))
     tokens1 = song_name.split()
     cached_songs = song_list
 
     res = []
     for song in cached_songs:
         song_back = song
-        song = song.track_name
-        name = song.lower()
+        name = song.track_name.lower()
         name = remove_punct(name)
         name = remove_multiple_spaces(name)
         tokens2 = name.split()
         match = check_keywords(tokens1, tokens2)
         if match:
             dist = compute_jaccard(tokens1, tokens2)
-            # if dist >= 1:
-            res.append((song_back, dist))
+            if dist >= 1:
+                res.append((song_back, dist))
     res = sorted(res, key=lambda x: x[1], reverse=True)
 
     # Return w/o the dist values
@@ -57,7 +59,7 @@ def _search_tokens(song_name, song_list):
     return res
 
 
-def filterSongs(data, filters={}):
+def filterSongs(data, filters=[]):
     """Filter the songs according to the passed filters.
 
     In the passed filters the first element is artist.
@@ -75,7 +77,7 @@ def filterSongs(data, filters={}):
         albumMatch = True
 
         if filters[0] is not None:
-            artistMatch  = (songData.artist_name == filters[0])
+            artistMatch = (songData.artist_name == filters[0])
         if filters[1] is not None:
             albumMatch = (songData.collection_name == filters[1])
 
@@ -114,6 +116,7 @@ def SEARCH_SONG(q="Tera Buzz", filters=[]):
 
     # Send the data to get sorted
     sorted_data = _search_tokens(q, to_be_sorted)
+    # sorted_data = to_be_sorted
 
     # Add the unsorted data
     sorted_data += rest
@@ -122,7 +125,7 @@ def SEARCH_SONG(q="Tera Buzz", filters=[]):
 
 
 if __name__ == '__main__':
-    n = SEARCH_SONG("Giorgio", ["Moroder", None])
+    n = SEARCH_SONG("That's what I like", ["Bruno Mars", None])
 
     for i in n:
         print(i.track_name + ' by ' + i.artist_name + ' of ' + i.collection_name)
