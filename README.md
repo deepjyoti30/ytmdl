@@ -11,7 +11,7 @@
 <div align="center">
 
 <br/>
-<a href="#prerequisites">Prerequisites</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="#setup">Setup</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="#usage">Usage</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="#change-defaults">Change Defaults</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="#acknowledgements">Acknowledgements</a>&nbsp;&nbsp;&nbsp;
+<a href="#why-this">Why this?</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="#prerequisites">Prerequisites</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="#setup">Setup</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="#usage">Usage</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="#change-defaults">Change Defaults</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="#acknowledgements">Acknowledgements</a>&nbsp;&nbsp;&nbsp;
 <br/>
 </div>
 
@@ -22,10 +22,16 @@
 [![forthebadge made-with-python](http://ForTheBadge.com/images/badges/made-with-python.svg)](https://www.python.org/)<br/><br/>
 ![Travis (.org)](https://img.shields.io/travis/deepjyoti30/ytmdl?style=for-the-badge) [![License](https://img.shields.io/badge/License-MIT-pink.svg?style=for-the-badge)](LICENSE.md) ![PyPI](https://img.shields.io/pypi/v/ytmdl?style=for-the-badge) ![AUR](https://img.shields.io/aur/version/ytmdl?color=red&style=for-the-badge) ![PyPI - Downloads](https://img.shields.io/pypi/dm/ytmdl?style=for-the-badge) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-lightblue.svg?style=for-the-badge)](http://makeapullrequest.com)
 
-<!--[![Build Status][img-travis-ci]][Passing]&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;[![PyPI license](https://img.shields.io/pypi/l/ansicolortags.svg)](https://pypi.python.org/pypi/ansicolortags/)&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;[![PyPI status](https://img.shields.io/pypi/status/ansicolortags.svg)](https://pypi.python.org/pypi/ansicolortags/)&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;[![GitHub release](https://img.shields.io/github/release/Naereen/StrapDown.js.svg)](https://GitHub.com/Naereen/StrapDown.js/releases/)[![PRs Welcome][prs-badge]][prs]-->
-
 
 </div>
+
+## Why this?
+
+This app downloads a song by getting the audio from Youtube sources __using__ youtube-dl and then adds song information like
+artist name, album name, release date, thumbnail etc by fetching it from sources like Itunes and Gaana.
+
+__NO__. YoutubeDL doesn't do that. All youtube-dl does is lets you download audio from a video that you specify.
+__This app is not yet another youtube-dl clone.__
 
 
 ## Prerequisites
