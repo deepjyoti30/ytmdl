@@ -60,11 +60,6 @@ def progress_handler(d):
         stdout.write(status)
         stdout.flush()
 
-    if d['status'] == "finished":
-        print(d["filename"])
-        f_size, f_unit = d_obj._format_size(d['total_bytes'])
-        print(r"%.2f %s" % (round(f_size), f_unit))
-
 
 def dw_using_yt(link, proxy, song_name):
     """
