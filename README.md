@@ -1,5 +1,6 @@
 <div align="center">
 <h1>YouTube Music Downloader</h1>
+<h4>Download songs from YouTube by getting the audio from YouTube and the metadata from sources like Itunes and Gaana.</h4>
 </div>
 
 <div align="center" width="80%" height="auto">
