@@ -43,6 +43,7 @@ __This app is not yet another youtube-dl clone.__
 
  - [Manual](#manual)
  - [AUR](#aur)
+ - [Gentoo](#gentoo)
  - [PyPi](#pypi)
 
     ## Manual
@@ -63,7 +64,20 @@ __This app is not yet another youtube-dl clone.__
       ```sh
       yay -S ytmdl
       ```
-    
+    ## Gentoo
+
+
+      Available in **src_prepare-overlay** [here](https://gitlab.com/src_prepare/src_prepare-overlay)
+
+      ```sh
+      # First set up src_prepare-overlay (as root)
+      emerge -av --noreplace app-eselect/eselect-repository
+      eselect repository enable src_prepare-overlay
+      emaint sync -r src_prepare-overlay
+      # Finally emerge ytmdl (as root)
+      emerge -av --autounmask net-misc/ytmdl
+      ```
+
     ## PyPi
 
       Available in **PyPi** [here](https://pypi.org/project/ytmdl/)
