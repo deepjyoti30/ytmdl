@@ -41,23 +41,20 @@ __This app is not yet another youtube-dl clone.__
 
 ## Setup
 
- - [Manual](#manual)
+ - [PyPi](#pypi)
  - [AUR](#aur)
  - [Gentoo](#gentoo)
- - [PyPi](#pypi)
+ - [Manual](#manual)
 
-    ## Manual
+    ## PyPi
 
-    - **Hate your stable life? Love living on the bleeding edge?**
+      Available in **PyPi** [here](https://pypi.org/project/ytmdl/)
 
-        Clone the repo and install manually.
+      ```sh
+      pip install ytmdl
+      ```
 
-        ```sh
-        git clone https://github.com/deepjyoti30/ytmdl && cd ytmdl && sudo python setup.py install
-        ```
-    
     ## AUR
-
 
       Available in **AUR** [here](https://aur.archlinux.org/packages/ytmdl/)
 
@@ -65,7 +62,6 @@ __This app is not yet another youtube-dl clone.__
       yay -S ytmdl
       ```
     ## Gentoo
-
 
       Available in **src_prepare-overlay** [here](https://gitlab.com/src_prepare/src_prepare-overlay)
 
@@ -78,13 +74,16 @@ __This app is not yet another youtube-dl clone.__
       emerge -av --autounmask net-misc/ytmdl
       ```
 
-    ## PyPi
+    ## Manual
 
-      Available in **PyPi** [here](https://pypi.org/project/ytmdl/)
+    - **Hate your stable life? Love living on the bleeding edge?**
 
-      ```sh
-      pip install ytmdl
-      ```
+        Clone the repo and install manually.
+
+        ```sh
+        git clone https://github.com/deepjyoti30/ytmdl && cd ytmdl && sudo python setup.py install
+        ```
+    
 
 ## Usage
 
