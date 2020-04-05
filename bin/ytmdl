@@ -84,7 +84,7 @@ def arguments():
                         help='Don\'t search locally for the song before\
                         downloading.',
                         action='store_true')
-    parser.add_argument('--version', action='version', version='2020.03.21',
+    parser.add_argument('--version', action='version', version='2020.03.21-2',
                         help='show the program version number and exit')
     
     logger_group = parser.add_argument_group("Logger")
@@ -286,6 +286,22 @@ def extract_data():
                 main(args)
         else:
             logger.info("{}: is empty".format(args.list))
+    elif yt.is_playlist(args.SONG_NAME):
+        logger.info("Youtube playlist passed...extracting!")
+        songs = yt.get_playlist(args.SONG_NAME, args.proxy)
+
+        # Check if data is actually returned
+        if songs is None:
+            logger.error("Couldn't extract playlist data!")
+
+        logger.info("{} songs found".format(len(songs)))
+
+        # Iterate and work on the data.
+        url_base = "https://www.youtube.com/watch?v="
+        for song in songs:
+            args.url = url_base + song["url"]
+            args.SONG_NAME = song["title"]
+            main(args)
     else:
         main(args)
 

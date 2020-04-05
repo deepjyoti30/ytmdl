@@ -208,6 +208,19 @@ def scan_video(url, proxy):
         return False
 
 
+def is_playlist(url):
+    """
+    Check if the passed URL is a youtube playlist
+    URL.
+    """
+    logger.debug("Passed url is: {}".format(url))
+    playlist_part = "https://www.youtube.com/playlist?list"
+    if playlist_part in url:
+        return True
+    else:
+        return False
+
+
 def get_playlist(url, proxy):
     """
     Extract the playlist data and return it accordingly.
