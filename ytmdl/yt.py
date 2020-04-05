@@ -220,7 +220,7 @@ def is_playlist(url):
         return False
 
 
-def get_playlist(url, proxy):
+def get_playlist(url, proxy, playlist_start=None, playlist_end=None):
     """
     Extract the playlist data and return it accordingly.
 
@@ -240,6 +240,10 @@ def get_playlist(url, proxy):
 
     if proxy is not None:
         ydl_opts['proxy'] = proxy
+    if playlist_start is not None:
+        ydl_opts['playliststart'] = playlist_start
+    if playlist_end is not None:
+        ydl_opts['playlistend'] = playlist_end
 
     # Extract the info now
     songs = youtube_dl.YoutubeDL(ydl_opts).extract_info(url, False)

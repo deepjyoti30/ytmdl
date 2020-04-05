@@ -87,6 +87,22 @@ def arguments():
                         action='store_true')
     parser.add_argument('--version', action='version', version='2020.03.21-2',
                         help='show the program version number and exit')
+
+    playlist_group = parser.add_argument_group("Playlist")
+    playlist_group.add_argument(
+        "--playlist-start",
+        help="Playlist video to start at (default is 1)",
+        default=None,
+        metavar="NUMBER",
+        type=int
+    )
+    playlist_group.add_argument(
+        "--playlist-end",
+        help="Playlist video to end at (default is last)",
+        default=None,
+        metavar="NUMBER",
+        type=int
+    )
     
     logger_group = parser.add_argument_group("Logger")
     logger_group.add_argument(
