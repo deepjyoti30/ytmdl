@@ -88,10 +88,12 @@ __This app is not yet another youtube-dl clone.__
 ## Usage
 
 ```console
-usage: ytmdl [-h] [-q] [--song SONG-METADATA] [--choice CHOICE] [--artist ARTIST]
-             [--album ALBUM] [--disable-metaadd] [--proxy URL] [--url URL] [-s]
-             [--list PATH TO LIST] [--nolocal] [--version] [--level LEVEL]
-             [--disable-file] [--list-level]
+usage: ytmdl [-h] [-q] [--song SONG-METADATA] [--choice CHOICE]
+             [--artist ARTIST] [--album ALBUM] [--disable-metaadd]
+             [--proxy URL] [--url URL] [-s] [--list PATH TO LIST] [--nolocal]
+             [--version] [--pl-start NUMBER] [--pl-end NUMBER]
+             [--pl-items ITEM_SPEC] [--level LEVEL] [--disable-file]
+             [--list-level]
              [SONG_NAME [SONG_NAME ...]]
 
 positional arguments:
@@ -99,34 +101,47 @@ positional arguments:
 
 optional arguments:
   -h, --help            show this help message and exit
-  -q, --quiet           Don't ask the user to select songs if more than one search
-                        result. The first result in each case will be considered.
-  --proxy URL           Use the specified HTTP/HTTPS/SOCKS proxy. To enable SOCKS
-                        proxy, specify a proper scheme. For example
-                        socks5://127.0.0.1:1080/. Pass in an empty string (--proxy
-                        "") for direct connection
+  -q, --quiet           Don't ask the user to select songs if more than one
+                        search result. The first result in each case will be
+                        considered.
+  --proxy URL           Use the specified HTTP/HTTPS/SOCKS proxy. To enable
+                        SOCKS proxy, specify a proper scheme. For example
+                        socks5://127.0.0.1:1080/. Pass in an empty string
+                        (--proxy "") for direct connection
   --url URL             Youtube song link.
   -s, --setup           Setup the config file
-  --list PATH TO LIST   Download list of songs. The list should have one song name in
-                        every line.
+  --list PATH TO LIST   Download list of songs. The list should have one song
+                        name in every line.
   --nolocal             Don't search locally for the song before downloading.
   --version             show the program version number and exit
 
 Metadata:
-  --song SONG-METADATA  The song to search in Metadata. Particularly useful for songs
-                        that have the names in a different language in YouTube. For
-                        Example, greek songs.
-  --choice CHOICE       The choice that the user wants to go for. Usefull to pass
-                        along with --quiet. Choices start at 1
-  --artist ARTIST       The name of the song's artist. Pass it with a song name.
+  --song SONG-METADATA  The song to search in Metadata. Particularly useful for
+                        songs that have the names in a different language in
+                        YouTube. For Example, greek songs.
+  --choice CHOICE       The choice that the user wants to go for. Usefull to
+                        pass along with --quiet. Choices start at 1
+  --artist ARTIST       The name of the song's artist. Pass it with a song
+                        name.
   --album ALBUM         The name of the song's album. Pass it with a song name.
-  --disable-metaadd     Disable addition of passed artist and album keyword to the
-                        youtube search in order to get a more accurate result.
-                        (Default: false)
+  --disable-metaadd     Disable addition of passed artist and album keyword to
+                        the youtube search in order to get a more accurate
+                        result. (Default: false)
+
+Playlist:
+  --pl-start NUMBER     Playlist video to start at (default is 1)
+  --pl-end NUMBER       Playlist video to end at (default is last)
+  --pl-items ITEM_SPEC  Playlist video items to download. Specify indices of
+                        the videos present in the playlist seperated by commas
+                        like: '--playlist-items 1, 2, 4, 6' if you want to
+                        download videos indexed 1, 2, 4 and 6. Range can also
+                        be passed like: '--playlist-items 1-3, 5-7' to download
+                        the videos indexed at 1, 2, 3, 5, 6, 7.
 
 Logger:
-  --level LEVEL         The level of the logger that will be used while verbosing.
-                        Use `--list-level` to check available options.
+  --level LEVEL         The level of the logger that will be used while
+                        verbosing. Use `--list-level` to check available
+                        options.
   --disable-file        Disable logging to files
   --list-level          List all the available logger levels.
 
