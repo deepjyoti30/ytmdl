@@ -103,6 +103,19 @@ def arguments():
         metavar="NUMBER",
         type=int
     )
+    playlist_group.add_argument(
+        "--playlist-items",
+        help="Playlist video items to download. \
+             Specify indices of the videos present in the\
+             playlist seperated by commas like: '--playlist-items\
+              1, 2, 4, 6' if you want to download videos indexed\
+             1, 2, 4 and 6. Range can also be passed like:\
+             '--playlist-items 1-3, 5-7' to download the videos\
+             indexed at 1, 2, 3, 5, 6, 7.",
+        type=str,
+        metavar="item_spec".upper(),
+        default=None
+    )
     
     logger_group = parser.add_argument_group("Logger")
     logger_group.add_argument(
