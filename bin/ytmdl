@@ -289,12 +289,13 @@ def extract_data():
             logger.info("{}: is empty".format(args.list))
     elif yt.is_playlist(args.SONG_NAME[0]):
         logger.info("Youtube playlist passed...extracting!")
-        songs = yt.get_playlist(args.SONG_NAME[0], args.proxy)
+        songs, playlist_name = yt.get_playlist(args.SONG_NAME[0], args.proxy)
 
         # Check if data is actually returned
         if songs is None:
             logger.error("Couldn't extract playlist data!")
 
+        logger.info("Playlist: {}".format(playlist_name))
         logger.info("{} songs found".format(len(songs)))
 
         # Iterate and work on the data.

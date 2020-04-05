@@ -245,7 +245,7 @@ def get_playlist(url, proxy):
     songs = youtube_dl.YoutubeDL(ydl_opts).extract_info(url, False)
 
     try:
-        return songs["entries"]
+        return songs["entries"], songs["title"]
     except KeyError:
         logger.warning(
             "Something went wrong while extracting the playlist data."
