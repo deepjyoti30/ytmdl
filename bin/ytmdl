@@ -40,7 +40,9 @@ def arguments():
     """Parse the arguments."""
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('SONG_NAME', help="Name of the song to download.",
+    parser.add_argument('SONG_NAME', help="Name of the song to download.\
+                         Can be an URL to a playlist as well. It will be\
+                         automatically recognized.",
                         type=str, nargs="*")
     parser.add_argument('-q', '--quiet',
                         help="Don't ask the user to select songs\

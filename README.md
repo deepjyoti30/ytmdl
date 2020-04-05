@@ -97,7 +97,8 @@ usage: ytmdl [-h] [-q] [--song SONG-METADATA] [--choice CHOICE]
              [SONG_NAME [SONG_NAME ...]]
 
 positional arguments:
-  SONG_NAME             Name of the song to download.
+  SONG_NAME             Name of the song to download. Can be an URL to a
+                        playlist as well. It will be automatically recognized.
 
 optional arguments:
   -h, --help            show this help message and exit
