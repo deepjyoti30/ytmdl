@@ -90,21 +90,21 @@ def arguments():
 
     playlist_group = parser.add_argument_group("Playlist")
     playlist_group.add_argument(
-        "--playlist-start",
+        "--pl-start",
         help="Playlist video to start at (default is 1)",
         default=None,
         metavar="NUMBER",
         type=int
     )
     playlist_group.add_argument(
-        "--playlist-end",
+        "--pl-end",
         help="Playlist video to end at (default is last)",
         default=None,
         metavar="NUMBER",
         type=int
     )
     playlist_group.add_argument(
-        "--playlist-items",
+        "--pl-items",
         help="Playlist video items to download. \
              Specify indices of the videos present in the\
              playlist seperated by commas like: '--playlist-items\
@@ -318,7 +318,13 @@ def extract_data():
             logger.info("{}: is empty".format(args.list))
     elif yt.is_playlist(args.SONG_NAME[0]):
         logger.info("Youtube playlist passed...extracting!")
-        songs, playlist_name = yt.get_playlist(args.SONG_NAME[0], args.proxy)
+        songs, playlist_name = yt.get_playlist(
+                                    args.SONG_NAME[0],
+                                    args.proxy,
+                                    args.pl_start,
+                                    args.pl_end,
+                                    args.pl_items
+                                )
 
         # Check if data is actually returned
         if songs is None:
