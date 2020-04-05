@@ -26,7 +26,8 @@ from ytmdl import (
             cache,
             utility,
             metadata,
-            logger
+            logger,
+            stringutils
 )
 
 # init colorama for windows
@@ -286,9 +287,9 @@ def extract_data():
                 main(args)
         else:
             logger.info("{}: is empty".format(args.list))
-    elif yt.is_playlist(args.SONG_NAME):
+    elif yt.is_playlist(args.SONG_NAME[0]):
         logger.info("Youtube playlist passed...extracting!")
-        songs = yt.get_playlist(args.SONG_NAME, args.proxy)
+        songs = yt.get_playlist(args.SONG_NAME[0], args.proxy)
 
         # Check if data is actually returned
         if songs is None:
@@ -300,7 +301,7 @@ def extract_data():
         url_base = "https://www.youtube.com/watch?v="
         for song in songs:
             args.url = url_base + song["url"]
-            args.SONG_NAME = song["title"]
+            args.SONG_NAME = [stringutils.remove_yt_words(song["title"])]
             main(args)
     else:
         main(args)

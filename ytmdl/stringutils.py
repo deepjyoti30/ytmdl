@@ -88,6 +88,15 @@ def check_keywords(tokens1, tokens2):
     res = [token in tokens2 for token in tokens1]
     return sum(res) == len(tokens1)
 
+
+def remove_yt_words(title):
+    """
+    Remove words like Official video etc from the name of the song
+    """
+    title = re.sub(r'[|]official|video', '', str(title))
+    return title
+
+
 def main():
     pass
 

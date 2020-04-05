@@ -213,7 +213,6 @@ def is_playlist(url):
     Check if the passed URL is a youtube playlist
     URL.
     """
-    logger.debug("Passed url is: {}".format(url))
     playlist_part = "https://www.youtube.com/playlist?list"
     if playlist_part in url:
         return True
