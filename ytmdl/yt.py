@@ -208,5 +208,38 @@ def scan_video(url, proxy):
         return False
 
 
+def get_playlist(url, proxy):
+    """
+    Extract the playlist data and return it accordingly.
+
+    The return result will be a dictionary with the following
+    entries
+    _type: Type of the entity returned.
+    url  : URL of the video
+    title: Title of the video.
+    """
+    ydl_opts = {
+        'quiet': True,
+        'format': 'bestaudio/best',
+        'nocheckcertificate': True,
+        'dump_single_json': True,
+        'extract_flat': True,
+    }
+
+    if proxy is not None:
+        ydl_opts['proxy'] = proxy
+
+    # Extract the info now
+    songs = youtube_dl.YoutubeDL(ydl_opts).extract_info(url, False)
+
+    try:
+        return songs["entries"]
+    except KeyError:
+        logger.warning(
+            "Something went wrong while extracting the playlist data."
+        )
+        return None
+
+
 if __name__ == '__main__':
     print(defaults.DEFAULT.SONG_QUALITY)
