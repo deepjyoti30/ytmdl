@@ -93,7 +93,7 @@ def remove_yt_words(title):
     """
     Remove words like Official video etc from the name of the song
     """
-    title = re.sub(r'\]|\[|official|video|-', '', str(title).lower())
+    title = re.sub(r'\]|\[|official|video|music|-|\)|\(|®', '', str(title).lower())
     # Replace more than one space with one space
     title = re.sub(r'\ {2}', ' ', title)
     return title
