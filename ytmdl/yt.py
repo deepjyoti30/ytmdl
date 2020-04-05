@@ -244,6 +244,15 @@ def get_playlist(url, proxy):
     # Extract the info now
     songs = youtube_dl.YoutubeDL(ydl_opts).extract_info(url, False)
 
+    # Put another check to see if the passed URL is a playlist
+    try:
+        if songs["_type"] != "playlist":
+            logger.warning("Passed URL is not a playlist URL")
+            return None
+    except KeyError:
+        pass
+
+    # Return the songs now.
     try:
         return songs["entries"], songs["title"]
     except KeyError:
