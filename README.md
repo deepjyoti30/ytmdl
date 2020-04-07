@@ -92,8 +92,8 @@ usage: ytmdl [-h] [-q] [--song SONG-METADATA] [--choice CHOICE]
              [--artist ARTIST] [--album ALBUM] [--disable-metaadd]
              [--proxy URL] [--url URL] [-s] [--list PATH TO LIST] [--nolocal]
              [--version] [--pl-start NUMBER] [--pl-end NUMBER]
-             [--pl-items ITEM_SPEC] [--level LEVEL] [--disable-file]
-             [--list-level]
+             [--pl-items ITEM_SPEC] [--ignore-errors] [--level LEVEL]
+             [--disable-file] [--list-level]
              [SONG_NAME [SONG_NAME ...]]
 
 positional arguments:
@@ -138,6 +138,9 @@ Playlist:
                         download videos indexed 1, 2, 4 and 6. Range can also
                         be passed like: '--playlist-items 1-3, 5-7' to download
                         the videos indexed at 1, 2, 3, 5, 6, 7.
+  --ignore-errors       Ignore if downloading any video fails in a playlist. If
+                        passed, the execution will move to the next video in
+                        the passed playlist.
 
 Logger:
   --level LEVEL         The level of the logger that will be used while
