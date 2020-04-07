@@ -84,8 +84,10 @@ def dw_using_yt(link, proxy, song_name):
 
     try:
         ydl.download([link])
+        return 0
     except Exception as e:
-        logger.critical("{}".format(e))
+        logger.warning("{}".format(e))
+        return e
 
 
 def dw(value, proxy=None, song_name='ytmdl_temp.mp3'):
@@ -110,9 +112,12 @@ def dw(value, proxy=None, song_name='ytmdl_temp.mp3'):
         logger.debug(name)
 
         # Start downloading the song
-        dw_using_yt(value, proxy, name)
+        status = dw_using_yt(value, proxy, name)
 
-        return name
+        if status == 0:
+            return name
+        else:
+            return status
 
     except Exception as e:
         # traceback.print_exception(e)
