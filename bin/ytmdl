@@ -118,6 +118,13 @@ def arguments():
         metavar="item_spec".upper(),
         default=None
     )
+    playlist_group.add_argument(
+        "--ignore-errors",
+        help="Ignore if downloading any video fails in a playlist.\
+             If passed, the execution will move to the next video in the\
+             passed playlist.",
+        action="store_true"
+    )
     
     logger_group = parser.add_argument_group("Logger")
     logger_group.add_argument(
@@ -262,7 +269,11 @@ def main(args):
     path = yt.dw(link, args.proxy, yt_title)
 
     if type(path) is not str:
-        logger.critical("ERROR: {}".format(path))
+        if not args.ignore_errors:
+            logger.critical("ERROR: {}".format(path))
+        else:
+            logger.info("--ignore-errors passed. Skipping this song!")
+            return
     else:
         logger.info('Downloaded!')
 
