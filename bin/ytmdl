@@ -218,6 +218,15 @@ def main(args):
         data = []
         # Get video data from youtube
         temp_data = yt.scan_video(yt.get_href(url), args.proxy)
+
+        # Sometimes the temp_data may be returned as unauthorized, skip that
+        if type(temp_data) is str and temp_data.lower() == "Unauthorized".lower():
+            if args.ignore_errors:
+                logger.warning("{}: is unauthorized".format(url))
+                return
+            else:
+                logger.critical("{}: is unauthorized".format(url))
+
         data.append(temp_data)
 
         # link to dw the song
@@ -256,6 +265,7 @@ def main(args):
         link = 'https://youtube.com{}'.format(data[int(choice)]['href'])
 
     # Declare a var to store the name of the yt video
+    logger.debug("{}".format(data[choice]))
     yt_title = data[choice]['title']
 
     logger.info('Downloading {}{}{} in {}{}kbps{}'.format(
