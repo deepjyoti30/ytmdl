@@ -274,5 +274,20 @@ def get_playlist(
         return None
 
 
+def get_title(url):
+    """
+    Return the title of the passed URL.
+    """
+    ydl_opts = {"quiet": True}
+    ydl = youtube_dl.YoutubeDL(ydl_opts)
+    data = ydl.extract_info(url, False)
+
+    try:
+        return stringutils.remove_yt_words(data["title"])
+    except KeyError:
+        logger.error("Wasn't able to extract the name of the song.")
+        return ""
+
+
 if __name__ == '__main__':
     print(defaults.DEFAULT.SONG_QUALITY)

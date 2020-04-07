@@ -167,16 +167,20 @@ def main(args):
     # Just a message to make the user aware of the current running state
     logger.debug("Logger running in DEBUG mode")
 
-    if not args.SONG_NAME:
+    if not args.SONG_NAME and not args.url:
         logger.critical("Song Name is required. Check 'ytmdl --help' for help.")
 
     logger.debug(len(args.SONG_NAME))
     if len(args.SONG_NAME) > 1:
         song_name = ' '.join(args.SONG_NAME)
+    elif not args.SONG_NAME:
+        # Fetch the title of the song
+        song_name = yt.get_title(args.url)
     else:
         song_name = args.SONG_NAME[0]
 
     logger.debug(song_name)
+    logger.hold()
 
     if not args.nolocal:
         # Search for the song locally
@@ -318,7 +322,7 @@ def extract_data():
                 main(args)
         else:
             logger.info("{}: is empty".format(args.list))
-    elif yt.is_playlist(args.SONG_NAME[0]):
+    elif args.SONG_NAME and yt.is_playlist(args.SONG_NAME[0]):
         logger.info("Youtube playlist passed...extracting!")
         songs, playlist_name = yt.get_playlist(
                                     args.SONG_NAME[0],
@@ -339,7 +343,14 @@ def extract_data():
         url_base = "https://www.youtube.com/watch?v="
         for song in songs:
             args.url = url_base + song["url"]
-            args.SONG_NAME = [stringutils.remove_yt_words(song["title"])]
+
+            # Try to pass the title as well, if it's not there
+            # that will be handled by ytmdl
+            try:
+                args.SONG_NAME = [stringutils.remove_yt_words(song["title"])]
+            except KeyError:
+                pass
+
             main(args)
     else:
         main(args)
