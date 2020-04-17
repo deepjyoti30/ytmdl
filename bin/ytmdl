@@ -77,9 +77,6 @@ def arguments():
                         'for direct connection', default=None, metavar='URL')
     parser.add_argument('--url',
                         help="Youtube song link.")
-    parser.add_argument('-s', '--setup',
-                        help='Setup the config file',
-                        action='store_true')
     parser.add_argument('--list', help="Download list of songs.\
                         The list should have one song name in every line.",
                         default=None, metavar="path to list".upper())
@@ -154,11 +151,6 @@ def arguments():
 def main(args):
     """Run on program call."""
 
-    # Check if --setup is passed
-    if args.setup:
-        setupConfig.make_config()
-        exit(0)
-
     if args.list_level:
         logger.list_available_levels()
         exit(0)
@@ -173,6 +165,13 @@ def main(args):
 
     # Just a message to make the user aware of the current running state
     logger.debug("Logger running in DEBUG mode")
+
+    # Check if --setup is passed
+    if not setupConfig.check_config_setup():
+        logger.debug("Config not present, creating default.")
+        setupConfig.make_config()
+        logger.debug("Config created")
+        logger.info("Created new config since none was present")
 
     if not args.SONG_NAME and not args.url:
         logger.critical("Song Name is required. Check 'ytmdl --help' for help.")

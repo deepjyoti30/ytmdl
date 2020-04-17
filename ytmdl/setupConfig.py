@@ -115,7 +115,7 @@ def make_config():
     # Check if the ytmdl folder is present in config
     if not os.path.isdir(DEFAULTS().CONFIG_PATH):
         # Make the ytmdl folder
-        os.makedirs(DEFAULTS().CONFIG_PATH)
+        os.makedirs(DEFAULTS().CONFIG_PATH, exist_ok=True)
 
     elif os.path.isfile(config_path):
         os.remove(config_path)
@@ -124,7 +124,6 @@ def make_config():
     if not os.path.isdir(DEFAULTS().SONG_TEMP_DIR):
         # Make the ytmdl folder
         os.makedirs(DEFAULTS().SONG_TEMP_DIR)
-
 
     # Now write the config text to config file
     with open(config_path, 'w') as write_config:
@@ -148,6 +147,33 @@ def checkConfig():
         return True
     else:
         return True
+
+
+def check_config_setup():
+    """
+    Method to check if the config file is setup.
+
+    This is different from the above method because
+    it will check if the config is setup and not do
+    anything about it.
+
+    The return value can be used to perform on config
+    setup etc.
+    """
+    # There are two possibilities that might indicate
+    # that the config is not setup.
+    DEFAULT_CONF_PATH = DEFAULTS().CONFIG_PATH
+
+    # Check if ytmdl config directory is present
+    if not os.path.isdir(DEFAULT_CONF_PATH):
+        return False
+
+    # Check if config file is present
+    if not os.path.isfile(os.path.join(DEFAULT_CONF_PATH, 'config')):
+        return False
+
+    # Else it's probably setup
+    return True
 
 
 def checkExistence(keyword, value):
