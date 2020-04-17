@@ -126,13 +126,12 @@ def setData(SONG_INFO, is_quiet, song_path, choice=None):
 
     try:
         # If more than one choice then call getChoice
+        option = 0
         if len(SONG_INFO) > 1:
             if not is_quiet:
                 option = getChoice(SONG_INFO, 'metadata')
             elif choice is not None and choice in range(1,len(SONG_INFO)):
                 option = choice
-        else:
-            option = 0
 
         SONG_PATH = os.path.join(defaults.DEFAULT.SONG_TEMP_DIR,
                                  song_path)
