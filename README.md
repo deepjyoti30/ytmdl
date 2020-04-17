@@ -94,7 +94,7 @@ __This app is not yet another youtube-dl clone.__
 ```console
 usage: ytmdl [-h] [-q] [--song SONG-METADATA] [--choice CHOICE]
              [--artist ARTIST] [--album ALBUM] [--disable-metaadd]
-             [--proxy URL] [--url URL] [-s] [--list PATH TO LIST] [--nolocal]
+             [--proxy URL] [--url URL] [--list PATH TO LIST] [--nolocal]
              [--version] [--pl-start NUMBER] [--pl-end NUMBER]
              [--pl-items ITEM_SPEC] [--ignore-errors] [--level LEVEL]
              [--disable-file] [--list-level]
