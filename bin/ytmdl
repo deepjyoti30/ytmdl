@@ -311,7 +311,7 @@ def main(args):
         prepend.PREPEND(1)
         print('Setting data...')
 
-        option = song.setData(TRACK_INFO, is_quiet, conv_name, passed_choice)
+        option = song.setData(TRACK_INFO, is_quiet, conv_name, choice)
 
         if type(option) is not int:
             logger.critical('ERROR: {}'.format(option))
