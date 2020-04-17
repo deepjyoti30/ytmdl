@@ -114,7 +114,6 @@ optional arguments:
                         socks5://127.0.0.1:1080/. Pass in an empty string
                         (--proxy "") for direct connection
   --url URL             Youtube song link.
-  -s, --setup           Setup the config file
   --list PATH TO LIST   Download list of songs. The list should have one song
                         name in every line.
   --nolocal             Don't search locally for the song before downloading.
