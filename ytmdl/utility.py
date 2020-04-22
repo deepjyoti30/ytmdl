@@ -62,6 +62,21 @@ def convert_to_mp3(path):
     return new_name
 
 
+def convert_to_aac(path):
+    new_name = path + '_new.mp3'
+    ffmpeg.input(path).output(
+                        new_name,
+                        loglevel='panic',
+                        ar=44100,
+                        ac=2,
+                        ab='{}k'.format(defaults.DEFAULT.SONG_QUALITY),
+                        f='aac'
+                    ).run()
+    # Delete the temp file now
+    remove(path)
+    return new_name
+
+
 def is_valid(dir_path):
     """Check if passed path is valid or not."""
     if not path.isfile(dir_path):

@@ -6,6 +6,7 @@ All the functions used to interact with the downloaded song are defined here.
 from colorama import Fore, Style
 from mutagen.id3 import ID3, APIC, TIT2, TPE1, TALB, TCON, TRCK, TYER
 from mutagen.mp3 import MP3
+from mutagen.aac import AAC
 import requests
 from ytmdl import prepend, defaults
 import os
@@ -130,7 +131,7 @@ def setData(SONG_INFO, is_quiet, song_path, choice=None):
         if len(SONG_INFO) > 1:
             if not is_quiet:
                 option = getChoice(SONG_INFO, 'metadata')
-            elif choice is not None and choice in range(1,len(SONG_INFO)):
+            elif choice is not None and choice in range(1, len(SONG_INFO)):
                 option = choice
 
         SONG_PATH = os.path.join(defaults.DEFAULT.SONG_TEMP_DIR,

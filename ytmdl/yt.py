@@ -61,7 +61,7 @@ def progress_handler(d):
         stdout.flush()
 
 
-def dw_using_yt(link, proxy, song_name):
+def dw_using_yt(link, proxy, song_name, datatype):
     """
     Download the song using YTDL downloader and use downloader CLI's
     functions to be used to display a progressbar.
@@ -90,13 +90,23 @@ def dw_using_yt(link, proxy, song_name):
         return e
 
 
-def dw(value, proxy=None, song_name='ytmdl_temp.mp3'):
-    """Download the song."""
-    try:
-        # If song_name doesn't have mp3 extension, add it
-        if not song_name.endswith('.mp3'):
-            song_name += '.mp3'
+def dw(value, proxy=None, song_name='ytmdl_temp.mp3', datatype='mp3'):
+    """
+    Download the song.
 
+    The song can be downloaded in various types.
+
+    Default type is mp3 as ytmdl was solely designed to download
+    MP3 songs, however due to user requests other formats are
+    added.
+    """
+    # If song_name doesn't have mp3 extension, add it
+    if datatype == "mp3" and not song_name.endswith(datatype):
+        song_name += '.' + datatype
+    elif datatype == "m4a" and not song_name.endswith(datatype):
+        song_name += '.' + datatype
+
+    try:
         # Replace the spaces with hashes
         song_name = stringutils.remove_unwanted_chars(song_name)
 
@@ -112,7 +122,7 @@ def dw(value, proxy=None, song_name='ytmdl_temp.mp3'):
         logger.debug(name)
 
         # Start downloading the song
-        status = dw_using_yt(value, proxy, name)
+        status = dw_using_yt(value, proxy, name, datatype)
 
         if status == 0:
             return name
