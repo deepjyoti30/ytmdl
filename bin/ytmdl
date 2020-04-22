@@ -208,10 +208,14 @@ def main(args):
     is_quiet = args.quiet
     url = args.url
     passed_choice = args.choice
-    passed_format = args.format
+    passed_format = args.format.lower()
 
     logger.debug("proxy passed: {}".format(args.proxy))
     logger.debug("Passed format: {}".format(passed_format))
+
+    # Check if passed format is support, if not exit.
+    if passed_format not in defaults.FORMAT.valid_formats:
+        logger.critical("Passed format is not supported yet!")
 
     if args.song is not None:
         song_metadata = args.song

@@ -21,3 +21,14 @@ class DEFAULT:
 
     # The song quality
     SONG_QUALITY = setupConfig.GIVE_DEFAULT(1, 'QUALITY')
+
+
+class FORMAT:
+    """
+    Class to handle stuff related to the passed
+    format.
+    """
+    valid_formats = [
+        'mp3',
+        'm4a'
+    ]
