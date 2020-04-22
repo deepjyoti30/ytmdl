@@ -86,7 +86,8 @@ def arguments():
                         action='store_true')
     parser.add_argument('--format',
                         help="The format in which the final should be present in.\
-                        Default is MP3. Available options are m4a", default='mp3')
+                        Default is MP3. Available options are m4a", default='mp3',
+                        type=str)
     parser.add_argument('--version', action='version', version='2020.03.21-2',
                         help='show the program version number and exit')
 
@@ -207,8 +208,10 @@ def main(args):
     is_quiet = args.quiet
     url = args.url
     passed_choice = args.choice
+    passed_format = args.format
 
     logger.debug("proxy passed: {}".format(args.proxy))
+    logger.debug("Passed format: {}".format(passed_format))
 
     if args.song is not None:
         song_metadata = args.song
@@ -282,7 +285,7 @@ def main(args):
         defaults.DEFAULT.SONG_QUALITY,
         Style.RESET_ALL
     ))
-    path = yt.dw(link, args.proxy, yt_title, args.format)
+    path = yt.dw(link, args.proxy, yt_title, passed_format)
 
     if type(path) is not str:
         if not args.ignore_errors:
@@ -293,10 +296,10 @@ def main(args):
     else:
         logger.info('Downloaded!')
 
-    if args.format == 'mp3':
+    if passed_format == 'mp3':
         logger.info('Converting to mp3...')
         conv_name = utility.convert_to_mp3(path)
-    elif args.format == 'm4a':
+    elif passed_format == 'm4a':
         conv_name = path
 
     if type(conv_name) is not str:
@@ -320,14 +323,14 @@ def main(args):
         prepend.PREPEND(1)
         print('Setting data...')
 
-        option = song.setData(TRACK_INFO, is_quiet, conv_name, args.format, choice)
+        option = song.setData(TRACK_INFO, is_quiet, conv_name, passed_format, choice)
 
         if type(option) is not int:
             logger.critical('ERROR: {}'.format(option))
 
     # Get the directory where song is moved
 
-    DIR = dir.cleanup(TRACK_INFO, option, args.format)
+    DIR = dir.cleanup(TRACK_INFO, option, passed_format)
     logger.info('Moving to {}...'.format(DIR))
 
     if type(DIR) is not str:
