@@ -85,8 +85,8 @@ def arguments():
                         downloading.',
                         action='store_true')
     parser.add_argument('--format',
-                        help="The format in which the final should be present in.\
-                        Default is MP3. Available options are m4a", default='mp3',
+                        help="The format in which the song should be downloaded.\
+                        Default is [MP3]. Available options are [m4a]", default='mp3',
                         type=str)
     parser.add_argument('--version', action='version', version='2020.03.21-2',
                         help='show the program version number and exit')
