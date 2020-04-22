@@ -320,14 +320,14 @@ def main(args):
         prepend.PREPEND(1)
         print('Setting data...')
 
-        option = song.setData(TRACK_INFO, is_quiet, conv_name, choice)
+        option = song.setData(TRACK_INFO, is_quiet, conv_name, args.format, choice)
 
         if type(option) is not int:
             logger.critical('ERROR: {}'.format(option))
 
     # Get the directory where song is moved
 
-    DIR = dir.cleanup(TRACK_INFO, option)
+    DIR = dir.cleanup(TRACK_INFO, option, args.format)
     logger.info('Moving to {}...'.format(DIR))
 
     if type(DIR) is not str:

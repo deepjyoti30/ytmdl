@@ -6,10 +6,13 @@ import shutil
 from ytmdl import defaults
 
 
-def cleanup(TRACK_INFO, index):
+def cleanup(TRACK_INFO, index, datatype):
     """Move the song from temp to $HOME/Music dir."""
     try:
-        SONG = glob.glob(os.path.join(defaults.DEFAULT.SONG_TEMP_DIR, '*mp3'))
+        SONG = glob.glob(os.path.join(
+                                defaults.DEFAULT.SONG_TEMP_DIR,
+                                '*{}'.format(datatype)
+                            ))
         SONG = SONG[0]
 
         SONG_NAME = os.path.basename(SONG)

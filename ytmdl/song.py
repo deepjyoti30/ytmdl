@@ -6,7 +6,7 @@ All the functions used to interact with the downloaded song are defined here.
 from colorama import Fore, Style
 from mutagen.id3 import ID3, APIC, TIT2, TPE1, TALB, TCON, TRCK, TYER
 from mutagen.mp3 import MP3
-from mutagen.aac import AAC
+from mutagen.mp4 import MP4, MP4Cover
 import requests
 from ytmdl import prepend, defaults
 import os
@@ -183,11 +183,85 @@ def set_MP3_data(SONG_INFO, is_quiet, song_path, choice):
         return e
 
 
+def set_M4A_data(SONG_INFO, is_quiet, song_path, choice):
+    """
+    Set the tags in the m4a file passed.
+    """
+    cover_added = False
+
+    try:
+        # If more than one choice then call getChoice
+        option = 0
+        if len(SONG_INFO) > 1:
+            if not is_quiet:
+                option = getChoice(SONG_INFO, 'metadata')
+            elif choice is not None and choice in range(1, len(SONG_INFO)):
+                option = choice
+
+        SONG_PATH = os.path.join(defaults.DEFAULT.SONG_TEMP_DIR,
+                                 song_path)
+
+        audio = MP4(SONG_PATH)
+
+        # Download the cover image, if failed, pass
+        if dwCover(SONG_INFO, option):
+            imagedata = open(defaults.DEFAULT.COVER_IMG, 'rb').read()
+            audio["covr"] = [MP4Cover(
+                                imagedata,
+                                imageformat=MP4Cover.FORMAT_JPEG
+                            )]
+            # REmove the image
+            os.remove(defaults.DEFAULT.COVER_IMG)
+            cover_added = True
+
+        # If tags are not present then add them
+        try:
+            audio.add_tags()
+        except Exception:
+            pass
+
+        audio.save()
+
+        option = int(option)
+
+        # Add the meta data, the key's can be found at
+        # https://mutagen.readthedocs.io/en/latest/api/mp4.html#mutagen.mp4.MP4Tags
+        audio["\xa9nam"] = SONG_INFO[option].track_name
+        audio["\xa9alb"] = SONG_INFO[option].collection_name
+        audio["\xa9ART"] = SONG_INFO[option].artist_name
+        audio["\xa9day"] = SONG_INFO[option].release_date
+        audio["\xa9gen"] = SONG_INFO[option].primary_genre_name
+
+        # Adding track number would probably thwor some kind
+        # of render error, will leave for later
+
+        audio.save()
+
+        defaults.DEFAULT.SONG_NAME_TO_SAVE = SONG_INFO[option].track_name + '.m4a'
+
+        # Rename the downloaded file
+        os.rename(SONG_PATH, os.path.join(
+                                    defaults.DEFAULT.SONG_TEMP_DIR,
+                                    defaults.DEFAULT.SONG_NAME_TO_SAVE
+                                ))
+
+        return option, cover_added
+
+    except Exception as e:
+        return e
+
+
 def setData(SONG_INFO, is_quiet, song_path, datatype='mp3', choice=None):
     """Add the metadata to the song."""
-    option = 0
     if datatype == 'mp3':
         option, img_added = set_MP3_data(
+                                SONG_INFO,
+                                is_quiet,
+                                song_path,
+                                choice
+                            )
+    elif datatype == 'm4a':
+        option, img_added = set_M4A_data(
                                 SONG_INFO,
                                 is_quiet,
                                 song_path,
@@ -209,3 +283,5 @@ def setData(SONG_INFO, is_quiet, song_path, datatype='mp3', choice=None):
 
     prepend.PREPEND(1)
     print('================================')
+
+    return option
