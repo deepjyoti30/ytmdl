@@ -84,6 +84,9 @@ def arguments():
                         help='Don\'t search locally for the song before\
                         downloading.',
                         action='store_true')
+    parser.add_argument('--format',
+                        help="The format in which the final should be present in.\
+                        Default is MP3. Available options are m4a", default='mp3')
     parser.add_argument('--version', action='version', version='2020.03.21-2',
                         help='show the program version number and exit')
 
@@ -279,7 +282,7 @@ def main(args):
         defaults.DEFAULT.SONG_QUALITY,
         Style.RESET_ALL
     ))
-    path = yt.dw(link, args.proxy, yt_title)
+    path = yt.dw(link, args.proxy, yt_title, args.format)
 
     if type(path) is not str:
         if not args.ignore_errors:
@@ -290,9 +293,11 @@ def main(args):
     else:
         logger.info('Downloaded!')
 
-    logger.info('Converting to mp3...')
-
-    conv_name = utility.convert_to_mp3(path)
+    if args.format == 'mp3':
+        logger.info('Converting to mp3...')
+        conv_name = utility.convert_to_mp3(path)
+    elif args.format == 'm4a':
+        conv_name = path
 
     if type(conv_name) is not str:
         logger.critical('ERROR: {}'.format(conv_name))

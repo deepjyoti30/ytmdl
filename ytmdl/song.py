@@ -120,8 +120,10 @@ def getChoice(SONG_INFO, type):
     return choice
 
 
-def setData(SONG_INFO, is_quiet, song_path, choice=None):
-    """Add the metadata to the song."""
+def set_MP3_data(SONG_INFO, is_quiet, song_path, choice):
+    """
+    Set the meta data if the passed data is mp3.
+    """
     # A variable to see if cover image was added.
     IS_IMG_ADDED = False
 
@@ -170,26 +172,40 @@ def setData(SONG_INFO, is_quiet, song_path, choice=None):
         defaults.DEFAULT.SONG_NAME_TO_SAVE = SONG_INFO[option].track_name + '.mp3'
 
         # Rename the downloaded file
-        os.rename(SONG_PATH, os.path.join(defaults.DEFAULT.SONG_TEMP_DIR,
-                                             defaults.DEFAULT.SONG_NAME_TO_SAVE))
+        os.rename(SONG_PATH, os.path.join(
+                                    defaults.DEFAULT.SONG_TEMP_DIR,
+                                    defaults.DEFAULT.SONG_NAME_TO_SAVE
+                                ))
 
-        # Show the written stuff in a better format
-        prepend.PREPEND(1)
-        print('================================')
-        print('  || YEAR: ' + SONG_INFO[option].release_date)
-        print('  || TITLE: ' + SONG_INFO[option].track_name)
-        print('  || ARTIST: ' + SONG_INFO[option].artist_name)
-        print('  || ALBUM: ' + SONG_INFO[option].collection_name)
-        print('  || GENRE: ' + SONG_INFO[option].primary_genre_name)
-        print('  || TRACK NO: ' + str(SONG_INFO[option].track_number))
+        return option, IS_IMG_ADDED
 
-        if IS_IMG_ADDED:
-            print('  || ALBUM COVER ADDED')
-
-        prepend.PREPEND(1)
-        print('================================')
-
-        return option
     except Exception as e:
-        # traceback.print_tb(e.__traceback__)
         return e
+
+
+def setData(SONG_INFO, is_quiet, song_path, datatype='mp3', choice=None):
+    """Add the metadata to the song."""
+    option = 0
+    if datatype == 'mp3':
+        option, img_added = set_MP3_data(
+                                SONG_INFO,
+                                is_quiet,
+                                song_path,
+                                choice
+                            )
+
+    # Show the written stuff in a better format
+    prepend.PREPEND(1)
+    print('================================')
+    print('  || YEAR: ' + SONG_INFO[option].release_date)
+    print('  || TITLE: ' + SONG_INFO[option].track_name)
+    print('  || ARTIST: ' + SONG_INFO[option].artist_name)
+    print('  || ALBUM: ' + SONG_INFO[option].collection_name)
+    print('  || GENRE: ' + SONG_INFO[option].primary_genre_name)
+    print('  || TRACK NO: ' + str(SONG_INFO[option].track_number))
+
+    if img_added:
+        print('  || ALBUM COVER ADDED')
+
+    prepend.PREPEND(1)
+    print('================================')

@@ -68,11 +68,15 @@ def dw_using_yt(link, proxy, song_name, datatype):
 
     The function will be called by using hooks.
     """
+    if datatype == 'mp3':
+        format_ = 'bestaudio/best'
+    elif datatype == 'm4a':
+        format_ = 'bestaudio[ext=m4a]'
 
     ydl_opts = {
         'quiet': True,
         'outtmpl': song_name,
-        'format': 'bestaudio/best',
+        'format': format_,
         'nocheckcertificate': True,
         'progress_hooks': [progress_handler],
     }
