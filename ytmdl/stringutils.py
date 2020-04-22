@@ -99,6 +99,18 @@ def remove_yt_words(title):
     return title
 
 
+def srtip_unwanted_words_from_url(url):
+    """
+    If more than just the video ID is passed, extract the
+    URL and operate on that only.
+
+    The URL will be of the type https://yotuube.com/watch?v=<id>&other_args
+
+    We just need to keep the v arg and remove all the other args
+    """
+    return url.split("&")[0]
+
+
 def main():
     pass
 

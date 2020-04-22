@@ -215,6 +215,8 @@ def main(args):
     # If the url is passed then get the data
     if url is not None:
         data = []
+        # Strip unwanted stuff from the URL
+        url = stringutils.srtip_unwanted_words_from_url(url)
         # Get video data from youtube
         temp_data = yt.scan_video(yt.get_href(url), args.proxy)
 
