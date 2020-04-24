@@ -37,7 +37,15 @@ def progress_handler(d):
         length = d_obj._get_terminal_length()
         time_left = d['eta']
         f_size_disp, dw_unit = d_obj._format_size(d['downloaded_bytes'])
-        percent = d['downloaded_bytes'] / d['total_bytes'] * 100
+
+        # Total bytes might not be always passed, sometimes
+        # total_bytes_estimate is passed
+        try:
+            total_bytes = d['total_bytes']
+        except KeyError:
+            total_bytes = d['total_bytes_estimate']
+
+        percent = d['downloaded_bytes'] / total_bytes * 100
         speed, s_unit, time_left, time_unit = d_obj._get_speed_n_time(
                     d['downloaded_bytes'],
                     0,
