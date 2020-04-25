@@ -153,6 +153,8 @@ Logger:
 
 #### The defaults can be changed by editing the config file in ytmdl folder in your .config folder
 
+>__NOTE__: The config file can be created by using ```ytmdl --setup``` and will be present in ```~/.config/ytmdl/config```
+
 ### Supported options to change are:
 
 | Name           |                                                    |
