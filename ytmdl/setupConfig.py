@@ -240,7 +240,7 @@ def GIVE_DEFAULT(self, keyword):
                 if checkExistence(keyword, newDEFAULT):
                     return newDEFAULT
                 else:
-                    logger.warning("{}: doesn't exist.")
+                    logger.warning("{}: doesn't exist.".format(newDEFAULT))
                     return retDefault(keyword)
 
 

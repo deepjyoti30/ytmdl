@@ -28,14 +28,27 @@ class Cache:
             directory = DEFAULT.SONG_DIR
             # Check the dir only if special characters are present
             if '$' in directory:
-                directory = os.path.dirname(directory)
+                directory = directory.split("$")[0]
         directory = os.path.expanduser(directory)
         self.directory = directory
 
+    def _get_files(self, src):
+        """
+        List all the files in the passed dir.
+        """
+        files = os.listdir(src)
+        for file in files:
+            if os.path.isdir(os.path.join(src, file)):
+                files.extend(self._get_files(os.path.join(src, file)))
+        return files
+
     def list_mp3(self):
-        """Get the list of all the mp3 files in the cache."""
-        os.chdir(self.directory)
-        return glob.glob("*.mp3")
+        """
+        Get the list of all the mp3 files in the cache.
+        """
+        all_files = self._get_files(self.directory)
+        all_files = [file for file in all_files if file.endswith("mp3")]
+        return all_files
 
     def search_exactly(self, song_name):
         """Search the song in the cache.
@@ -50,12 +63,11 @@ class Cache:
                 return song
         return None
 
-    def get_full_location(self, song_name):
-        """Return full location of the song."""
-        return self.directory + "/" + song_name
-
     def search(self, song_name):
-        logger.info("Searching to see if already present in {}".format(self.directory))
+        logger.info(
+                "Searching to see if already present in {}".format(
+                    self.directory)
+            )
         return self._search_tokens(song_name)
 
     def _search_tokens(self, song_name):
@@ -77,19 +89,19 @@ class Cache:
                 res.append((song_name, song, title, dist))
         res = sorted(res, key=lambda x: x[-1], reverse=True)
         if res and res[0][-1] > 0:
-            return res[0][2], self.get_full_location(res[0][1])
+            return True
         else:
-            return None
+            return False
 
 
 def main(SONG_NAME=''):
     """Run on program call."""
     cache = Cache()
     match = cache.search(SONG_NAME)
-    if match is not None:
+    if match:
         PREPEND(1)
         print(Fore.MAGENTA, end='')
-        print('{} '.format(match[0]), end='')
+        print('{} '.format(SONG_NAME), end='')
         print(Style.RESET_ALL, end='')
         print('found.')
         while True:
@@ -104,4 +116,4 @@ def main(SONG_NAME=''):
 
 
 if __name__ == "__main__":
-    main()
+    main("Rockstar")
