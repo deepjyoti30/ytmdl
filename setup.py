@@ -24,7 +24,7 @@ req_pkgs = [
 if __name__ == '__main__':
     setuptools.setup(
         name="ytmdl",
-        version="2020.03.21",
+        version="2020.05.14",
         author="Deepjyoti Barman",
         author_email="deep.barma30@gmail.com",
         description="Youtube Music Downloader",

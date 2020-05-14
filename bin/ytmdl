@@ -88,7 +88,7 @@ def arguments():
                         help="The format in which the song should be downloaded.\
                         Default is [MP3]. Available options are [m4a]", default='mp3',
                         type=str)
-    parser.add_argument('--version', action='version', version='2020.03.21-2',
+    parser.add_argument('--version', action='version', version='2020.05.14',
                         help='show the program version number and exit')
 
     playlist_group = parser.add_argument_group("Playlist")
