@@ -40,6 +40,10 @@ artist name, album name, release date, thumbnail etc by fetching it from sources
 __NO__. YoutubeDL doesn't do that. All youtube-dl does is lets you download audio from a video that you specify.
 __This app is not yet another youtube-dl clone.__
 
+## Like My Work?
+
+If you like my work, [consider buying me a coffee] or donating. In case you want to become a patron, join my [Pateron](https://www.patreon.com/deepjyoti30)
+
 
 ## Prerequisites
 
