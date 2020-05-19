@@ -1,0 +1,45 @@
+#*****************************************#
+#*-------------config for ytmdl ----------#
+#
+#-----------------------------------------#
+#------PLEASE DON'T LEAVE ANY BLANK LINE---#
+#-----------------------------------------#
+#
+# To change defaults just remove the hash(#)
+# from thw beginning of the line.
+# The will be read as a single line comment.
+#
+#*****************************************
+# The SONG_DIR is the directory where all the songs will be saved.
+# In order to change it, simply remove the hash from beginning
+# And change the path to your desired one.
+# In case the path has spaces in in, include it in a " "
+# Following is a simple folder path example
+#
+#SONG_DIR = "path/to/your/desired/folder"
+#
+#************--------ADVANCED-------*********
+# If you want to save the song in custom folders than those can be
+# added to the name like the following example.
+# The possible values are following
+#
+# Artist --> Song Artist
+# Album  --> Song Album Name
+# Title  --> Song Name
+# Genre  --> Song Genre
+# TrackNumber --> Song Number in the album
+# ReleaseDate --> Song Release date
+#
+# Following is an example of the format
+#SONG_DIR = "/home/user/Music$Artist->Album->Title"
+#
+#*****************************************#
+# The QUALITY is the quality of the song in kbps
+# By default it is set to 320kbps
+# In case you want to change it to something else,
+# Uncomment the following line and change it
+#
+# Supported values are 320 and 192
+#
+#QUALITY = "320"
+#

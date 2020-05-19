@@ -3,3 +3,4 @@ dist/*
 ytmdl.egg-info
 .eggs/*
 ytmdl/__pycache__/*
+ytmdl.mp4
