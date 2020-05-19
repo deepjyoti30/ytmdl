@@ -163,9 +163,18 @@ Logger:
 
 ## Change Defaults
 
-#### The defaults can be changed by editing the config file in ytmdl folder in your .config folder
+The defaults can be changed by editing the config file in ytmdl folder in your .config folder
 
->__NOTE__: The config file can be created by using ```ytmdl --setup``` and will be present in ```~/.config/ytmdl/config```
+>__NOTE__: The config will be created automatically the first time you run ```ytmdl``` and will be present in ```~/.config/ytmdl/config```
+
+In case you want to create the config before the first run and edit it accordingly, do it the following way.
+
+```console
+mkdir -p ~/.config/ytmdl; curl https://raw.githubusercontent.com/deepjyoti30/ytmdl/master/config > ~/.config/ytmdl/config
+```
+
+This will download the default config from the repo to your ```~/.config/ytmdl``` directory.
+
 
 ### Supported options to change are:
 
