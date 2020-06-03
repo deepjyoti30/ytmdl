@@ -26,6 +26,7 @@ from ytmdl import (
             cache,
             utility,
             metadata,
+            manual,
             logger,
             stringutils
 )
@@ -70,6 +71,13 @@ def arguments():
                         passed artist and album keyword to the youtube search\
                         in order to get a more accurate result. (Default: false)",
                         action="store_true")
+    metadata_group.add_argument('--skip-meta', help="Skip setting the metadata and\
+                        just copy the converted song to the destination directory.\
+                        '--manual-meta' will override this option, pass only one\
+                        of them.",
+                        action="store_true")
+    metadata_group.add_argument('-m', '--manual-meta', help="Manually enter song\
+                        details.", action="store_true")
 
     parser.add_argument('--proxy', help='Use the specified HTTP/HTTPS/SOCKS proxy. To enable '
                         'SOCKS proxy, specify a proper scheme. For example '
@@ -198,12 +206,12 @@ def main(args):
             return 0
 
     # Check if ffmpeg is installed.
-    if not utility.is_present('ffmpeg'):
+    """if not utility.is_present('ffmpeg'):
         logger.critical("ffmpeg is not installed. Please install it!")
 
     # Check if youtube-dl is installed.
     if not utility.is_present('youtube-dl'):
-        logger.critical("youtube-dl is not installed. Please install it!")
+        logger.critical("youtube-dl is not installed. Please install it!")"""
 
     is_quiet = args.quiet
     url = args.url
@@ -309,37 +317,48 @@ def main(args):
     if type(conv_name) is not str:
         logger.critical('ERROR: {}'.format(conv_name))
 
-    logger.info('Getting song data for {}...'.format(song_metadata))
+    logger.debug("Skip Meta: {}".format(args.skip_meta))
 
-    TRACK_INFO = metadata.SEARCH_SONG(song_metadata, filters=[args.artist, args.album])
-
-    # declare a variable to store the option
-    option = 0
-
-    if TRACK_INFO is False:
-        # prepend.PREPEND(2)
-        # print('Data \a')
-        # exit(0)
-        pass
-    elif len(TRACK_INFO) == 0:
-        logger.critical('No data was found!\a')
-    else:
-        prepend.PREPEND(1)
-        print('Setting data...')
+    if args.manual_meta:
+        # Read the values from the user.
+        TRACK_INFO = manual.get_data(song_name)
+        option = 0
 
         option = song.setData(TRACK_INFO, is_quiet, conv_name, passed_format, choice)
 
         if type(option) is not int:
             logger.critical('ERROR: {}'.format(option))
 
-    # Get the directory where song is moved
+        # Get the status of moving the song
+        move_status = dir.cleanup(TRACK_INFO, option, passed_format)
+    elif not args.skip_meta:
+        logger.info('Getting song data for {}...'.format(song_metadata))
 
-    DIR = dir.cleanup(TRACK_INFO, option, passed_format)
-    logger.info('Moving to {}...'.format(DIR))
+        TRACK_INFO = metadata.SEARCH_SONG(song_metadata, filters=[args.artist, args.album])
 
-    if type(DIR) is not str:
-        logger.critical('ERROR: {}'.format(DIR))
+        # declare a variable to store the option
+        option = 0
+
+        if len(TRACK_INFO) == 0:
+            logger.critical('No data was found!\a')
+        else:
+            prepend.PREPEND(1)
+            print('Setting data...')
+
+            option = song.setData(TRACK_INFO, is_quiet, conv_name, passed_format, choice)
+
+            if type(option) is not int:
+                logger.critical('ERROR: {}'.format(option))
+
+        # Get the status of moving the song
+        move_status = dir.cleanup(TRACK_INFO, option, passed_format)
     else:
+        # If meta data is supposed to be skipped, go for a dry cleanup.
+        move_status = dir.dry_cleanup(conv_name, song_name)
+
+    if move_status:
+        # If move_status would be False, program will exit from there
+        # after showing the error.
         logger.info('Done')
 
 

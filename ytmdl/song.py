@@ -8,9 +8,11 @@ from mutagen.id3 import ID3, APIC, TIT2, TPE1, TALB, TCON, TRCK, TYER
 from mutagen.mp3 import MP3
 from mutagen.mp4 import MP4, MP4Cover
 import requests
-from ytmdl import prepend, defaults
+from ytmdl import prepend, defaults, logger
 import os
 # import traceback
+
+logger = logger.Logger("song")
 
 # ----------------------cover--------------------
 
@@ -18,8 +20,22 @@ import os
 def dwCover(SONG_INFO, index):
     """Download the song cover img from itunes."""
     # Try to download the cover art as cover.jpg in temp
+    logger.info("Preparing the album cover")
     try:
         imgURL = SONG_INFO[index].artwork_url_100
+
+        # Check if the passed imgURL is a local file
+        # this is possible if the metadata was entered manually.
+        imgURL = os.path.expanduser(imgURL)
+        if os.path.exists(imgURL):
+            # Probably a file, read it in binary and extract the data
+            # then return.
+            content = open(imgURL, "rb").read()
+            with open(defaults.DEFAULT.COVER_IMG, 'wb') as f:
+                f.write(content)
+            return True
+
+        # Else might be an URL
         try:
             # Try to get 512 cover art
             imgURL = imgURL.replace('100x100', '2048x2048')
@@ -35,6 +51,9 @@ def dwCover(SONG_INFO, index):
     except TimeoutError:
         prepend.PREPEND(2)
         print('Could not get album cover. Are you connected to internet?\a')
+        return False
+    except Exception as e:
+        logger.warning("Error while trying to download image, skipping!: {}".format(e))
         return False
     else:
         return False
@@ -180,7 +199,8 @@ def set_MP3_data(SONG_INFO, is_quiet, song_path, choice):
         return option, IS_IMG_ADDED
 
     except Exception as e:
-        return e
+        logger.debug("{}".format(e))
+        return e, False
 
 
 def set_M4A_data(SONG_INFO, is_quiet, song_path, choice):

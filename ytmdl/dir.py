@@ -3,7 +3,9 @@
 import os
 import glob
 import shutil
-from ytmdl import defaults
+from ytmdl import defaults, logger
+
+logger = logger.Logger("Dir")
 
 
 def cleanup(TRACK_INFO, index, datatype):
@@ -31,9 +33,11 @@ def cleanup(TRACK_INFO, index, datatype):
                 SONG = SONG_NAME
         shutil.move(SONG, os.path.join(DIR, SONG_NAME))
 
-        return DIR
+        logger.info('Moved to {}...'.format(DIR))
+        return True
     except Exception as e:
-        return e
+        logger.critical("Failed while moving with error: {}".format(e))
+        return False
 
 
 def ret_proper_names(ordered_names):
@@ -128,3 +132,29 @@ def make_custom_dir(DIR, TRACK_INFO):
         base_DIR = new_dir
 
     return (base_DIR, last_element)
+
+
+def dry_cleanup(current_path, passed_name):
+    """
+    Move the song from the current path to the
+    song dir and change the name to the passed_name.
+
+    This is only for when the meta-skip option is passed,
+    in which case the song needs to be moved from the cache
+    to the user directory.
+    """
+    try:
+        extension = os.path.basename(current_path).split(".")[-1]
+        logger.debug("ext: {}".format(extension))
+
+        new_basename = "{}.{}".format(passed_name, extension)
+        DEST = defaults.DEFAULT.SONG_DIR
+
+        logger.debug("Moving to: {}".format(DEST))
+        shutil.move(current_path, os.path.join(DEST, new_basename))
+
+        logger.info('Moved to {}...'.format(DEST))
+        return True
+    except Exception as e:
+        logger.critical("{}".format(e))
+        return False

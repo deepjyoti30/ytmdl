@@ -12,5 +12,6 @@ __all__ = ['ytmdl',
            'utility',
            'gaana',
            'metadata',
+           'manual',
            'logger'
            ]
