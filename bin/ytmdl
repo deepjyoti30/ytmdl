@@ -212,12 +212,12 @@ def main(args):
             return 0
 
     # Check if ffmpeg is installed.
-    """if not utility.is_present('ffmpeg'):
+    if not utility.is_present('ffmpeg'):
         logger.critical("ffmpeg is not installed. Please install it!")
 
     # Check if youtube-dl is installed.
     if not utility.is_present('youtube-dl'):
-        logger.critical("youtube-dl is not installed. Please install it!")"""
+        logger.critical("youtube-dl is not installed. Please install it!")
 
     is_quiet = args.quiet
     url = args.url
