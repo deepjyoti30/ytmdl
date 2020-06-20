@@ -86,8 +86,11 @@ def dw_using_yt(link, proxy, song_name, datatype):
         'outtmpl': song_name,
         'format': format_,
         'nocheckcertificate': True,
-        'progress_hooks': [progress_handler],
     }
+
+    # Disable the progress handler for Windows
+    if os.name != 'nt':
+        ydl_opts['progress_hooks'] = [progress_handler]
 
     if proxy is not None:
         ydl_opts['proxy'] = proxy
