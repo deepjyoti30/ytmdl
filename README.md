@@ -107,9 +107,10 @@ If you like my work, consider buying me a coffee or donating. In case you want t
 usage: ytmdl [-h] [-q] [--song SONG-METADATA] [--choice CHOICE]
              [--artist ARTIST] [--album ALBUM] [--disable-metaadd]
              [--skip-meta] [-m] [--proxy URL] [--url URL]
-             [--list PATH TO LIST] [--nolocal] [--format FORMAT] [--version]
-             [--pl-start NUMBER] [--pl-end NUMBER] [--pl-items ITEM_SPEC]
-             [--ignore-errors] [--level LEVEL] [--disable-file] [--list-level]
+             [--list PATH TO LIST] [--nolocal] [--format FORMAT] [--trim]
+             [--version] [--pl-start NUMBER] [--pl-end NUMBER]
+             [--pl-items ITEM_SPEC] [--ignore-errors] [--level LEVEL]
+             [--disable-file] [--list-level]
              [SONG_NAME [SONG_NAME ...]]
 
 positional arguments:
@@ -131,6 +132,11 @@ optional arguments:
   --nolocal             Don't search locally for the song before downloading.
   --format FORMAT       The format in which the song should be downloaded.
                         Default is [MP3]. Available options are [m4a]
+  --trim, -t            Trim out the audio from the song. Use underlying
+                        speech and music segmentation engine to determine and
+                        keep only the music in the file. Useful in songs where
+                        there are speeches, noise etc before/after the start
+                        of the song. Default is false.
   --version             show the program version number and exit
 
 Metadata:
