@@ -17,7 +17,9 @@ req_pkgs = [
             'lxml',
             'pyxdg',
             'ffmpeg-python',
-            'pysocks'
+            'pysocks',
+            'tensorflow',
+            'inaSpeechSegmenter'
         ]
 
 
