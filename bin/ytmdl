@@ -96,6 +96,11 @@ def arguments():
                         help="The format in which the song should be downloaded.\
                         Default is [MP3]. Available options are [m4a]", default='mp3',
                         type=str)
+    parser.add_argument('--trim', '-t', help="Trim out the audio from the song. Use \
+                        underlying speech and music segmentation engine to determine \
+                        and keep only the music in the file. Useful in songs where there \
+                        are speeches, noise etc before/after the start of the song. Default \
+                        is false.", action='store_true')
     parser.add_argument('--version', action='version', version='2020.05.14',
                         help='show the program version number and exit')
 
