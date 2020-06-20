@@ -28,7 +28,8 @@ from ytmdl import (
             metadata,
             manual,
             logger,
-            stringutils
+            stringutils,
+            trim
 )
 
 # init colorama for windows
@@ -321,6 +322,12 @@ def main(args):
 
     if type(conv_name) is not str:
         logger.critical('ERROR: {}'.format(conv_name))
+
+
+    # Trim the song if the trim option is passed.
+    if args.trim:
+        logger.info("Passing the song to get trimmed.")
+        trim.Trim(conv_name)
 
     logger.debug("Skip Meta: {}".format(args.skip_meta))
 
