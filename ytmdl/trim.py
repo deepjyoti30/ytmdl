@@ -45,6 +45,7 @@ class Trim:
         music timestamps from there.
         """
         segmentation = self.segmenter(self.filename)
+        logger.debug("Segmentation tuple: {}".format(segmentation))
 
         # Only keep all the music stamps
         segmentation = [stamp for stamp in segmentation if stamp[0] == "music"]
@@ -60,6 +61,8 @@ class Trim:
         segmentation = segmentation[-1]
         self.start_time = segmentation[1]
         self.end_time = segmentation[2]
+
+        logger.debug("ST: {}\nET: {}".format(self.start_time, self.end_time))
 
     def _trim(self):
         """
