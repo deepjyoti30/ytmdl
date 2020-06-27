@@ -127,7 +127,7 @@ def getChoice(SONG_INFO, type):
         # If the choice is 6 then try to print more results
         if choice <= results and choice > 0:
             break
-        elif choice == 0:
+        elif choice == 0 and results < len(SONG_INFO):
             PRINT_WHOLE = True
             beg = results
             results = beg + 5
