@@ -49,17 +49,24 @@ def convert_to_mp3r(path):
 def convert_to_mp3(path):
     """Covert to mp3 using the python ffmpeg module."""
     new_name = path + '_new.mp3'
-    ffmpeg.input(path).output(
-                        new_name,
-                        loglevel='panic',
-                        ar=44100,
-                        ac=2,
-                        ab='{}k'.format(defaults.DEFAULT.SONG_QUALITY),
-                        f='mp3'
-                    ).run()
-    # Delete the temp file now
-    remove(path)
-    return new_name
+    try:
+        ffmpeg.input(path).output(
+                            new_name,
+                            loglevel='panic',
+                            ar=44100,
+                            ac=2,
+                            ab='{}k'.format(defaults.DEFAULT.SONG_QUALITY),
+                            f='mp3'
+                        ).run()
+        # Delete the temp file now
+        remove(path)
+        return new_name
+    except ffmpeg._run.Error:
+        # This error is usually thrown where ffmpeg doesn't have to
+        # overwrite a file.
+        # The bug is from ffmpeg, I'm just adding this catch to
+        # handle that.
+        return new_name
 
 
 def is_valid(dir_path):

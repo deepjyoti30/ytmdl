@@ -217,7 +217,18 @@ def main(args):
 
     # Check if youtube-dl is installed.
     if not utility.is_present('youtube-dl'):
+<<<<<<< HEAD
         logger.critical("youtube-dl is not installed. Please install it!")"""
+=======
+        logger.critical("youtube-dl is not installed. Please install it!")
+
+    # Check if we need to import trim. Importing it is realy inefficient if
+    # the user is not going to use it.
+    if args.trim:
+        logger.debug("Need to trim the song, importing the trim module.")
+        from ytmdl import trim
+
+>>>>>>> fde1b18... Fixed bug of ffmpeg throwing error if selected not to overwrite.
 
     is_quiet = args.quiet
     url = args.url
