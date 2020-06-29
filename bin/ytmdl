@@ -29,7 +29,6 @@ from ytmdl import (
             manual,
             logger,
             stringutils,
-            trim
 )
 
 # init colorama for windows
@@ -218,6 +217,13 @@ def main(args):
     # Check if youtube-dl is installed.
     if not utility.is_present('youtube-dl'):
         logger.critical("youtube-dl is not installed. Please install it!")
+
+    # Check if we need to import trim. Importing it is realy unefficient if
+    # the user is not going to use it.
+    if args.trim:
+        logger.debug("Need to trim the song, importing the trim module.")
+        from ytmdl import trim
+
 
     is_quiet = args.quiet
     url = args.url
