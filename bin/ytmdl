@@ -218,7 +218,7 @@ def main(args):
     if not utility.is_present('youtube-dl'):
         logger.critical("youtube-dl is not installed. Please install it!")
 
-    # Check if we need to import trim. Importing it is realy unefficient if
+    # Check if we need to import trim. Importing it is realy inefficient if
     # the user is not going to use it.
     if args.trim:
         logger.debug("Need to trim the song, importing the trim module.")
