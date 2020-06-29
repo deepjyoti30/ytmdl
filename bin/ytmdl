@@ -29,7 +29,6 @@ from ytmdl import (
             manual,
             logger,
             stringutils,
-            trim
 )
 
 # init colorama for windows
@@ -222,13 +221,20 @@ def main(args):
 =======
         logger.critical("youtube-dl is not installed. Please install it!")
 
+<<<<<<< HEAD
     # Check if we need to import trim. Importing it is realy inefficient if
+=======
+    # Check if we need to import trim. Importing it is realy unefficient if
+>>>>>>> e93cfe7... Made the trim import optional.
     # the user is not going to use it.
     if args.trim:
         logger.debug("Need to trim the song, importing the trim module.")
         from ytmdl import trim
 
+<<<<<<< HEAD
 >>>>>>> fde1b18... Fixed bug of ffmpeg throwing error if selected not to overwrite.
+=======
+>>>>>>> e93cfe7... Made the trim import optional.
 
     is_quiet = args.quiet
     url = args.url
