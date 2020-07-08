@@ -1,6 +1,6 @@
-build/*
-dist/*
-ytmdl.egg-info
-.eggs/*
+__pycache__/*
+.eggs/
+build/
+dist/
+ytmdl.*
 ytmdl/__pycache__/*
-ytmdl.mp4
