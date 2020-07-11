@@ -18,6 +18,7 @@ req_pkgs = [
             'pyxdg',
             'ffmpeg-python',
             'pysocks',
+            'unidecode',
             'tensorflow',
             'inaSpeechSegmenter'
         ]

@@ -22,6 +22,8 @@ class Logger:
         self.name = name
         self._file_format = ''
         self._console_format = ''
+        self._log_file = Path(os.path.join(xdg_cache_home, 'ytmdl/logs/log.cat'))
+        self._check_logfile()
         self._level_number = {
                                 'DEBUG': 0,
                                 'INFO': 1,
@@ -30,8 +32,6 @@ class Logger:
                                 'CRITICAL': 4
                              }
         self.level = self._level_number[level]
-        self._log_file = Path(os.path.join(xdg_cache_home, 'ytmdl/logs/log.cat'))
-        self._check_logfile()
         self._disable_file = disable_file
         self._instances.append(self)
 
@@ -52,7 +52,7 @@ class Logger:
             return
 
         with open(self._log_file, 'a') as f:
-            # The file log is to be written to the log_file file
+            # The file log is to be written to the _log_file file
             f = open(self._log_file, 'a')
             f.write(self._file_format)
 

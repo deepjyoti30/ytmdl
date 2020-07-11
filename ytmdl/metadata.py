@@ -6,7 +6,7 @@ from ytmdl.stringutils import (
     check_keywords
 )
 from ytmdl import gaana, logger
-from textwrap import dedent
+from unidecode import unidecode
 
 logger = logger.Logger('metadata')
 
@@ -46,9 +46,9 @@ def get_from_gaana(SONG_NAME):
 def _search_tokens(song_name, song_list):
     """Search song in the cache based on simple each word matching."""
     song_name = remove_punct(
-        remove_stopwords(
-            remove_multiple_spaces(song_name).lower()
-        ))
+                    remove_stopwords(
+                        remove_multiple_spaces(unidecode(song_name)).lower()
+                    ))
     tokens1 = song_name.split()
     cached_songs = song_list
 
@@ -58,6 +58,7 @@ def _search_tokens(song_name, song_list):
         name = song.track_name.lower()
         name = remove_punct(name)
         name = remove_multiple_spaces(name)
+        name = unidecode(name)
         tokens2 = name.split()
         match = check_keywords(tokens1, tokens2)
         if match:
