@@ -5,7 +5,18 @@ from ytmdl.stringutils import (
     remove_multiple_spaces, remove_punct, compute_jaccard, remove_stopwords,
     check_keywords
 )
-from ytmdl import gaana
+from ytmdl import gaana, logger
+from textwrap import dedent
+
+logger = logger.Logger('metadata')
+
+
+def _logger_provider_error(exception, name):
+    """Show error if providers throw an error""""
+    logger.debug('{}'.format(exception))
+    logger.error(
+        "Something went wrong with {}. The program will continue with"
+        "the other providers. Please check '{}' for more details.".format(name, logger.get_log_file()))
 
 
 def get_from_itunes(SONG_NAME):
@@ -17,8 +28,9 @@ def get_from_itunes(SONG_NAME):
         for song in SONG_INFO:
             song.track_time = round(song.track_time / 60000, 2)
         return SONG_INFO
-    except Exception:
-        pass
+    except Exception as e:
+        _logger_provider_error(e, 'iTunes')
+        return None
 
 
 def get_from_gaana(SONG_NAME):
@@ -26,16 +38,17 @@ def get_from_gaana(SONG_NAME):
     try:
         nana = gaana.searchSong(SONG_NAME)
         return nana
-    except Exception:
+    except Exception as e:
+        _logger_provider_error(e, 'Gaana')
         return None
 
 
 def _search_tokens(song_name, song_list):
     """Search song in the cache based on simple each word matching."""
     song_name = remove_punct(
-                    remove_stopwords(
-                        remove_multiple_spaces(song_name).lower()
-                    ))
+        remove_stopwords(
+            remove_multiple_spaces(song_name).lower()
+        ))
     tokens1 = song_name.split()
     cached_songs = song_list
 
