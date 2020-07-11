@@ -9,7 +9,7 @@ with open("README.md", "r") as fh:
 req_pkgs = [
             'youtube_dl',
             'mutagen',
-            'itunespy',
+            'itunespy==1.5.5',
             'requests',
             'colorama',
             'bs4',
