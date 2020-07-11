@@ -50,6 +50,14 @@ config_text = '''#*****************************************#
 # Supported values are 320 and 192
 #
 #QUALITY = "320"
+#
+#*****************************************#
+# The METADATA_PROVIDERS value is a comma separated
+# values that specifies wich API providers to use for getting
+# the song metadata. Available values right now are: itunes, gaana.
+# Please check the github page of ytmdl for more information.
+#
+#METADATA_PROVIDERS = "itunes, gaana"
 #'''
 
 
@@ -74,6 +82,12 @@ class DEFAULTS:
 
         # The config path
         self.CONFIG_PATH = os.path.join(xdg_config_home, 'ytmdl')
+
+        # The default metadata providers
+        self.METADATA_PROVIDERS = ['itunes', 'gaana']
+
+        # The available metadata providers
+        self.AVAILABLE_METADATA_PROVIDERS = self.METADATA_PROVIDERS + [] # add new ones here
 
     def _get_music_dir(self):
         """Get the dir the file will be saved to."""
@@ -197,6 +211,18 @@ def checkExistence(keyword, value):
             return True
         else:
             return False
+    elif keyword == 'METADATA_PROVIDERS':
+        # Possible values that METADATA_PROVIDERS can take
+        possM = DEFAULTS().AVAILABLE_METADATA_PROVIDERS
+        if not value:
+            logger.warning(
+                "Metadata provider value is empty. Default values will be used.")
+            return False
+        new_val = value.replace(' ', '').split(',')
+        for provider in new_val:
+            if provider not in possM:
+                return False
+        return True
 
 
 def retDefault(keyword):
@@ -205,6 +231,8 @@ def retDefault(keyword):
         return DEFAULTS().SONG_QUALITY
     elif keyword == 'SONG_DIR':
         return DEFAULTS().SONG_DIR
+    elif keyword == 'METADATA_PROVIDERS':
+        return DEFAULTS().METADATA_PROVIDERS
 
 
 def GIVE_DEFAULT(self, keyword):
