@@ -135,13 +135,15 @@ def SEARCH_SONG(q="Tera Buzz", filters=[]):
             _extend_to_be_sorted_and_rest(
                 data_provider, to_be_sorted, rest, filters)
         else:
-            logger.error('"{}" isn\'t implemented'.format(provider))
+            logger.warning(
+                        '"{}" isn\'t implemented. Skipping!'.format(provider)
+                    )
             broken_provider_counter += 1
 
     # to_be_sorted will be empty and it will return None anyway, no need
     # to do it here as well
     if broken_provider_counter == len(metadata_providers):
-        logger.error("{}".format(
+        logger.critical("{}".format(
                             'No metadata provider in the configuration is '
                             'implemented. Please change it to something \
                             available or use the --skip-meta flag'))
