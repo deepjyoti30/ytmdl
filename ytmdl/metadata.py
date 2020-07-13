@@ -12,11 +12,12 @@ logger = logger.Logger('metadata')
 
 
 def _logger_provider_error(exception, name):
-    """Show error if providers throw an error""""
+    """Show error if providers throw an error"""
     logger.debug('{}'.format(exception))
     logger.error(
         "Something went wrong with {}. The program will continue with"
-        "the other providers. Please check '{}' for more details.".format(name, logger.get_log_file()))
+        "the other providers. Please check '{}' for more details.\
+            ".format(name, logger.get_log_file()))
 
 
 def get_from_itunes(SONG_NAME):
