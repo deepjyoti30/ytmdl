@@ -88,6 +88,9 @@ class Logger:
                                 message
                             )
 
+    def get_log_file(self):
+        return self._log_file
+
     def update_level(self, level):
         """
         Update all the instances of the class with the passed
