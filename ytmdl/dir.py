@@ -31,13 +31,34 @@ def cleanup(TRACK_INFO, index, datatype):
                 os.rename(SONG, name + '.mp3')
                 SONG_NAME = name + '.mp3'
                 SONG = SONG_NAME
+
         shutil.move(SONG, os.path.join(DIR, SONG_NAME))
+
+        _delete_cached_songs(datatype)
 
         logger.info('Moved to {}...'.format(DIR))
         return True
     except Exception as e:
         logger.critical("Failed while moving with error: {}".format(e))
         return False
+
+
+def _delete_cached_songs(ext='mp3'):
+    """Delete cached songs"""
+    # We need to call this after song is moved
+    # because otherwise if there is an error along the way
+    # next time a wrong song may be copied.
+    SONGS_PATH = os.path.join(
+        defaults.DEFAULT.SONG_TEMP_DIR,
+        '*{}'.format(ext)
+    )
+    deleted = False
+    for song in glob.glob(SONGS_PATH):
+        deleted = True
+        os.remove(song)
+        logger.debug('Removed "{}" from cache'.format(os.path.basename(song)))
+    if deleted:
+        logger.debug('{}'.format('Deleted cached songs'))
 
 
 def ret_proper_names(ordered_names):
