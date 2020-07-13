@@ -5,7 +5,7 @@ from ytmdl.stringutils import (
     remove_multiple_spaces, remove_punct, compute_jaccard, remove_stopwords,
     check_keywords
 )
-from ytmdl import gaana, logger
+from ytmdl import gaana, logger, defaults
 from unidecode import unidecode
 
 logger = logger.Logger('metadata')
@@ -103,35 +103,53 @@ def filterSongs(data, filters=[]):
     return (new_tuple + rest)
 
 
+def _extend_to_be_sorted_and_rest(provider_data, to_be_sorted, rest, filters):
+    """Create the to be sorted and rest lists"""
+    # Before passing for sorting filter the songs
+    # with the passed args
+    if filters:
+        provider_data = filterSongs(provider_data, filters)
+    if provider_data is not None:
+        to_be_sorted.extend(provider_data[:10])
+        rest.extend(provider_data[10:])
+
+
 def SEARCH_SONG(q="Tera Buzz", filters=[]):
     """Do the task by calling other functions."""
     to_be_sorted = []
     rest = []
 
-    # Get from itunes
-    data_itunes = get_from_itunes(q)
-    data_gaana = get_from_gaana(q)
+    metadata_providers = defaults.DEFAULT.METADATA_PROVIDERS
 
-    # Before passing for sorting filter the songs
-    # with the passed args
-    if len(filters) != 0:
-        data_itunes = filterSongs(data_itunes, filters)
-        data_gaana = filterSongs(data_gaana, filters)
+    GET_METADATA_ACTIONS = {
+        'itunes': get_from_itunes,
+        'gaana': get_from_gaana
+    }
 
-    if data_itunes is not None:
-        to_be_sorted = data_itunes[:10]
-        rest = data_itunes[10:]
+    broken_provider_counter = 0
 
-    if data_gaana is not None:
-        to_be_sorted += data_gaana[:10]
-        rest += data_gaana[10:]
+    for provider in metadata_providers:
+        data_provider = GET_METADATA_ACTIONS.get(
+            provider, lambda _: None)(q)
+        if data_provider:
+            _extend_to_be_sorted_and_rest(
+                data_provider, to_be_sorted, rest, filters)
+        else:
+            logger.error('"{}" isn\'t implemented'.format(provider))
+            broken_provider_counter += 1
+    
+    # to_be_sorted will be empty and it will return None anyway, no need
+    # to do it here as well
+    if broken_provider_counter == len(metadata_providers):
+        logger.error("{}".format('No metadata provider in the configuration is '
+                                 'implemented. Please change it to something available '
+                                 'or use the --skip-meta flag'))
 
-    if len(to_be_sorted) == 0:
-        return False
+    if not to_be_sorted:
+        return None
 
     # Send the data to get sorted
     sorted_data = _search_tokens(q, to_be_sorted)
-    # sorted_data = to_be_sorted
 
     # Add the unsorted data
     sorted_data += rest
