@@ -216,13 +216,16 @@ def checkExistence(keyword, value):
         possM = DEFAULTS().AVAILABLE_METADATA_PROVIDERS
         if not value:
             logger.warning(
-                "Metadata provider value is empty. Default values will be used.")
+                "Metadata provider value is empty. \
+                    Default values will be used.")
             return False
         new_val = value.replace(' ', '').split(',')
+
+        # Even if one is valid, return true
         for provider in new_val:
-            if provider not in possM:
-                return False
-        return True
+            if provider in possM:
+                return True
+        return False
 
 
 def retDefault(keyword):

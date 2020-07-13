@@ -137,13 +137,14 @@ def SEARCH_SONG(q="Tera Buzz", filters=[]):
         else:
             logger.error('"{}" isn\'t implemented'.format(provider))
             broken_provider_counter += 1
-    
+
     # to_be_sorted will be empty and it will return None anyway, no need
     # to do it here as well
     if broken_provider_counter == len(metadata_providers):
-        logger.error("{}".format('No metadata provider in the configuration is '
-                                 'implemented. Please change it to something available '
-                                 'or use the --skip-meta flag'))
+        logger.error("{}".format(
+                            'No metadata provider in the configuration is '
+                            'implemented. Please change it to something \
+                            available or use the --skip-meta flag'))
 
     if not to_be_sorted:
         return None
