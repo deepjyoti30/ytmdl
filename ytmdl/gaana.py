@@ -20,6 +20,7 @@ class GaanaSongs():
         self.track_name = SONG['track_title']
         self.release_date = SONG['release_date']
         self.artist_name = SONG['artist'][0]['name']
+        self.provider = "gaana"
         self.collection_name = SONG['album_title']
         self.primary_genre_name = SONG['gener'][0]['name']
         self.track_number = '1'
@@ -40,9 +41,10 @@ def searchSong(querry, lim=40):
     data = data['tracks']
     SONG_TUPLE = []
 
-    for i in range(0, len(data)):
-        song_obj = GaanaSongs(data[i])
-        SONG_TUPLE.append(song_obj)
+    if data:
+        for i in range(0, len(data)):
+            song_obj = GaanaSongs(data[i])
+            SONG_TUPLE.append(song_obj)
 
     return SONG_TUPLE
 

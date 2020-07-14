@@ -54,11 +54,16 @@ config_text = '''#*****************************************#
 #*****************************************#
 # The METADATA_PROVIDERS value is a comma separated
 # values that specifies wich API providers to use for getting
-# the song metadata. Available values right now are: itunes, gaana.
+# the song metadata. Available values right now are: itunes, gaana, deezer.
 # Please check the github page of ytmdl for more information.
 #
 #METADATA_PROVIDERS = "itunes, gaana"
-#'''
+#*****************************************#
+# The SEARCH_SENSITIVITY value is between 0 and 1, 1 being the
+# most restrictive. Lower for looser searches of metadata, youtube
+# isn't affected by this
+#SEARCH_SENSITIVITY = 1
+# '''
 
 
 logger = Logger("config")
@@ -80,6 +85,9 @@ class DEFAULTS:
         # The default song quality
         self.SONG_QUALITY = '320'
 
+        # Default search sensitivity
+        self.SEARCH_SENSITIVITY = 1
+
         # The config path
         self.CONFIG_PATH = os.path.join(xdg_config_home, 'ytmdl')
 
@@ -87,7 +95,8 @@ class DEFAULTS:
         self.METADATA_PROVIDERS = ['itunes', 'gaana']
 
         # The available metadata providers
-        self.AVAILABLE_METADATA_PROVIDERS = self.METADATA_PROVIDERS + [] # add new ones here
+        self.AVAILABLE_METADATA_PROVIDERS = self.METADATA_PROVIDERS + \
+            ['deezer']  # add new ones here
 
     def _get_music_dir(self):
         """Get the dir the file will be saved to."""
@@ -190,7 +199,7 @@ def check_config_setup():
     return True
 
 
-def checkExistence(keyword, value):
+def checkValidity(keyword, value):
     """Check if the user specified value in config is possible."""
     if keyword == 'SONG_DIR':
         # In this case check if $ and -> are present
@@ -226,6 +235,21 @@ def checkExistence(keyword, value):
             if provider in possM:
                 return True
         return False
+    elif keyword == 'SEARCH_SENSITIVITY':
+        if not value:
+            logger.warning(
+                "Search sensitivity value is empty. "
+                "Default value will be used.")
+            return False
+        try:
+            val = float(value)
+        except Exception as e:
+            logger.debug("Search sensitivity value is invalid. "
+                         "Default value will be used.")
+            return False
+        if val and 0 <= val <= 1:
+            return True
+        return False
 
 
 def retDefault(keyword):
@@ -236,6 +260,8 @@ def retDefault(keyword):
         return DEFAULTS().SONG_DIR
     elif keyword == 'METADATA_PROVIDERS':
         return DEFAULTS().METADATA_PROVIDERS
+    elif keyword == 'SEARCH_SENSITIVITY':
+        return DEFAULTS().SEARCH_SENSITIVITY
 
 
 def GIVE_DEFAULT(self, keyword):
@@ -264,14 +290,17 @@ def GIVE_DEFAULT(self, keyword):
 
                 # Remove the "
                 newDEFAULT = newDEFAULT.replace('"', '')
+                newDEFAULT = newDEFAULT.replace("'", '')
                 # Check if the line has a \n in it
                 if "\n" in line:
                     newDEFAULT = newDEFAULT.replace('\n', '')
 
-                if checkExistence(keyword, newDEFAULT):
+                if checkValidity(keyword, newDEFAULT):
                     return newDEFAULT
                 else:
-                    logger.warning("{}: doesn't exist.".format(newDEFAULT))
+                    if newDEFAULT:
+                        logger.warning(
+                            "{}: is invalid for option {}.".format(newDEFAULT, keyword))
                     return retDefault(keyword)
 
 
