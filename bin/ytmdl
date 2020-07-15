@@ -16,6 +16,7 @@ import sys
 from colorama import init
 from colorama import Fore, Style
 import argparse
+
 from ytmdl import (
             dir,
             song,
@@ -24,6 +25,7 @@ from ytmdl import (
             prepend,
             setupConfig,
             cache,
+            cut,
             utility,
             metadata,
             manual,
@@ -101,6 +103,12 @@ def arguments():
                         and keep only the music in the file. Useful in songs where there \
                         are speeches, noise etc before/after the start of the song. Default \
                         is false.", action='store_true')
+    parser.add_argument('--cut', '-c', nargs='+', help="Cut song. If more than one value is passed, \
+                        the cutting will be done in intervals. Example: \
+                        --cut 1:30 will cut starting from 1:30 to the end, while \
+                        --cut 1:30 2:30 4:00 5:00 will cut between 1:30 and 2:30 \
+                            and merge with 4:00 to 5:00. If more than one value is passed \
+                            they need to be even numbered.") 
     parser.add_argument('--version', action='version', version='2020.07.09',
                         help='show the program version number and exit')
 
@@ -167,7 +175,6 @@ def arguments():
 
 def main(args):
     """Run on program call."""
-
     if args.list_level:
         logger.list_available_levels()
         exit(0)
@@ -329,6 +336,9 @@ def main(args):
     if type(conv_name) is not str:
         logger.critical('ERROR: {}'.format(conv_name))
 
+    if args.cut:
+        logger.info("Cutting the song...")
+        cut.Cut(conv_name, args.cut)
 
     # Trim the song if the trim option is passed.
     if args.trim:
@@ -357,7 +367,7 @@ def main(args):
         # declare a variable to store the option
         option = 0
 
-        if len(TRACK_INFO) == 0:
+        if not TRACK_INFO:
             logger.critical('No data was found!\a')
         else:
             prepend.PREPEND(1)

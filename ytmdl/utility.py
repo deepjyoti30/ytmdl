@@ -2,9 +2,11 @@
 
 import subprocess
 from os import remove, path, popen
-from ytmdl import defaults
+from ytmdl import defaults, logger
 from shutil import which
 import ffmpeg
+
+logger = logger.Logger('utility')
 
 
 def exe(command):
@@ -13,13 +15,15 @@ def exe(command):
     Written by Nishan Pantha.
     """
     command = command.strip()
-    c = command.split()
-    output, error = subprocess.Popen(c,
+    output, error = subprocess.Popen(command,
                                      stdout=subprocess.PIPE,
-                                     stderr=subprocess.PIPE).communicate()
+                                     stderr=subprocess.PIPE,
+                                     # We need shell=True, otherwise there are errors
+                                     # if file name contains special chars
+                                     shell=True).communicate()
     output = output.decode('utf-8').strip()
     error = error.decode('utf-8').strip()
-    return (output, error)
+    return output, error
 
 
 def get_terminal_length():
@@ -35,7 +39,7 @@ def convert_to_mp3r(path):
         new_name = path + '_new.mp3'
 
         command = "ffmpeg -loglevel panic -i {} -vn -ar 44100 -ac 2 -ab {}k -f mp3 {}".format(path,
-                                                                                             defaults.DEFAULT.SONG_QUALITY,
+                                                                                              defaults.DEFAULT.SONG_QUALITY,
                                                                                               new_name)
         output, error = exe(command)
 
@@ -51,13 +55,13 @@ def convert_to_mp3(path):
     new_name = path + '_new.mp3'
     try:
         ffmpeg.input(path).output(
-                            new_name,
-                            loglevel='panic',
-                            ar=44100,
-                            ac=2,
-                            ab='{}k'.format(defaults.DEFAULT.SONG_QUALITY),
-                            f='mp3'
-                        ).run()
+            new_name,
+            loglevel='panic',
+            ar=44100,
+            ac=2,
+            ab='{}k'.format(defaults.DEFAULT.SONG_QUALITY),
+            f='mp3'
+        ).run()
         # Delete the temp file now
         remove(path)
         return new_name
@@ -93,3 +97,4 @@ def get_songs(file_path):
 def is_present(app):
     """Check if the passed app is installed in the machine."""
     return which(app) is not None
+
