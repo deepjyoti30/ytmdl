@@ -94,7 +94,8 @@ def arguments():
                         action='store_true')
     parser.add_argument('--format',
                         help="The format in which the song should be downloaded.\
-                        Default is [MP3]. Available options are [m4a]", default='mp3',
+                        Default is mp3, but can be set in config. Available options are [m4a]", 
+                        default=defaults.DEFAULT.DEFAULT_FORMAT,
                         type=str)
     parser.add_argument('--trim', '-t', help="Trim out the audio from the song. Use \
                         underlying speech and music segmentation engine to determine \
@@ -234,7 +235,7 @@ def main(args):
     logger.debug("Passed format: {}".format(passed_format))
 
     # Check if passed format is support, if not exit.
-    if passed_format not in defaults.FORMAT.valid_formats:
+    if passed_format not in defaults.DEFAULT.VALID_FORMATS:
         logger.critical("Passed format is not supported yet!")
 
     if args.song is not None:

@@ -201,6 +201,7 @@ This will download the default config from the repo to your ```~/.config/ytmdl``
 | `SONG_DIR`           | Directory to save the songs in after editing       |
 | `SONG_QUALITY`       | Quality of the song                                |
 | `METADATA_PROVIDERS` | Which API providers to use for metadata            |
+| `DEFAULT_FORMAT`     | Default format of the song                         |
 
 #### SONG_DIR also takes values that are extracted from the song
 ##### Example format is `/your/desired/path$Album->Artist->Title` to save in the following way
