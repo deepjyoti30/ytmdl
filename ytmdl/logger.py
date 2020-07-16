@@ -9,7 +9,8 @@ from xdg.BaseDirectory import xdg_cache_home
 
 class Logger:
     """
-        Custom logger that meets the requirements of using multiple logging setup.
+        Custom logger that meets the requirements of using
+        multiple logging setup.
     """
     _instances = []
 
@@ -22,7 +23,12 @@ class Logger:
         self.name = name
         self._file_format = ''
         self._console_format = ''
-        self._log_file = Path(os.path.join(xdg_cache_home, 'ytmdl/logs/log.cat'))
+        self._log_file = Path(
+                            os.path.join(
+                                xdg_cache_home,
+                                'ytmdl/logs/log.cat'
+                            )
+                        )
         self._check_logfile()
         self._level_number = {
                                 'DEBUG': 0,
@@ -87,6 +93,9 @@ class Logger:
                                 DATETIME_FORMAT,
                                 message
                             )
+
+    def get_log_file(self):
+        return self._log_file
 
     def update_level(self, level):
         """

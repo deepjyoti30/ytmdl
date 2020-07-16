@@ -122,7 +122,9 @@ def getChoice(SONG_INFO, type):
         if PRINT_WHOLE:
             print_choice(beg, results, SONG_INFO, type)
         prepend.PREPEND(1)
-        choice = input('Enter Choice [a valid choice] ')
+        choice = input('Enter Choice [default is 1] ')
+        if not choice:
+            choice = 1
         choice = int(choice)
         # If the choice is 6 then try to print more results
         if choice <= results and choice > 0:
