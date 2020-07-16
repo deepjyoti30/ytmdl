@@ -3,7 +3,8 @@
 import os
 import glob
 import shutil
-from ytmdl import defaults, logger
+from ytmdl.helpers import logger
+from ytmdl.config import defaults
 
 logger = logger.Logger("Dir")
 

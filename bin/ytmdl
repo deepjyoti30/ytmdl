@@ -16,20 +16,11 @@ import sys
 from colorama import init
 from colorama import Fore, Style
 import argparse
-from ytmdl import (
-            dir,
-            song,
-            yt,
-            defaults,
-            prepend,
-            setupConfig,
-            cache,
-            utility,
-            metadata,
-            manual,
-            logger,
-            stringutils,
-)
+
+from ytmdl.helpers import dir, prepend, cache, utility, logger, stringutils
+from ytmdl.song import song, yt
+from ytmdl.config import setup_config, defaults
+from ytmdl.metadata import metadata, manual
 
 # init colorama for windows
 init()
@@ -184,9 +175,9 @@ def main(args):
     logger.debug("Logger running in DEBUG mode")
 
     # Check if --setup is passed
-    if not setupConfig.check_config_setup():
+    if not setup_config.check_config_setup():
         logger.debug("Config not present, creating default.")
-        setupConfig.make_config()
+        setup_config.make_config()
         logger.debug("Config created")
         logger.info("Created new config since none was present")
 
@@ -222,7 +213,7 @@ def main(args):
     # the user is not going to use it.
     if args.trim:
         logger.debug("Need to trim the song, importing the trim module.")
-        from ytmdl import trim
+        from ytmdl.helpers import trim
 
 
     is_quiet = args.quiet

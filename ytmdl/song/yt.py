@@ -5,12 +5,13 @@ from bs4 import BeautifulSoup
 import os
 import youtube_dl
 import re
-from ytmdl import defaults, utility, stringutils
+from ytmdl.helpers import utility, stringutils
+from ytmdl.config import defaults
 from downloader_cli.download import Download
 import traceback
 from sys import stdout
 
-from ytmdl.logger import Logger
+from ytmdl.helpers.logger import Logger
 
 
 logger = Logger("yt")

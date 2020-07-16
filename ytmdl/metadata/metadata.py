@@ -2,11 +2,13 @@
 
 import itunespy
 import re
-from ytmdl.stringutils import (
+from ytmdl.helpers.stringutils import (
     remove_multiple_spaces, remove_punct, compute_jaccard, remove_stopwords,
     check_keywords
 )
-from ytmdl import gaana, logger, defaults, deezer
+from ytmdl.helpers import logger
+from ytmdl.config import defaults
+from ytmdl.providers import gaana, itunes, deezer
 from unidecode import unidecode
 
 logger = logger.Logger('metadata')
@@ -16,43 +18,17 @@ def _logger_provider_error(exception, name):
     """Show error if providers throw an error"""
     logger.debug('{}'.format(exception))
     logger.error(
-        "Something went wrong with {}. The program will continue with"
+        "Something went wrong with {}. The program will continue with "
         "the other providers. Please check '{}' for more details.\
             ".format(name, logger.get_log_file()))
 
 
-def get_from_itunes(SONG_NAME):
-    """Try to download the metadata using itunespy."""
-    # Try to get the song data from itunes
+def _get_from_provider(provider, SONG_NAME):
+    """Get songs from metadata provider"""
     try:
-        SONG_INFO = itunespy.search_track(SONG_NAME)
-        # Before returning convert all the track_time values to minutes.
-        for song in SONG_INFO:
-            song.track_time = round(song.track_time / 60000, 2)
-            song.provider = "itunes"
-        return SONG_INFO
+        return provider.search_song(SONG_NAME)
     except Exception as e:
-        _logger_provider_error(e, 'iTunes')
-        return None
-
-
-def get_from_gaana(SONG_NAME):
-    """Get some tags from gaana."""
-    try:
-        nana = gaana.searchSong(SONG_NAME)
-        return nana
-    except Exception as e:
-        _logger_provider_error(e, 'Gaana')
-        return None
-
-
-def get_from_deezer(SONG_NAME):
-    """Get some tags from deezer."""
-    try:
-        songs = deezer.searchSong(SONG_NAME)
-        return songs
-    except Exception as e:
-        _logger_provider_error(e, 'Deezer')
+        _logger_provider_error(e, provider.name)
         return None
 
 
@@ -90,7 +66,7 @@ def _search_tokens(song_name, song_list):
     return res
 
 
-def filterSongs(data, filters=[]):
+def _filter_songs(data, filters=[]):
     """Filter the songs according to the passed filters.
 
     In the passed filters the first element is artist.
@@ -124,7 +100,7 @@ def _extend_to_be_sorted_and_rest(provider_data, to_be_sorted, rest, filters):
     # Before passing for sorting filter the songs
     # with the passed args
     if filters:
-        provider_data = filterSongs(provider_data, filters)
+        provider_data = _filter_songs(provider_data, filters)
     if provider_data is not None:
         to_be_sorted.extend(provider_data[:10])
         rest.extend(provider_data[10:])
@@ -137,18 +113,18 @@ def SEARCH_SONG(q="Tera Buzz", filters=[]):
 
     metadata_providers = defaults.DEFAULT.METADATA_PROVIDERS
 
-    GET_METADATA_ACTIONS = {
-        'itunes': get_from_itunes,
-        'gaana': get_from_gaana,
-        'deezer': get_from_deezer
+    PROVIDER_CLASSES = {
+        'itunes': itunes.iTunes(),
+        'gaana': gaana.Gaana(),
+        'deezer': deezer.Deezer()
     }
 
     broken_provider_counter = 0
 
     for provider in metadata_providers:
-        if provider in GET_METADATA_ACTIONS:
-            data_provider = GET_METADATA_ACTIONS.get(
-                provider, lambda _: None)(q)
+        if provider in PROVIDER_CLASSES:
+            data_provider = _get_from_provider(
+                PROVIDER_CLASSES.get(provider, None), q)
             if data_provider:
                 _extend_to_be_sorted_and_rest(
                     data_provider, to_be_sorted, rest, filters)

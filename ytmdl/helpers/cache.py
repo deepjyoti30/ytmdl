@@ -7,13 +7,13 @@
 
 from glob import glob
 import os
-from ytmdl.stringutils import (
+from ytmdl.helpers.stringutils import (
     remove_multiple_spaces, remove_punct, compute_jaccard, remove_stopwords,
     check_keywords
 )
-from ytmdl.defaults import DEFAULT
-from ytmdl.prepend import PREPEND
-from ytmdl.logger import Logger
+from ytmdl.config.defaults import DEFAULT
+from ytmdl.helpers.prepend import PREPEND
+from ytmdl.helpers.logger import Logger
 from colorama import Fore, Style
 
 logger = Logger("cache")

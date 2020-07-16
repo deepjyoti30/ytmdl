@@ -2,7 +2,7 @@
 
 import subprocess
 from os import remove, path, popen
-from ytmdl import defaults
+from ytmdl.config import defaults
 from shutil import which
 import ffmpeg
 

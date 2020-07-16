@@ -7,7 +7,7 @@ from inaSpeechSegmenter import Segmenter
 from warnings import filterwarnings
 from os import environ, remove, rename
 import ffmpeg
-from ytmdl.logger import Logger
+from ytmdl.helpers.logger import Logger
 
 # Setup the logger name
 logger = Logger("Trimmer")
