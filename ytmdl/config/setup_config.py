@@ -2,7 +2,7 @@
 
 import os
 import re
-from ytmdl.logger import Logger
+from ytmdl.helpers.logger import Logger
 from xdg.BaseDirectory import xdg_config_home
 
 

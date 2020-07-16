@@ -2,7 +2,7 @@
 from pathlib import Path
 import datetime
 import os
-from ytmdl.prepend import PREPEND
+from ytmdl.helpers.prepend import PREPEND
 
 from xdg.BaseDirectory import xdg_cache_home
 
