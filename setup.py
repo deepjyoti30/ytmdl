@@ -20,7 +20,8 @@ req_pkgs = [
             'pysocks',
             'unidecode',
             'tensorflow',
-            'inaSpeechSegmenter'
+            'inaSpeechSegmenter',
+            'youtube_search'
         ]
 
 
