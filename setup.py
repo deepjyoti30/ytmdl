@@ -19,11 +19,13 @@ req_pkgs = [
             'ffmpeg-python',
             'pysocks',
             'unidecode',
-            'tensorflow',
-            'inaSpeechSegmenter',
             'youtube_search'
-        ]
+          ]
 
+
+extra_features = {
+            'noise-clean': ['inaSpeechSegmenter', 'tensorflow']
+        }
 
 if __name__ == '__main__':
     setuptools.setup(
@@ -44,5 +46,6 @@ if __name__ == '__main__':
         python_requires=">=3.*",
         scripts=['bin/ytmdl'],
         install_requires=req_pkgs,
-        setup_requires=req_pkgs
+        setup_requires=req_pkgs,
+        extras_require=extra_features
     )
