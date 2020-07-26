@@ -30,7 +30,7 @@ extra_features = {
 if __name__ == '__main__':
     setuptools.setup(
         name="ytmdl",
-        version="2020.07.09",
+        version="2020.07.26",
         author="Deepjyoti Barman",
         author_email="deep.barma30@gmail.com",
         description="Youtube Music Downloader",
