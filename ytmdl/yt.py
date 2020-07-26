@@ -1,3 +1,4 @@
+
 """Definition of functions that are used to interact with youtube."""
 
 import requests
@@ -9,6 +10,7 @@ from ytmdl import defaults, utility, stringutils
 from downloader_cli.download import Download
 import traceback
 from sys import stdout
+from youtube_search import YoutubeSearch
 
 from ytmdl.logger import Logger
 
@@ -157,16 +159,11 @@ def get_href(url):
 
 def search(query, bettersearch, proxy, kw=[], lim=20):
     """
-    Search the video on youtube using `youtube-scrape`.
+    Search the song name and return results
 
-    Youtube Scrape is a project that exposes an URL deployed
-    on Heroku that can be used to make calls to Youtube's API.
-
-    Go say thanks to them at https://github.com/HermanFassett/youtube-scrape
+    Search the passed query using the `youtube_search` module
+    and extract the results accordingly and return.
     """
-    # Base API url
-    BASE_URL = 'http://youtube-scrape.herokuapp.com/api/search'
-
     # Add keywords if better search is enabled
     kw = [kw_ for kw_ in kw if kw_ is not None]
 
@@ -181,59 +178,27 @@ def search(query, bettersearch, proxy, kw=[], lim=20):
     # Replace all the spaces with +
     query = query.replace(' ', '+')
 
-    url = "{}?q={}".format(BASE_URL, query)
+    results = YoutubeSearch(query).to_dict()
 
-    try:
-        response = requests.get(url, proxies=proxies)
-    except requests.exceptions.ConnectionError:
-        logger.critical("Connection Error! Are you connected to internet?")
-    except requests.exceptions.Timeout:
-        logger.critical("Timed Out! Are you connected to internet?")
-    except Exception:
-        traceback.print_exc()
-
-    # Check if everythin was ok
-    if response.status_code != 200:
-        logger.critical("Was not able to search the video")
-
-    response = response.json()
-
-    try:
-        results = response['results']
-    except KeyError:
-        logger.critical(
-                    "No result was returned. Returned data is: {}".format(
-                                                                    response
-                                                                )
-                )
-
-    # Check if any result was even found.
-    if not len(results):
-        logger.critical("No results were found. Try a different keyword?!")
+    if not results:
+        logger.warning("No search results found!")
 
     # Trim the data to the passed number
     if len(results) > lim:
         results = results[:lim]
 
-    extracted_data = []
+    stripped_results = []
 
     for video in results:
-        # Put a check to see the result is not a channel
-        if 'video' not in list(video.keys()):
-            continue
-
         data = {}
-        data['title'] = video['video']['title']
-        data['href'] = video['video']['url'].replace(
-                                                'https://www.youtube.com',
-                                                ''
-                                            )
-        data['author_name'] = video['uploader']['username']
-        data['duration'] = video['video']['duration']
+        data['title'] = video['title']
+        data['href'] = video['url_suffix']
+        data['author_name'] = video['channel']
+        data['duration'] = video['duration']
 
-        extracted_data.append(data)
+        stripped_results.append(data)
 
-    return extracted_data
+    return stripped_results
 
 
 def search2(query, bettersearch, proxy, kw=[], lim=10):

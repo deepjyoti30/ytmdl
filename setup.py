@@ -19,7 +19,8 @@ req_pkgs = [
             'ffmpeg-python',
             'pysocks',
             'unidecode',
-        ]
+            'youtube_search'
+          ]
 
 
 extra_features = {
