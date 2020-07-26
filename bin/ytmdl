@@ -357,7 +357,7 @@ def main(args):
         # declare a variable to store the option
         option = 0
 
-        if len(TRACK_INFO) == 0:
+        if not TRACK_INFO:
             logger.critical('No data was found!\a')
         else:
             prepend.PREPEND(1)
