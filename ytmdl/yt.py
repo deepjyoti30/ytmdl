@@ -106,7 +106,13 @@ def dw_using_yt(link, proxy, song_name, datatype, no_progress=False):
         return e
 
 
-def dw(value, proxy=None, song_name='ytmdl_temp.mp3', datatype='mp3'):
+def dw(
+        value,
+        proxy=None,
+        song_name='ytmdl_temp.mp3',
+        datatype='mp3',
+        no_progress=False
+    ):
     """
     Download the song.
 
@@ -138,7 +144,7 @@ def dw(value, proxy=None, song_name='ytmdl_temp.mp3', datatype='mp3'):
         logger.debug(name)
 
         # Start downloading the song
-        status = dw_using_yt(value, proxy, name, datatype)
+        status = dw_using_yt(value, proxy, name, datatype, no_progress)
 
         if status == 0:
             return name
