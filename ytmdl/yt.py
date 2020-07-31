@@ -71,7 +71,7 @@ def progress_handler(d):
         stdout.flush()
 
 
-def dw_using_yt(link, proxy, song_name, datatype):
+def dw_using_yt(link, proxy, song_name, datatype, no_progress=False):
     """
     Download the song using YTDL downloader and use downloader CLI's
     functions to be used to display a progressbar.
@@ -88,8 +88,10 @@ def dw_using_yt(link, proxy, song_name, datatype):
         'outtmpl': song_name,
         'format': format_,
         'nocheckcertificate': True,
-        'progress_hooks': [progress_handler],
     }
+
+    if not no_progress:
+        ydl_opts['progress_hooks'] = [progress_handler]
 
     if proxy is not None:
         ydl_opts['proxy'] = proxy
