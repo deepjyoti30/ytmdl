@@ -88,6 +88,7 @@ def dw_using_yt(link, proxy, song_name, datatype, no_progress=False):
         'outtmpl': song_name,
         'format': format_,
         'nocheckcertificate': True,
+        'source_address': '0.0.0.0'
     }
 
     if not no_progress:
@@ -112,7 +113,7 @@ def dw(
         song_name='ytmdl_temp.mp3',
         datatype='mp3',
         no_progress=False
-    ):
+        ):
     """
     Download the song.
 
