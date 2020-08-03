@@ -250,6 +250,8 @@ Supported options are:
  * Thanks to <a href = https://github.com/NISH1001>Nishan Pantha</a> for search logic.
 
  * Thanks to <a href = https://github.com/biswaroop1547>Biswaroop</a> for testing in windows.
+
+ * Thanks to [cyberboysumanjay](https://github.com/cyberboysumanjay) for [JioSaavnAPI](https://github.com/cyberboysumanjay/JioSaavnAPI).
  
 
 ## Need Help
