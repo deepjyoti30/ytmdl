@@ -107,7 +107,7 @@ class SaavnSong():
         Preferably YYYY-MM-DDTHH:MM:SSZ
         """
         return date + 'T00:00:00Z'
-    
+
     def _get_proper_img_url(self, url):
         """
         The URL provided by Saavn will be a 500x500
