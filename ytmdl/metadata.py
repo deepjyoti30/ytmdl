@@ -5,7 +5,7 @@ from ytmdl.stringutils import (
     remove_multiple_spaces, remove_punct, compute_jaccard, remove_stopwords,
     check_keywords
 )
-from ytmdl import gaana, logger, defaults
+from ytmdl import gaana, logger, defaults, saavn
 from unidecode import unidecode
 
 logger = logger.Logger('metadata')
@@ -41,6 +41,18 @@ def get_from_gaana(SONG_NAME):
         return nana
     except Exception as e:
         _logger_provider_error(e, 'Gaana')
+        return None
+
+
+def get_from_saavn(SONG_NAME):
+    """
+    Get the songs from JioSaavn
+    """
+    try:
+        results = saavn.search_query(SONG_NAME)
+        return results
+    except Exception as e:
+        _logger_provider_error(e, "Saavn")
         return None
 
 
@@ -123,7 +135,8 @@ def SEARCH_SONG(q="Tera Buzz", filters=[]):
 
     GET_METADATA_ACTIONS = {
         'itunes': get_from_itunes,
-        'gaana': get_from_gaana
+        'gaana': get_from_gaana,
+        'saavn': get_from_saavn
     }
 
     broken_provider_counter = 0

@@ -19,7 +19,9 @@ req_pkgs = [
             'ffmpeg-python',
             'pysocks',
             'unidecode',
-            'youtube_search'
+            'youtube_search',
+            'pyDes',
+            'urllib3'
           ]
 
 
