@@ -59,7 +59,10 @@ config_text = '''#*****************************************#
 #
 #METADATA_PROVIDERS = "itunes, gaana"
 #*****************************************#
-# '''
+# The DEFAULT_FORMAT denotes what to use as default between
+# m4a and mp3
+#DEFAULT_FORMAT = "mp3"
+#'''
 
 
 logger = Logger("config")
@@ -85,11 +88,15 @@ class DEFAULTS:
         self.CONFIG_PATH = os.path.join(xdg_config_home, 'ytmdl')
 
         # The default metadata providers
-        self.METADATA_PROVIDERS = ['itunes', 'gaana']
+        self.METADATA_PROVIDERS = ['itunes', 'gaana', 'saavn']
 
         # The available metadata providers
         self.AVAILABLE_METADATA_PROVIDERS = self.METADATA_PROVIDERS + \
             ['deezer']  # add new ones here
+
+        self.VALID_FORMATS = ['mp3', 'm4a']
+
+        self.DEFAULT_FORMAT = 'mp3'
 
     def _get_music_dir(self):
         """Get the dir the file will be saved to."""
@@ -193,6 +200,7 @@ def check_config_setup():
 
 
 def checkValidity(keyword, value):
+
     """Check if the user specified value in config is possible."""
     if keyword == 'SONG_DIR':
         # In this case check if $ and -> are present
@@ -200,19 +208,14 @@ def checkValidity(keyword, value):
         if '$' in value:
             pos = value.find('$')
             value = value[:pos]
-
-        if os.path.isdir(value):
-            return True
-        else:
-            return False
+        return os.path.isdir(value)
     elif keyword == 'QUALITY':
         # Possible values that QUALITY can take
         possQ = ['320', '192']
-
-        if value in possQ:
-            return True
-        else:
-            return False
+        return value in possQ
+    elif keyword == 'DEFAULT_FORMAT':
+        possF = DEFAULTS().VALID_FORMATS
+        return value in possF
     elif keyword == 'METADATA_PROVIDERS':
         # Possible values that METADATA_PROVIDERS can take
         possM = DEFAULTS().AVAILABLE_METADATA_PROVIDERS
@@ -234,6 +237,8 @@ def retDefault(keyword):
     """Return the DEFAULT value of keyword."""
     if keyword == 'QUALITY':
         return DEFAULTS().SONG_QUALITY
+    elif keyword == 'DEFAULT_FORMAT':
+        return DEFAULTS().DEFAULT_FORMAT
     elif keyword == 'SONG_DIR':
         return DEFAULTS().SONG_DIR
     elif keyword == 'METADATA_PROVIDERS':

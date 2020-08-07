@@ -19,15 +19,20 @@ req_pkgs = [
             'ffmpeg-python',
             'pysocks',
             'unidecode',
-            'tensorflow',
-            'inaSpeechSegmenter'
-        ]
+            'youtube_search',
+            'pyDes',
+            'urllib3'
+          ]
 
+
+extra_features = {
+            'noise-clean': ['inaSpeechSegmenter', 'tensorflow']
+        }
 
 if __name__ == '__main__':
     setuptools.setup(
         name="ytmdl",
-        version="2020.07.09",
+        version="2020.07.26",
         author="Deepjyoti Barman",
         author_email="deep.barma30@gmail.com",
         description="Youtube Music Downloader",
@@ -43,5 +48,6 @@ if __name__ == '__main__':
         python_requires=">=3.*",
         scripts=['bin/ytmdl'],
         install_requires=req_pkgs,
-        setup_requires=req_pkgs
+        setup_requires=req_pkgs,
+        extras_require=extra_features
     )

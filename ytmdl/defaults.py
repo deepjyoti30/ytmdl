@@ -30,6 +30,8 @@ class DEFAULT:
     # The song quality
     SONG_QUALITY = setupConfig.GIVE_DEFAULT(1, 'QUALITY')
 
+    DEFAULT_FORMAT = setupConfig.GIVE_DEFAULT(1, 'DEFAULT_FORMAT')
+
     # The metadata providers
     METADATA_PROVIDERS = _providers_string_to_list(
         setupConfig.GIVE_DEFAULT(1, 'METADATA_PROVIDERS'))
@@ -50,3 +52,4 @@ class FORMAT:
         'mp3',
         'm4a'
     ]
+

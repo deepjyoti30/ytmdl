@@ -94,14 +94,15 @@ def arguments():
                         action='store_true')
     parser.add_argument('--format',
                         help="The format in which the song should be downloaded.\
-                        Default is [MP3]. Available options are [m4a]", default='mp3',
+                        Default is mp3, but can be set in config. Available options are [m4a]", 
+                        default=defaults.DEFAULT.DEFAULT_FORMAT,
                         type=str)
     parser.add_argument('--trim', '-t', help="Trim out the audio from the song. Use \
                         underlying speech and music segmentation engine to determine \
                         and keep only the music in the file. Useful in songs where there \
                         are speeches, noise etc before/after the start of the song. Default \
                         is false.", action='store_true')
-    parser.add_argument('--version', action='version', version='2020.07.09',
+    parser.add_argument('--version', action='version', version='2020.07.26',
                         help='show the program version number and exit')
 
     playlist_group = parser.add_argument_group("Playlist")
@@ -220,10 +221,16 @@ def main(args):
 
     # Check if we need to import trim. Importing it is realy inefficient if
     # the user is not going to use it.
+    trim_has_dependencies = True
     if args.trim:
         logger.debug("Need to trim the song, importing the trim module.")
-        from ytmdl import trim
-
+        try:
+            from ytmdl import trim
+        except ImportError:
+            trim_has_dependencies = False
+            logger.error("Dependencies needed for trim are not installed. Please use the"
+                          " [noise-clean] specifier when installing ytmdl. The script will"
+                          " continue without trimming.")
 
     is_quiet = args.quiet
     url = args.url
@@ -234,7 +241,7 @@ def main(args):
     logger.debug("Passed format: {}".format(passed_format))
 
     # Check if passed format is support, if not exit.
-    if passed_format not in defaults.FORMAT.valid_formats:
+    if passed_format not in defaults.DEFAULT.VALID_FORMATS:
         logger.critical("Passed format is not supported yet!")
 
     if args.song is not None:
@@ -331,7 +338,7 @@ def main(args):
 
 
     # Trim the song if the trim option is passed.
-    if args.trim:
+    if args.trim and trim_has_dependencies:
         logger.info("Passing the song to get trimmed.")
         trim.Trim(conv_name)
 
