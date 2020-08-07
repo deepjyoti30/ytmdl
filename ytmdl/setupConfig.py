@@ -59,10 +59,6 @@ config_text = '''#*****************************************#
 #
 #METADATA_PROVIDERS = "itunes, gaana"
 #*****************************************#
-# The SEARCH_SENSITIVITY value is between 0 and 1, 1 being the
-# most restrictive. Lower for looser searches of metadata, youtube
-# isn't affected by this
-#SEARCH_SENSITIVITY = 1
 # '''
 
 
@@ -84,9 +80,6 @@ class DEFAULTS:
 
         # The default song quality
         self.SONG_QUALITY = '320'
-
-        # Default search sensitivity
-        self.SEARCH_SENSITIVITY = 1
 
         # The config path
         self.CONFIG_PATH = os.path.join(xdg_config_home, 'ytmdl')
@@ -235,21 +228,6 @@ def checkValidity(keyword, value):
             if provider in possM:
                 return True
         return False
-    elif keyword == 'SEARCH_SENSITIVITY':
-        if not value:
-            logger.warning(
-                "Search sensitivity value is empty. "
-                "Default value will be used.")
-            return False
-        try:
-            val = float(value)
-        except Exception as e:
-            logger.debug("Search sensitivity value is invalid. "
-                         "Default value will be used.")
-            return False
-        if val and 0 <= val <= 1:
-            return True
-        return False
 
 
 def retDefault(keyword):
@@ -260,8 +238,6 @@ def retDefault(keyword):
         return DEFAULTS().SONG_DIR
     elif keyword == 'METADATA_PROVIDERS':
         return DEFAULTS().METADATA_PROVIDERS
-    elif keyword == 'SEARCH_SENSITIVITY':
-        return DEFAULTS().SEARCH_SENSITIVITY
 
 
 def GIVE_DEFAULT(self, keyword):

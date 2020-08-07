@@ -38,7 +38,7 @@ class DEFAULT:
         'deezer': deezer.get_more_data
     }
 
-    SEARCH_SENSITIVITY = float(setupConfig.GIVE_DEFAULT(1, 'SEARCH_SENSITIVITY'))
+    SEARCH_SENSITIVITY = 0.5
 
 
 class FORMAT:
