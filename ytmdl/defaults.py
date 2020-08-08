@@ -36,16 +36,4 @@ class DEFAULT:
     METADATA_PROVIDERS = _providers_string_to_list(
         setupConfig.GIVE_DEFAULT(1, 'METADATA_PROVIDERS'))
 
-    VALID_FORMATS = ['mp3', 'm4a']
-
-
-class FORMAT:
-    """
-    Class to handle stuff related to the passed
-    format.
-    """
-    valid_formats = [
-        'mp3',
-        'm4a'
-    ]
-
+    VALID_FORMATS = setupConfig.DEFAULTS().VALID_FORMATS
