@@ -194,12 +194,14 @@ def main(args):
     if not args.SONG_NAME and not args.url:
         logger.critical("Song Name is required. Check 'ytmdl --help' for help.")
 
-    logger.debug(len(args.SONG_NAME))
+    logger.debug(args.SONG_NAME)
     if len(args.SONG_NAME) > 1:
         song_name = ' '.join(args.SONG_NAME)
     elif not args.SONG_NAME:
         # Fetch the title of the song
         song_name = yt.get_title(args.url)
+        logger.debug(song_name)
+        logger.hold()
     else:
         song_name = args.SONG_NAME[0]
 

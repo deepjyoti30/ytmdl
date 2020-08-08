@@ -210,67 +210,6 @@ def search(query, bettersearch, proxy, kw=[], lim=20):
     return stripped_results
 
 
-def search2(query, bettersearch, proxy, kw=[], lim=10):
-    """Search the query in youtube and return lim number of results.
-
-    Query is the keyword, i:e name of the song
-    lim is the number of songs that will be added to video array and returned
-    """
-
-    # Add keywords if better search is enabled
-    if bettersearch:
-        for keyword in kw:
-            if keyword is not None:
-                query += ' ' + keyword
-
-    # Check if proxy is passed.
-    proxies = {}
-    if proxy is not None:
-        proxies['http'] = proxy
-
-    # Replace all the spaces with +
-    query = query.replace(' ', '+')
-
-    url = "https://www.youtube.com/results?search_query={}".format(query)
-    videos = []
-
-    try:
-        response = requests.get(url, proxies=proxies)
-        soup = BeautifulSoup(response.text, "lxml")
-        videos = soup.findAll('div', attrs={'class': 'yt-lockup-content'})
-    except requests.exceptions.ConnectionError:
-        logger.critical("Connection Error! Are you connected to internet?")
-    except requests.exceptions.Timeout:
-        logger.critical("Timed Out! Are you connected to internet?")
-    except Exception:
-        traceback.print_exc()
-
-    if not videos:
-        return []
-
-    if len(videos) > lim:
-        videos = videos[:lim]
-
-    extracted_data = []
-
-    for video in videos:
-        a = video.find_all('a')
-        # This check is necessary because in some cases the search results
-        # contain channel names etc.
-        if len(a) <= 1: continue
-        data = {}
-        data['title'] = a[0]['title']
-        data['href'] = a[0]['href']
-        data['author_name'] = a[1].text
-        duration_unprocessed = video.span.text
-        duration = re.sub(r'\ |\-|\.|Duration', '', duration_unprocessed)
-        data['duration'] = re.subn(r':', '', duration, 1)[0]
-
-        extracted_data.append(data)
-
-    return extracted_data
-
-
 def scan_video(url, proxy):
     """Scan the link of the video and return data and."""
     proxies = {}

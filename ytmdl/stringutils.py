@@ -92,9 +92,17 @@ def remove_yt_words(title):
     """
     Remove words like Official video etc from the name of the song
     """
-    title = re.sub(r'\]|\[|official|video|music|audio|full|lyrics?|-|\)|\(|®', '', str(title).lower())
+    # Remove stopwords like official, video etc
+    # Remove square as well as circle brackets
+    # Remove dashes (-) and trademark icons like ®
+    # Remove spaces in the beginning or at the end
+    title = re.sub(
+                r'\]|\[|official|video|music|audio|full|lyrics?|-|\)|\(|®|^[ ]*|[ ]*$',
+                '',
+                str(title).lower()
+            )
     # Replace more than one space with one space
-    title = re.sub(r'\ {2}', ' ', title)
+    title = re.sub(r'\ {2,}', ' ', title)
     return title
 
 
@@ -111,7 +119,7 @@ def srtip_unwanted_words_from_url(url):
 
 
 def main():
-    pass
+    print(remove_yt_words("    Nana   haha  "))
 
 if __name__ == "__main__":
     main()
