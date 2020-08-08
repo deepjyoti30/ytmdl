@@ -15,6 +15,7 @@ url_extra_album = "{}album/{}"
 
 SONG = []
 
+
 class DeezerSongs():
     """Class to store deezer song tags."""
 

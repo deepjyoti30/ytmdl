@@ -277,7 +277,11 @@ def setData(SONG_INFO, is_quiet, song_path, datatype='mp3', choice=None):
 
     get_more_data_dict = preconfig.CONFIG().GET_EXTRA_DATA
 
-    if song.provider in get_more_data_dict:
+    # Try to check if the song object has an attribute provider
+    # Deezer has it but other objects don't have it.
+    # If the provider is present then fetch extra data accordingly
+
+    if hasattr(song, 'provider') and song.provider in get_more_data_dict:
         song = get_more_data_dict.get(song.provider, lambda _: None)(song)
 
     if datatype == 'mp3':

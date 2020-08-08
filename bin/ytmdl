@@ -183,6 +183,7 @@ def main(args):
 
     # Just a message to make the user aware of the current running state
     logger.debug("Logger running in DEBUG mode")
+    logger.debug("Passed args: {}".format(args))
 
     # Check if --setup is passed
     if not setupConfig.check_config_setup():
@@ -202,6 +203,10 @@ def main(args):
         song_name = yt.get_title(args.url)
         logger.debug(song_name)
         logger.hold()
+
+        # Ask the user if they want to go with the extracted
+        # title or if they would like to change it.
+        song_name = utility.get_new_title(song_name)
     else:
         song_name = args.SONG_NAME[0]
 
@@ -421,18 +426,14 @@ def extract_data():
         logger.info("Playlist: {}".format(playlist_name))
         logger.info("{} songs found".format(len(songs)))
 
+        # Before passing the args, make the song name None
+        # so that the song name will be extracted in main
+        args.SONG_NAME = []
+
         # Iterate and work on the data.
         url_base = "https://www.youtube.com/watch?v="
         for song in songs:
             args.url = url_base + song["url"]
-
-            # Try to pass the title as well, if it's not there
-            # that will be handled by ytmdl
-            try:
-                args.SONG_NAME = [stringutils.remove_yt_words(song["title"])]
-            except KeyError:
-                pass
-
             main(args)
     else:
         main(args)

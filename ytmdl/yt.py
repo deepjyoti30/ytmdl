@@ -299,7 +299,14 @@ def get_title(url):
     """
     Return the title of the passed URL.
     """
-    ydl_opts = {"quiet": True}
+    ydl_opts = {
+            "quiet": True,
+            'nocheckcertificate': True,
+            'source_address': '0.0.0.0'
+        }
+
+    logger.debug(url)
+
     ydl = youtube_dl.YoutubeDL(ydl_opts)
     data = ydl.extract_info(url, False)
 
