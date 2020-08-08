@@ -54,10 +54,14 @@ config_text = '''#*****************************************#
 #*****************************************#
 # The METADATA_PROVIDERS value is a comma separated
 # values that specifies wich API providers to use for getting
-# the song metadata. Available values right now are: itunes, gaana.
+# the song metadata. Available values right now are: itunes, gaana, deezer.
 # Please check the github page of ytmdl for more information.
 #
 #METADATA_PROVIDERS = "itunes, gaana"
+#*****************************************#
+# The DEFAULT_FORMAT denotes what to use as default between
+# m4a and mp3
+#DEFAULT_FORMAT = "mp3"
 #'''
 
 
@@ -87,7 +91,12 @@ class DEFAULTS:
         self.METADATA_PROVIDERS = ['itunes', 'gaana', 'saavn']
 
         # The available metadata providers
-        self.AVAILABLE_METADATA_PROVIDERS = self.METADATA_PROVIDERS + [] # add new ones here
+        self.AVAILABLE_METADATA_PROVIDERS = self.METADATA_PROVIDERS + \
+            ['deezer']  # add new ones here
+
+        self.VALID_FORMATS = ['mp3', 'm4a']
+
+        self.DEFAULT_FORMAT = 'mp3'
 
     def _get_music_dir(self):
         """Get the dir the file will be saved to."""
@@ -190,7 +199,8 @@ def check_config_setup():
     return True
 
 
-def checkExistence(keyword, value):
+def checkValidity(keyword, value):
+
     """Check if the user specified value in config is possible."""
     if keyword == 'SONG_DIR':
         # In this case check if $ and -> are present
@@ -198,19 +208,14 @@ def checkExistence(keyword, value):
         if '$' in value:
             pos = value.find('$')
             value = value[:pos]
-
-        if os.path.isdir(value):
-            return True
-        else:
-            return False
+        return os.path.isdir(value)
     elif keyword == 'QUALITY':
         # Possible values that QUALITY can take
         possQ = ['320', '192']
-
-        if value in possQ:
-            return True
-        else:
-            return False
+        return value in possQ
+    elif keyword == 'DEFAULT_FORMAT':
+        possF = DEFAULTS().VALID_FORMATS
+        return value in possF
     elif keyword == 'METADATA_PROVIDERS':
         # Possible values that METADATA_PROVIDERS can take
         possM = DEFAULTS().AVAILABLE_METADATA_PROVIDERS
@@ -232,6 +237,8 @@ def retDefault(keyword):
     """Return the DEFAULT value of keyword."""
     if keyword == 'QUALITY':
         return DEFAULTS().SONG_QUALITY
+    elif keyword == 'DEFAULT_FORMAT':
+        return DEFAULTS().DEFAULT_FORMAT
     elif keyword == 'SONG_DIR':
         return DEFAULTS().SONG_DIR
     elif keyword == 'METADATA_PROVIDERS':
@@ -264,14 +271,17 @@ def GIVE_DEFAULT(self, keyword):
 
                 # Remove the "
                 newDEFAULT = newDEFAULT.replace('"', '')
+                newDEFAULT = newDEFAULT.replace("'", '')
                 # Check if the line has a \n in it
                 if "\n" in line:
                     newDEFAULT = newDEFAULT.replace('\n', '')
 
-                if checkExistence(keyword, newDEFAULT):
+                if checkValidity(keyword, newDEFAULT):
                     return newDEFAULT
                 else:
-                    logger.warning("{}: doesn't exist.".format(newDEFAULT))
+                    if newDEFAULT:
+                        logger.warning(
+                            "{}: is invalid for option {}.".format(newDEFAULT, keyword))
                     return retDefault(keyword)
 
 

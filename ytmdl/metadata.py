@@ -1,11 +1,13 @@
 """Define functions related to getting tags."""
 
 import itunespy
+import re
 from ytmdl.stringutils import (
     remove_multiple_spaces, remove_punct, compute_jaccard, remove_stopwords,
     check_keywords
 )
-from ytmdl import gaana, logger, defaults, saavn
+from ytmdl import logger, defaults
+from ytmdl.meta import gaana, deezer, saavn, preconfig
 from unidecode import unidecode
 
 logger = logger.Logger('metadata')
@@ -25,9 +27,6 @@ def get_from_itunes(SONG_NAME):
     # Try to get the song data from itunes
     try:
         SONG_INFO = itunespy.search_track(SONG_NAME)
-        # Before returning convert all the track_time values to minutes.
-        for song in SONG_INFO:
-            song.track_time = round(song.track_time / 60000, 2)
         return SONG_INFO
     except Exception as e:
         _logger_provider_error(e, 'iTunes')
@@ -44,6 +43,14 @@ def get_from_gaana(SONG_NAME):
         return None
 
 
+def get_from_deezer(SONG_NAME):
+    """Get some tags from deezer."""
+    try:
+        songs = deezer.searchSong(SONG_NAME)
+        return songs
+    except Exception as e:
+        _logger_provider_error(e, 'Deezer')
+        
 def get_from_saavn(SONG_NAME):
     """
     Get the songs from JioSaavn
@@ -59,9 +66,9 @@ def get_from_saavn(SONG_NAME):
 def _search_tokens(song_name, song_list):
     """Search song in the cache based on simple each word matching."""
     song_name = remove_punct(
-                    remove_stopwords(
-                        remove_multiple_spaces(unidecode(song_name)).lower()
-                    ))
+        remove_stopwords(
+            remove_multiple_spaces(unidecode(song_name)).lower()
+        ))
     tokens1 = song_name.split()
     cached_songs = song_list
 
@@ -69,6 +76,10 @@ def _search_tokens(song_name, song_list):
     for song in cached_songs:
         song_back = song
         name = song.track_name.lower()
+        # If there is a part like (featuring ..) or any extra data
+        # we should remove it as it doesn't aid the search
+        name = re.sub(r'\([^)]*\)', '', name)
+        name = remove_stopwords(name)
         name = remove_punct(name)
         name = remove_multiple_spaces(name)
         name = unidecode(name)
@@ -76,7 +87,7 @@ def _search_tokens(song_name, song_list):
         match = check_keywords(tokens1, tokens2)
         if match:
             dist = compute_jaccard(tokens1, tokens2)
-            if dist >= 1:
+            if dist >= preconfig.CONFIG().SEARCH_SENSITIVITY:
                 res.append((song_back, dist))
     res = sorted(res, key=lambda x: x[1], reverse=True)
 
@@ -136,29 +147,31 @@ def SEARCH_SONG(q="Tera Buzz", filters=[]):
     GET_METADATA_ACTIONS = {
         'itunes': get_from_itunes,
         'gaana': get_from_gaana,
+        'deezer': get_from_deezer,
         'saavn': get_from_saavn
     }
 
     broken_provider_counter = 0
 
     for provider in metadata_providers:
-        data_provider = GET_METADATA_ACTIONS.get(
-            provider, lambda _: None)(q)
-        if data_provider:
-            _extend_to_be_sorted_and_rest(
-                data_provider, to_be_sorted, rest, filters)
+        if provider in GET_METADATA_ACTIONS:
+            data_provider = GET_METADATA_ACTIONS.get(
+                provider, lambda _: None)(q)
+            if data_provider:
+                _extend_to_be_sorted_and_rest(
+                    data_provider, to_be_sorted, rest, filters)
         else:
             logger.warning(
-                        '"{}" isn\'t implemented. Skipping!'.format(provider)
-                    )
+                '"{}" isn\'t implemented. Skipping!'.format(provider)
+            )
             broken_provider_counter += 1
 
     # to_be_sorted will be empty and it will return None anyway, no need
     # to do it here as well
     if broken_provider_counter == len(metadata_providers):
         logger.critical("{}".format(
-                            'No metadata provider in the configuration is '
-                            'implemented. Please change it to something \
+            'No metadata provider in the configuration is '
+            'implemented. Please change it to something \
                             available or use the --skip-meta flag'))
 
     if not to_be_sorted:

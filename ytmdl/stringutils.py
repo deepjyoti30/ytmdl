@@ -56,7 +56,6 @@ def compute_jaccard(tokens1, tokens2):
     intersect = set(tokens1).intersection(tokens2)
     return len(intersect)/len(union)
 
-
 def remove_unwanted_chars(string):
     return re.sub(r" |/", "#", string)
 

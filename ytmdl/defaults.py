@@ -3,12 +3,14 @@ from ytmdl import setupConfig
 import os
 from xdg.BaseDirectory import xdg_cache_home
 
+
 def _providers_string_to_list(val):
     """Convert string to list if not already"""
     # Use a set to remove duplicates
     if type(val) == str:
         return list(set(val.replace(' ', '').split(',')))
     return list(set(val))
+
 
 class DEFAULT:
     """DEFAULT class contains value of different constants."""
@@ -28,9 +30,13 @@ class DEFAULT:
     # The song quality
     SONG_QUALITY = setupConfig.GIVE_DEFAULT(1, 'QUALITY')
 
+    DEFAULT_FORMAT = setupConfig.GIVE_DEFAULT(1, 'DEFAULT_FORMAT')
+
     # The metadata providers
     METADATA_PROVIDERS = _providers_string_to_list(
         setupConfig.GIVE_DEFAULT(1, 'METADATA_PROVIDERS'))
+
+    VALID_FORMATS = ['mp3', 'm4a']
 
 
 class FORMAT:
@@ -42,3 +48,4 @@ class FORMAT:
         'mp3',
         'm4a'
     ]
+

@@ -9,6 +9,7 @@ from mutagen.mp3 import MP3
 from mutagen.mp4 import MP4, MP4Cover
 import requests
 from ytmdl import prepend, defaults, logger
+from ytmdl.meta import preconfig
 import os
 # import traceback
 
@@ -17,12 +18,12 @@ logger = logger.Logger("song")
 # ----------------------cover--------------------
 
 
-def dwCover(SONG_INFO, index):
+def dwCover(song):
     """Download the song cover img from itunes."""
     # Try to download the cover art as cover.jpg in temp
     logger.info("Preparing the album cover")
     try:
-        imgURL = SONG_INFO[index].artwork_url_100
+        imgURL = song.artwork_url_100
 
         # Check if the passed imgURL is a local file
         # this is possible if the metadata was entered manually.
@@ -53,7 +54,8 @@ def dwCover(SONG_INFO, index):
         print('Could not get album cover. Are you connected to internet?\a')
         return False
     except Exception as e:
-        logger.warning("Error while trying to download image, skipping!: {}".format(e))
+        logger.warning(
+            "Error while trying to download image, skipping!: {}".format(e))
         return False
     else:
         return False
@@ -141,7 +143,7 @@ def getChoice(SONG_INFO, type):
     return choice
 
 
-def set_MP3_data(SONG_INFO, is_quiet, song_path, choice):
+def set_MP3_data(song, option, song_path):
     """
     Set the meta data if the passed data is mp3.
     """
@@ -149,14 +151,6 @@ def set_MP3_data(SONG_INFO, is_quiet, song_path, choice):
     IS_IMG_ADDED = False
 
     try:
-        # If more than one choice then call getChoice
-        option = 0
-        if len(SONG_INFO) > 1:
-            if not is_quiet:
-                option = getChoice(SONG_INFO, 'metadata')
-            elif choice is not None and choice in range(1, len(SONG_INFO)):
-                option = choice
-
         SONG_PATH = os.path.join(defaults.DEFAULT.SONG_TEMP_DIR,
                                  song_path)
 
@@ -164,7 +158,7 @@ def set_MP3_data(SONG_INFO, is_quiet, song_path, choice):
         data = ID3(SONG_PATH)
 
         # Download the cover image, if failed, pass
-        if dwCover(SONG_INFO, option):
+        if dwCover(song):
             imagedata = open(defaults.DEFAULT.COVER_IMG, 'rb').read()
             data.add(APIC(3, 'image/jpeg', 3, 'Front cover', imagedata))
             # REmove the image
@@ -179,59 +173,58 @@ def set_MP3_data(SONG_INFO, is_quiet, song_path, choice):
 
         audio.save()
 
-        option = int(option)
-
-        data.add(TYER(encoding=3, text=SONG_INFO[option].release_date))
-        data.add(TIT2(encoding=3, text=SONG_INFO[option].track_name))
-        data.add(TPE1(encoding=3, text=SONG_INFO[option].artist_name))
-        data.add(TALB(encoding=3, text=SONG_INFO[option].collection_name))
-        data.add(TCON(encoding=3, text=SONG_INFO[option].primary_genre_name))
-        data.add(TRCK(encoding=3, text=str(SONG_INFO[option].track_number)))
+        data.add(TYER(encoding=3, text=song.release_date))
+        data.add(TIT2(encoding=3, text=song.track_name))
+        data.add(TPE1(encoding=3, text=song.artist_name))
+        data.add(TALB(encoding=3, text=song.collection_name))
+        data.add(TCON(encoding=3, text=song.primary_genre_name))
+        data.add(TRCK(encoding=3, text=str(song.track_number)))
 
         data.save()
 
-        defaults.DEFAULT.SONG_NAME_TO_SAVE = SONG_INFO[option].track_name + '.mp3'
+        defaults.DEFAULT.SONG_NAME_TO_SAVE = song.track_name + '.mp3'
 
         # Rename the downloaded file
         os.rename(SONG_PATH, os.path.join(
-                                    defaults.DEFAULT.SONG_TEMP_DIR,
-                                    defaults.DEFAULT.SONG_NAME_TO_SAVE
-                                ))
+            defaults.DEFAULT.SONG_TEMP_DIR,
+            defaults.DEFAULT.SONG_NAME_TO_SAVE
+        ))
 
-        return option, IS_IMG_ADDED
+        return IS_IMG_ADDED
 
     except Exception as e:
         logger.debug("{}".format(e))
         return e, False
 
 
-def set_M4A_data(SONG_INFO, is_quiet, song_path, choice):
+def _get_option(SONG_INFO, is_quiet, choice):
+    option = 0
+    if len(SONG_INFO) > 1:
+        if not is_quiet:
+            option = getChoice(SONG_INFO, 'metadata')
+        elif choice is not None and choice in range(1, len(SONG_INFO)):
+            option = choice
+    return int(option)
+
+
+def set_M4A_data(song, option, song_path):
     """
     Set the tags in the m4a file passed.
     """
     cover_added = False
 
     try:
-        # If more than one choice then call getChoice
-        option = 0
-        if len(SONG_INFO) > 1:
-            if not is_quiet:
-                option = getChoice(SONG_INFO, 'metadata')
-            elif choice is not None and choice in range(1, len(SONG_INFO)):
-                option = choice
-
         SONG_PATH = os.path.join(defaults.DEFAULT.SONG_TEMP_DIR,
                                  song_path)
-
         audio = MP4(SONG_PATH)
 
         # Download the cover image, if failed, pass
-        if dwCover(SONG_INFO, option):
+        if dwCover(song):
             imagedata = open(defaults.DEFAULT.COVER_IMG, 'rb').read()
             audio["covr"] = [MP4Cover(
-                                imagedata,
-                                imageformat=MP4Cover.FORMAT_JPEG
-                            )]
+                imagedata,
+                imageformat=MP4Cover.FORMAT_JPEG
+            )]
             # REmove the image
             os.remove(defaults.DEFAULT.COVER_IMG)
             cover_added = True
@@ -244,30 +237,28 @@ def set_M4A_data(SONG_INFO, is_quiet, song_path, choice):
 
         audio.save()
 
-        option = int(option)
-
         # Add the meta data, the key's can be found at
         # https://mutagen.readthedocs.io/en/latest/api/mp4.html#mutagen.mp4.MP4Tags
-        audio["\xa9nam"] = SONG_INFO[option].track_name
-        audio["\xa9alb"] = SONG_INFO[option].collection_name
-        audio["\xa9ART"] = SONG_INFO[option].artist_name
-        audio["\xa9day"] = SONG_INFO[option].release_date
-        audio["\xa9gen"] = SONG_INFO[option].primary_genre_name
+        audio["\xa9nam"] = song.track_name
+        audio["\xa9alb"] = song.collection_name
+        audio["\xa9ART"] = song.artist_name
+        audio["\xa9day"] = song.release_date
+        audio["\xa9gen"] = song.primary_genre_name
 
         # Adding track number would probably thwor some kind
         # of render error, will leave for later
 
         audio.save()
 
-        defaults.DEFAULT.SONG_NAME_TO_SAVE = SONG_INFO[option].track_name + '.m4a'
+        defaults.DEFAULT.SONG_NAME_TO_SAVE = song.track_name + '.m4a'
 
         # Rename the downloaded file
         os.rename(SONG_PATH, os.path.join(
-                                    defaults.DEFAULT.SONG_TEMP_DIR,
-                                    defaults.DEFAULT.SONG_NAME_TO_SAVE
-                                ))
+            defaults.DEFAULT.SONG_TEMP_DIR,
+            defaults.DEFAULT.SONG_NAME_TO_SAVE
+        ))
 
-        return option, cover_added
+        return cover_added
 
     except Exception as e:
         return e
@@ -275,30 +266,42 @@ def set_M4A_data(SONG_INFO, is_quiet, song_path, choice):
 
 def setData(SONG_INFO, is_quiet, song_path, datatype='mp3', choice=None):
     """Add the metadata to the song."""
+
+    # Some providers need extra daa from other endpoints,
+    # this is where we define which need it and where to get
+    # it from
+
+    option = _get_option(SONG_INFO, is_quiet, choice)
+
+    song = SONG_INFO[option]
+
+    get_more_data_dict = preconfig.CONFIG().GET_EXTRA_DATA
+
+    if song.provider in get_more_data_dict:
+        song = get_more_data_dict.get(song.provider, lambda _: None)(song)
+
     if datatype == 'mp3':
-        option, img_added = set_MP3_data(
-                                SONG_INFO,
-                                is_quiet,
-                                song_path,
-                                choice
-                            )
+        img_added = set_MP3_data(
+            song,
+            option,
+            song_path,
+        )
     elif datatype == 'm4a':
-        option, img_added = set_M4A_data(
-                                SONG_INFO,
-                                is_quiet,
-                                song_path,
-                                choice
-                            )
+        img_added = set_M4A_data(
+            song,
+            option,
+            song_path,
+        )
 
     # Show the written stuff in a better format
     prepend.PREPEND(1)
     print('================================')
-    print('  || YEAR: ' + SONG_INFO[option].release_date)
-    print('  || TITLE: ' + SONG_INFO[option].track_name)
-    print('  || ARTIST: ' + SONG_INFO[option].artist_name)
-    print('  || ALBUM: ' + SONG_INFO[option].collection_name)
-    print('  || GENRE: ' + SONG_INFO[option].primary_genre_name)
-    print('  || TRACK NO: ' + str(SONG_INFO[option].track_number))
+    print('  || YEAR: ' + song.release_date)
+    print('  || TITLE: ' + song.track_name)
+    print('  || ARTIST: ' + song.artist_name)
+    print('  || ALBUM: ' + song.collection_name)
+    print('  || GENRE: ' + song.primary_genre_name)
+    print('  || TRACK NO: ' + str(song.track_number))
 
     if img_added:
         print('  || ALBUM COVER ADDED')
