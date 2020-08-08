@@ -6,7 +6,8 @@ from ytmdl.stringutils import (
     remove_multiple_spaces, remove_punct, compute_jaccard, remove_stopwords,
     check_keywords
 )
-from ytmdl import gaana, logger, defaults, deezer, saavn
+from ytmdl import logger, defaults
+from ytmdl.meta import gaana, deezer, saavn, preconfig
 from unidecode import unidecode
 
 logger = logger.Logger('metadata')
@@ -26,10 +27,6 @@ def get_from_itunes(SONG_NAME):
     # Try to get the song data from itunes
     try:
         SONG_INFO = itunespy.search_track(SONG_NAME)
-        # Before returning convert all the track_time values to minutes.
-        for song in SONG_INFO:
-            song.track_time = round(song.track_time / 60000, 2)
-            song.provider = "itunes"
         return SONG_INFO
     except Exception as e:
         _logger_provider_error(e, 'iTunes')
@@ -90,7 +87,7 @@ def _search_tokens(song_name, song_list):
         match = check_keywords(tokens1, tokens2)
         if match:
             dist = compute_jaccard(tokens1, tokens2)
-            if dist >= defaults.DEFAULT().SEARCH_SENSITIVITY:
+            if dist >= preconfig.CONFIG().SEARCH_SENSITIVITY:
                 res.append((song_back, dist))
     res = sorted(res, key=lambda x: x[1], reverse=True)
 
@@ -150,7 +147,7 @@ def SEARCH_SONG(q="Tera Buzz", filters=[]):
     GET_METADATA_ACTIONS = {
         'itunes': get_from_itunes,
         'gaana': get_from_gaana,
-        'deezer': get_from_deezer
+        'deezer': get_from_deezer,
         'saavn': get_from_saavn
     }
 

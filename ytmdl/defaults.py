@@ -1,5 +1,5 @@
 """Contains the definition of class DEFAULT."""
-from ytmdl import setupConfig, deezer
+from ytmdl import setupConfig
 import os
 from xdg.BaseDirectory import xdg_cache_home
 
@@ -36,11 +36,7 @@ class DEFAULT:
     METADATA_PROVIDERS = _providers_string_to_list(
         setupConfig.GIVE_DEFAULT(1, 'METADATA_PROVIDERS'))
 
-    GET_EXTRA_DATA = {
-        'deezer': deezer.get_more_data
-    }
-
-    SEARCH_SENSITIVITY = 0.5
+    VALID_FORMATS = ['mp3', 'm4a']
 
 
 class FORMAT:

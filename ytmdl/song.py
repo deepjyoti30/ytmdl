@@ -8,7 +8,8 @@ from mutagen.id3 import ID3, APIC, TIT2, TPE1, TALB, TCON, TRCK, TYER
 from mutagen.mp3 import MP3
 from mutagen.mp4 import MP4, MP4Cover
 import requests
-from ytmdl import prepend, defaults, logger, deezer
+from ytmdl import prepend, defaults, logger
+from ytmdl.meta import preconfig
 import os
 # import traceback
 
@@ -274,7 +275,7 @@ def setData(SONG_INFO, is_quiet, song_path, datatype='mp3', choice=None):
 
     song = SONG_INFO[option]
 
-    get_more_data_dict = defaults.DEFAULT().GET_EXTRA_DATA
+    get_more_data_dict = preconfig.CONFIG().GET_EXTRA_DATA
 
     if song.provider in get_more_data_dict:
         song = get_more_data_dict.get(song.provider, lambda _: None)(song)
