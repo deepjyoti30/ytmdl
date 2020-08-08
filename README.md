@@ -188,7 +188,7 @@ The defaults can be changed by editing the config file in ytmdl folder in your .
 In case you want to create the config before the first run and edit it accordingly, do it the following way.
 
 ```console
-mkdir -p ~/.config/ytmdl; curl https://raw.githubusercontent.com/deepjyoti30/ytmdl/master/config > ~/.config/ytmdl/config
+mkdir -p ~/.config/ytmdl; curl https://raw.githubusercontent.com/deepjyoti30/ytmdl/master/examples/config > ~/.config/ytmdl/config
 ```
 
 This will download the default config from the repo to your ```~/.config/ytmdl``` directory.
