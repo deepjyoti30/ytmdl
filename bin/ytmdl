@@ -30,6 +30,7 @@ from ytmdl import (
             logger,
             stringutils,
 )
+from ytmdl.__version__ import __version__
 
 # init colorama for windows
 init()
@@ -102,7 +103,7 @@ def arguments():
                         and keep only the music in the file. Useful in songs where there \
                         are speeches, noise etc before/after the start of the song. Default \
                         is false.", action='store_true')
-    parser.add_argument('--version', action='version', version='2020.07.26',
+    parser.add_argument('--version', action='version', version=__version__,
                         help='show the program version number and exit')
 
     playlist_group = parser.add_argument_group("Playlist")

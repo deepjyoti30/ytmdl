@@ -6,6 +6,8 @@ import setuptools
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
+exec(open("ytmdl/__version__.py").read())
+
 req_pkgs = [
             'youtube_dl',
             'mutagen',
@@ -32,7 +34,7 @@ extra_features = {
 if __name__ == '__main__':
     setuptools.setup(
         name="ytmdl",
-        version="2020.07.26",
+        version=__version__,
         author="Deepjyoti Barman",
         author_email="deep.barma30@gmail.com",
         description="Youtube Music Downloader",
