@@ -73,6 +73,26 @@ def convert_to_mp3(path):
         return new_name
 
 
+def convert_to_opus(path):
+    """Covert to opus using the python ffmpeg module."""
+    new_name = path + '_new.opus'
+    try:
+        ffmpeg.input(path).output(
+                            new_name,
+                            loglevel='panic',
+                            f='opus'
+                        ).run()
+        # Delete the temp file now
+        remove(path)
+        return new_name
+    except ffmpeg._run.Error:
+        # This error is usually thrown where ffmpeg doesn't have to
+        # overwrite a file.
+        # The bug is from ffmpeg, I'm just adding this catch to
+        # handle that.
+        return new_name
+
+
 def is_valid(dir_path):
     """Check if passed path is valid or not."""
     if not path.isfile(dir_path):

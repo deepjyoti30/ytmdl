@@ -4,13 +4,27 @@ All the functions used to interact with the downloaded song are defined here.
 """
 
 from colorama import Fore, Style
-from mutagen.id3 import ID3, APIC, TIT2, TPE1, TALB, TCON, TRCK, TYER
+from mutagen.id3 import (
+    ID3,
+    APIC,
+    TIT2,
+    TPE1,
+    TALB,
+    TCON,
+    TRCK,
+    TYER,
+    PictureType
+)
 from mutagen.mp3 import MP3
 from mutagen.mp4 import MP4, MP4Cover
+from mutagen import File
+from mutagen.flac import Picture
+from base64 import b64encode
 import requests
+import os
+
 from ytmdl import prepend, defaults, logger
 from ytmdl.meta import preconfig
-import os
 # import traceback
 
 logger = logger.Logger("song")
@@ -197,16 +211,6 @@ def set_MP3_data(song, song_path):
         return e, False
 
 
-def _get_option(SONG_INFO, is_quiet, choice):
-    option = 0
-    if len(SONG_INFO) > 1:
-        if not is_quiet:
-            option = getChoice(SONG_INFO, 'metadata')
-        elif choice is not None and choice in range(1, len(SONG_INFO)):
-            option = choice
-    return int(option)
-
-
 def set_M4A_data(song, song_path):
     """
     Set the tags in the m4a file passed.
@@ -264,12 +268,75 @@ def set_M4A_data(song, song_path):
         return e
 
 
-def set_OPUS_data(song, option, song_path):
+def set_OPUS_data(song, song_path):
     """
     Set the data into an OPUS container according to the
     passed data.
     """
-    pass
+    COVER_ADDED = False
+
+    try:
+        SONG_PATH = os.path.join(defaults.DEFAULT.SONG_TEMP_DIR,
+                                 song_path)
+        mutagen_file = File(SONG_PATH)
+
+        # Try adding the tags container
+        try:
+            mutagen_file.add_tags()
+        except Exception:
+            # If exception is thrown, the tags already exist
+            pass
+
+        # Clear out the tags from the file
+        mutagen_file.clear()
+
+        # Try adding the cover
+        if dwCover(song):
+            imagedata = open(defaults.DEFAULT.COVER_IMG, 'rb').read()
+            picture = Picture()
+            picture.data = imagedata
+            picture.type = PictureType.COVER_FRONT
+            picture.mime = "image/jpeg"
+            encoded_data = b64encode(picture.write())
+            mutagen_file["metadata_block_picture"] = encoded_data.decode(
+                                                     "ascii")
+
+            # Remove the image
+            os.remove(defaults.DEFAULT.COVER_IMG)
+            COVER_ADDED = True
+
+        # Add the tags now
+        # Refer to https://www.programcreek.com/python/example/63675/mutagen.File
+        # for more information on it
+        mutagen_file["Title"] = song.track_name
+        mutagen_file["Album"] = song.collection_name
+        mutagen_file["Artist"] = song.artist_name
+        mutagen_file["Date"] = song.release_date
+        mutagen_file["Genre"] = song.primary_genre_name
+
+        mutagen_file.save()
+
+        defaults.DEFAULT.SONG_NAME_TO_SAVE = song.track_name + '.opus'
+
+        # Rename the downloaded file
+        os.rename(SONG_PATH, os.path.join(
+            defaults.DEFAULT.SONG_TEMP_DIR,
+            defaults.DEFAULT.SONG_NAME_TO_SAVE
+        ))
+
+        return COVER_ADDED
+    except Exception as e:
+        return e
+
+
+def _get_option(SONG_INFO, is_quiet, choice):
+    option = 0
+    if len(SONG_INFO) > 1:
+        if not is_quiet:
+            option = getChoice(SONG_INFO, 'metadata')
+        elif choice is not None and choice in range(1, len(SONG_INFO)):
+            option = choice
+    return int(option)
 
 
 def setData(SONG_INFO, is_quiet, song_path, datatype='mp3', choice=None):
@@ -301,6 +368,11 @@ def setData(SONG_INFO, is_quiet, song_path, datatype='mp3', choice=None):
         img_added = set_M4A_data(
             song,
             song_path,
+        )
+    elif datatype == 'opus':
+        img_added = set_OPUS_data(
+            song,
+            song_path
         )
 
     # Show the written stuff in a better format

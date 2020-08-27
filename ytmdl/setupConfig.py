@@ -94,7 +94,7 @@ class DEFAULTS:
         self.AVAILABLE_METADATA_PROVIDERS = self.METADATA_PROVIDERS + \
             ['deezer']  # add new ones here
 
-        self.VALID_FORMATS = ['mp3', 'm4a']
+        self.VALID_FORMATS = ['mp3', 'm4a', 'opus']
 
         self.DEFAULT_FORMAT = 'mp3'
 

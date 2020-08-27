@@ -95,7 +95,8 @@ def arguments():
                         action='store_true')
     parser.add_argument('--format',
                         help="The format in which the song should be downloaded.\
-                        Default is mp3, but can be set in config. Available options are [m4a]", 
+                        Default is mp3, but can be set in config. Available options are\
+                         {}".format(defaults.DEFAULT.VALID_FORMATS), 
                         default=defaults.DEFAULT.DEFAULT_FORMAT,
                         type=str)
     parser.add_argument('--trim', '-t', help="Trim out the audio from the song. Use \
@@ -338,6 +339,9 @@ def main(args):
     if passed_format == 'mp3':
         logger.info('Converting to mp3...')
         conv_name = utility.convert_to_mp3(path)
+    elif passed_format == 'opus':
+        logger.info('Converting to opus')
+        conv_name = utility.convert_to_opus(path)
     elif passed_format == 'm4a':
         conv_name = path
 
