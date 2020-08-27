@@ -78,7 +78,7 @@ def dw_using_yt(link, proxy, song_name, datatype, no_progress=False):
 
     The function will be called by using hooks.
     """
-    if datatype == 'mp3':
+    if datatype == 'mp3' or datatype == 'opus':
         format_ = 'bestaudio/best'
     elif datatype == 'm4a':
         format_ = 'bestaudio[ext=m4a]'
