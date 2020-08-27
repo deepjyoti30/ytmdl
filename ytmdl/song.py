@@ -143,7 +143,7 @@ def getChoice(SONG_INFO, type):
     return choice
 
 
-def set_MP3_data(song, option, song_path):
+def set_MP3_data(song, song_path):
     """
     Set the meta data if the passed data is mp3.
     """
@@ -207,7 +207,7 @@ def _get_option(SONG_INFO, is_quiet, choice):
     return int(option)
 
 
-def set_M4A_data(song, option, song_path):
+def set_M4A_data(song, song_path):
     """
     Set the tags in the m4a file passed.
     """
@@ -264,6 +264,14 @@ def set_M4A_data(song, option, song_path):
         return e
 
 
+def set_OPUS_data(song, option, song_path):
+    """
+    Set the data into an OPUS container according to the
+    passed data.
+    """
+    pass
+
+
 def setData(SONG_INFO, is_quiet, song_path, datatype='mp3', choice=None):
     """Add the metadata to the song."""
 
@@ -287,13 +295,11 @@ def setData(SONG_INFO, is_quiet, song_path, datatype='mp3', choice=None):
     if datatype == 'mp3':
         img_added = set_MP3_data(
             song,
-            option,
             song_path,
         )
     elif datatype == 'm4a':
         img_added = set_M4A_data(
             song,
-            option,
             song_path,
         )
 
