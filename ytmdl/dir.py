@@ -3,6 +3,8 @@
 import os
 import glob
 import shutil
+from html import unescape
+
 from ytmdl import defaults, logger
 
 logger = logger.Logger("Dir")
@@ -66,17 +68,20 @@ def ret_proper_names(ordered_names):
 
     For eg: Artist to artist_name
     """
-    itunespy_dict = {'Artist': 'artist_name',
-                     'Title': 'track_name',
-                     'Album': 'collection_name',
-                     'Genre': 'primary_genre_name',
-                     'TrackNumber': 'track_number',
-                     'ReleaseDate': 'release_date'
-                     }
+    info_dict = {'Artist': 'artist_name',
+                 'Title': 'track_name',
+                 'Album': 'collection_name',
+                 'Genre': 'primary_genre_name',
+                 'TrackNumber': 'track_number',
+                 'ReleaseDate': 'release_date'
+                }
+
+    logger.debug(ordered_names)
+    logger.debug(info_dict)
 
     new_names = []
-    for names in ordered_names:
-        new_names.append(itunespy_dict[names])
+    for name in ordered_names:
+        new_names.append(info_dict.get(name))
 
     return new_names
 
@@ -133,15 +138,19 @@ def make_custom_dir(DIR, TRACK_INFO):
         last_element = None
         order_dir = ret_proper_names(order_dir)
 
-    # Convert TRACK_INFO
-    TRACK_INFO = vars(TRACK_INFO)
+    logger.debug(TRACK_INFO)
 
     if last_element is not None:
-        last_element = TRACK_INFO[last_element]
+        last_element = getattr(TRACK_INFO, last_element)
         order_dir = order_dir[:len(order_dir) - 1]
 
     for kw_name in order_dir:
-        dir_name = TRACK_INFO[kw_name]
+        dir_name = unescape(getattr(TRACK_INFO, kw_name))
+
+        # Sometimes, certain strings have / in the name which creates
+        # issues since those strings are used to create directories.
+        # Whenever there is a /, replace it with -
+        dir_name = dir_name.replace("/", "-")
 
         new_dir = os.path.join(base_DIR, dir_name)
 
