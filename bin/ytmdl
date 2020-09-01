@@ -96,7 +96,7 @@ def arguments():
     parser.add_argument('--format',
                         help="The format in which the song should be downloaded.\
                         Default is mp3, but can be set in config. Available options are\
-                         {}".format(defaults.DEFAULT.VALID_FORMATS), 
+                         {}".format(defaults.DEFAULT.VALID_FORMATS),
                         default=defaults.DEFAULT.DEFAULT_FORMAT,
                         type=str)
     parser.add_argument('--trim', '-t', help="Trim out the audio from the song. Use \
@@ -142,7 +142,7 @@ def arguments():
              passed playlist.",
         action="store_true"
     )
-    
+
     logger_group = parser.add_argument_group("Logger")
     logger_group.add_argument(
         "--level",
@@ -296,7 +296,7 @@ def main(args):
         data = yt.search(song_name, not args.disable_metaadd,
                                 args.proxy,
                                 kw=[args.artist, args.album])
-        
+
         # Handle the exception if urls has len 0
         if len(data) == 0:
             logger.critical("No song found. Please try again with a different keyword.")
@@ -356,39 +356,41 @@ def main(args):
 
     logger.debug("Skip Meta: {}".format(args.skip_meta))
 
+    # Read the song's metadata values from the user.
     if args.manual_meta:
-        # Read the values from the user.
         TRACK_INFO = manual.get_data(song_name)
         option = 0
-
         option = song.setData(TRACK_INFO, is_quiet, conv_name, passed_format, choice)
-
         if type(option) is not int:
             logger.critical('ERROR: {}'.format(option))
 
         # Get the status of moving the song
         move_status = dir.cleanup(TRACK_INFO, option, passed_format)
+
+    # Search for the metadata externally.
     elif not args.skip_meta:
         logger.info('Getting song data for {}...'.format(song_metadata))
-
         TRACK_INFO = metadata.SEARCH_SONG(song_metadata, filters=[args.artist, args.album])
-
-        # declare a variable to store the option
         option = 0
-
         if not TRACK_INFO:
-            logger.critical('No data was found!\a')
+            logger.info('No data was found!\a')
+            logger.info('Falling back to manual metadata selection.')
+            TRACK_INFO = manual.get_data(song_name)
+            option = 0
+            option = song.setData(TRACK_INFO, is_quiet, conv_name, passed_format, choice)
+            if type(option) is not int:
+                logger.critical('ERROR: {}'.format(option))
         else:
             prepend.PREPEND(1)
             print('Setting data...')
-
             option = song.setData(TRACK_INFO, is_quiet, conv_name, passed_format, choice)
-
             if type(option) is not int:
                 logger.critical('ERROR: {}'.format(option))
 
-        # Get the status of moving the song
+        # Get the status of moving the song.
         move_status = dir.cleanup(TRACK_INFO, option, passed_format)
+
+    # Skip searching for the metadata.
     else:
         # If meta data is supposed to be skipped, go for a dry cleanup.
         move_status = dir.dry_cleanup(conv_name, song_name)
