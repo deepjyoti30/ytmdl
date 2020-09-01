@@ -91,6 +91,7 @@ def print_choice(beg, end, SONG_INFO, type):
         if type == 'metadata':
             print(SONG_INFO[beg].track_name, end='')
         if type == 'mp3':
+            print('[M] ' if SONG_INFO[beg]['verified_music'] else '', end='')
             print(SONG_INFO[beg]['title'], end='')
         print(Style.RESET_ALL, end='')
         print(' by ', end='')
@@ -123,7 +124,9 @@ def getChoice(SONG_INFO, type):
     # In case less, print all
 
     prepend.PREPEND(1)
-    print('Choose One')
+    print('Choose One {}'.format(
+                        '(One with [M] is verified music)'
+                        if type == 'mp3' else ''))
 
     results = len(SONG_INFO)
 
