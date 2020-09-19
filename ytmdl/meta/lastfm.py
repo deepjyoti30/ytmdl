@@ -21,13 +21,13 @@ class LastFMSongs():
         """
         self.track_name = SONG['name']
         self.artist_name = SONG['artist']
-        self.provider = 'last.fm'
-        self.collection_id = ""
-        self.track_id = ""
+        self.provider = 'lastfm'
+        self.track_number = ""
         self.collection_name = ""
         self.release_date = ""
         self.artwork_url_100 = SONG["image"][-1]["#text"]
         self.track_time = ""
+        self.primary_genre_name = "N/A"
 
     def _convert_time(self, duration):
         """duration is in ms"""
@@ -60,8 +60,7 @@ def get_more_data(song):
     track_details = response.json()
 
     # Update the songs attributes
-    song.collection_id = 1
-    song.track_id = 1
+    song.track_number = 1
     song.collection_name = track_details["track"]["album"]["title"]
     song.track_time = song._convert_time(track_details["track"]["duration"])
     song.release_date = track_details["track"]["wiki"]["published"]

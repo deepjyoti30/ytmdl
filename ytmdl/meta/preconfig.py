@@ -2,7 +2,8 @@
 Handle all the preconfigurations related to metadata
 """
 
-from ytmdl.meta.deezer import get_more_data
+from ytmdl.meta import deezer
+from ytmdl.meta import lastfm
 
 
 class CONFIG:
@@ -13,7 +14,8 @@ class CONFIG:
 
     # Some sources require fetching extra data
     GET_EXTRA_DATA = {
-        'deezer': get_more_data
+        'deezer': deezer.get_more_data,
+        'lastfm': lastfm.get_more_data
     }
 
     # Search sensitivity is the restriction on matching the

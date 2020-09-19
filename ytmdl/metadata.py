@@ -7,7 +7,7 @@ from ytmdl.stringutils import (
     check_keywords
 )
 from ytmdl import logger, defaults
-from ytmdl.meta import gaana, deezer, saavn, preconfig
+from ytmdl.meta import gaana, deezer, saavn, lastfm, preconfig
 from unidecode import unidecode
 
 logger = logger.Logger('metadata')
@@ -50,7 +50,17 @@ def get_from_deezer(SONG_NAME):
         return songs
     except Exception as e:
         _logger_provider_error(e, 'Deezer')
-        
+
+
+def get_from_lastfm(SONG_NAME):
+    """Get metadata from Last FM"""
+    try:
+        songs = lastfm.searchSong(SONG_NAME)
+        return songs
+    except Exception as e:
+        _logger_provider_error(e, 'LastFM')
+
+
 def get_from_saavn(SONG_NAME):
     """
     Get the songs from JioSaavn
@@ -148,7 +158,8 @@ def SEARCH_SONG(q="Tera Buzz", filters=[]):
         'itunes': get_from_itunes,
         'gaana': get_from_gaana,
         'deezer': get_from_deezer,
-        'saavn': get_from_saavn
+        'saavn': get_from_saavn,
+        'lastfm': get_from_lastfm
     }
 
     broken_provider_counter = 0
