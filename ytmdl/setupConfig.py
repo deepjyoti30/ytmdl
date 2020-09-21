@@ -54,7 +54,8 @@ config_text = '''#*****************************************#
 #*****************************************#
 # The METADATA_PROVIDERS value is a comma separated
 # values that specifies wich API providers to use for getting
-# the song metadata. Available values right now are: itunes, gaana, deezer.
+# the song metadata. Available values right now are:
+# itunes, gaana, deezer, lastfm. saavn.
 # Please check the github page of ytmdl for more information.
 #
 #METADATA_PROVIDERS = "itunes, gaana"
