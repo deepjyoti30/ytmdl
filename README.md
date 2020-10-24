@@ -7,7 +7,8 @@
 <h4>Download songs from YouTube by getting the audio from YouTube and the metadata from sources like Itunes and Gaana.</h4>
 </div>
 
-<div align="center" width="80%" height="auto">
+<div align="center" width="60%" height="auto">
+  <br>
     <img src=".github/ytmdl.gif">
 </div>
 
