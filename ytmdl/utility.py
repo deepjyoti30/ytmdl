@@ -71,6 +71,7 @@ def convert_to_mp3(path):
         # The bug is from ffmpeg, I'm just adding this catch to
         # handle that.
         return new_name
+<<<<<<< HEAD
 
 
 def convert_to_opus(path):
@@ -91,6 +92,8 @@ def convert_to_opus(path):
         # The bug is from ffmpeg, I'm just adding this catch to
         # handle that.
         return new_name
+=======
+>>>>>>> cac046dbc9400ed4d50632e0351f49d6767d9514
 
 
 def is_valid(dir_path):

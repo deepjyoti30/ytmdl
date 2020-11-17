@@ -241,6 +241,12 @@ def main(args):
                           " [noise-clean] specifier when installing ytmdl. The script will"
                           " continue without trimming.")
 
+    # Check if we need to import trim. Importing it is realy inefficient if
+    # the user is not going to use it.
+    if args.trim:
+        logger.debug("Need to trim the song, importing the trim module.")
+        from ytmdl import trim
+
     is_quiet = args.quiet
     url = args.url
     passed_choice = args.choice
