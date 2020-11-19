@@ -12,7 +12,7 @@ SHELLS_SUPPORTED = [
     "zsh"
 ]
 DEFAULT_TEMPLATE = "ytmdl-{}-completion.in"
-FINAL_NAME = "_ytmdl.{}"
+FINAL_NAME = "ytmdl.{}"
 
 
 def build_files():
