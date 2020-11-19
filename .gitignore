@@ -4,4 +4,3 @@ build/
 dist/
 ytmdl.*
 ytmdl/__pycache__/*
-utils
