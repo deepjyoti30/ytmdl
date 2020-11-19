@@ -411,7 +411,7 @@ def extract_data():
 
     # If options is asked for
     if args.get_opts:
-        print(" ".join(("--{}".format(opt) for opt in vars(args))))
+        print(" ".join(("--{}".format(opt.replace("_", "-")) for opt in vars(args))))
         return
 
     if args.list is not None:
