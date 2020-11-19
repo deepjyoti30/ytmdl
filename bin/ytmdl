@@ -106,7 +106,6 @@ def arguments():
                         is false.", action='store_true')
     parser.add_argument('--version', action='version', version=__version__,
                         help='show the program version number and exit')
-    parser.add_argument('--get-opts', action="store_true", help=argparse.SUPPRESS)
 
     playlist_group = parser.add_argument_group("Playlist")
     playlist_group.add_argument(
@@ -408,11 +407,6 @@ def main(args):
 def extract_data():
     """Extract the arguments and act accordingly."""
     args = arguments()
-
-    # If options is asked for
-    if args.get_opts:
-        print(" ".join(("--{}".format(opt) for opt in vars(args))))
-        return
 
     if args.list is not None:
         songs = utility.get_songs(args.list)
