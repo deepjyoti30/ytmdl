@@ -377,7 +377,12 @@ def main(args):
         option = 0
 
         if not TRACK_INFO:
-            logger.critical('No data was found!\a')
+            if not args.ignore_errors:
+                logger.critical('No data was found!\a')
+            else:
+                logger.warning("Ignoring {} since no data was found.".format(
+                    song_name))
+                return
         else:
             prepend.PREPEND(1)
             print('Setting data...')
