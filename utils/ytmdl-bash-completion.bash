@@ -10,7 +10,7 @@ _ytmdl_complete()
     cur_word="${COMP_WORDS[COMP_CWORD]}"
     prev_word="${COMP_WORDS[COMP_CWORD-1]}"
 
-    # Ask pss to generate a list of types it supports
+    # Ask ytmdl to generate a list of types it supports
     type_list=`ytmdl --get-opts`
 
     # Only perform completion if the current word starts with a dash ('-'),
@@ -20,7 +20,7 @@ _ytmdl_complete()
         # the compgen builtin.
         COMPREPLY=( $(compgen -W "${type_list}" -- ${cur_word}) )
     else
-        COMPREPLY=()
+        COMPREPLY=( "${type_list}" )
     fi
     return 0
 }
