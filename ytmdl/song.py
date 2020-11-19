@@ -23,11 +23,12 @@ from base64 import b64encode
 import requests
 import os
 
-from ytmdl import prepend, defaults, logger
+from ytmdl import prepend, defaults
+from simber import Logger
 from ytmdl.meta import preconfig
 # import traceback
 
-logger = logger.Logger("song")
+logger = Logger("song")
 
 # ----------------------cover--------------------
 

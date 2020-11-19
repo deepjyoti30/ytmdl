@@ -5,8 +5,7 @@ from os import remove, path, popen
 from ytmdl import defaults, stringutils
 from shutil import which
 import ffmpeg
-
-from ytmdl.logger import Logger
+from simber import Logger
 
 logger = Logger("Utility")
 

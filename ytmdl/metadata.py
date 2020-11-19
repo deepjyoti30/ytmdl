@@ -6,11 +6,12 @@ from ytmdl.stringutils import (
     remove_multiple_spaces, remove_punct, compute_jaccard, remove_stopwords,
     check_keywords
 )
-from ytmdl import logger, defaults
+from ytmdl import defaults
+from simber import Logger
 from ytmdl.meta import gaana, deezer, saavn, lastfm, preconfig
 from unidecode import unidecode
 
-logger = logger.Logger('metadata')
+logger = Logger('metadata')
 
 
 def _logger_provider_error(exception, name):

@@ -11,8 +11,7 @@ from downloader_cli.download import Download
 import traceback
 from sys import stdout
 from youtube_search import YoutubeSearch
-
-from ytmdl.logger import Logger
+from simber import Logger
 
 
 logger = Logger("yt")

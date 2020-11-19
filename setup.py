@@ -13,7 +13,7 @@ exec(open("ytmdl/__version__.py").read())
 req_pkgs = [
             'youtube_dl',
             'mutagen',
-            'itunespy==1.5.5',
+            'itunespy',
             'requests',
             'colorama',
             'bs4',
@@ -25,7 +25,8 @@ req_pkgs = [
             'unidecode',
             'youtube_search',
             'pyDes',
-            'urllib3'
+            'urllib3',
+            'simber'
           ]
 
 

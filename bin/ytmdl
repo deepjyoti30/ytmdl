@@ -16,6 +16,9 @@ import sys
 from colorama import init
 from colorama import Fore, Style
 import argparse
+from xdg.BaseDirectory import xdg_cache_home
+from os import path
+from simber import Logger
 from ytmdl import (
             dir,
             song,
@@ -27,7 +30,6 @@ from ytmdl import (
             utility,
             metadata,
             manual,
-            logger,
             stringutils,
 )
 from ytmdl.__version__ import __version__
@@ -35,7 +37,14 @@ from ytmdl.__version__ import __version__
 # init colorama for windows
 init()
 
-logger = logger.Logger('ytmdl')
+LOGGER_OUTTEMPLATE = " %a{}==>{}% ".format(Style.BRIGHT, Style.RESET_ALL)
+LOGGER_FILEFORMAT = "[{logger}]:[{time}]: "
+logger = Logger('ytmdl',
+                log_path=path.join(xdg_cache_home,'ytmdl/logs/log.cat'),
+                format=LOGGER_OUTTEMPLATE,
+                file_format=LOGGER_FILEFORMAT,
+                update_all=True
+)
 
 
 def arguments():
