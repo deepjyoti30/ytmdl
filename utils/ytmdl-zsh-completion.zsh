@@ -5,7 +5,7 @@ __ytmdl() {
     typeset -A opt_args
 
     cur_word=$words[CURRENT]
-    type_list={{ytmdl_opts}}
+    type_list=`ytmdl --get-opts`
 
     # Only perform completion if the current word starts with a dash ('-'),
     # meaning that the user is trying to complete an option.

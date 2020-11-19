@@ -11,7 +11,7 @@ _ytmdl_complete()
     prev_word="${COMP_WORDS[COMP_CWORD-1]}"
 
     # Ask ytmdl to generate a list of types it supports
-    type_list={{ytmdl_opts}}
+    type_list=`ytmdl --get-opts`
 
     # Only perform completion if the current word starts with a dash ('-'),
     # meaning that the user is trying to complete an option.
