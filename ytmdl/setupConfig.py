@@ -10,12 +10,11 @@ config_text = '''#*****************************************#
 #*-------------config for ytmdl ----------#
 #
 #-----------------------------------------#
-#------PLEASE DON\'T LEAVE ANY BLANK LINE---#
+#------PLEASE DON\'T LEAVE ANY BLANK LINES---#
 #-----------------------------------------#
 #
 # To change defaults just remove the hash(#)
-# from thw beginning of the line.
-# The will be read as a single line comment.
+# from the beginning of the line.
 #
 #*****************************************
 # The SONG_DIR is the directory where all the songs will be saved.
