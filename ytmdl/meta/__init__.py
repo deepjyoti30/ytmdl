@@ -4,5 +4,6 @@ __all__ = [
             'deezer',
             'saavn',
             'gaana',
-            'lastfm'
+            'lastfm',
+            'musicbrainz'
         ]

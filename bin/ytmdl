@@ -221,6 +221,8 @@ def main(args):
         except ExtractorError:
             if args.ignore_errors:
                 return
+
+            # If ignore was not passed exit
             logger.critical("Wasn't able to extract song data.",
                             "Use `--ignore-errors` to ignore this error")
 
