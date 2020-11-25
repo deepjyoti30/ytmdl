@@ -47,6 +47,10 @@ class MusicBrainzSong():
         in_time = int(in_min / 60) + (0.01 * (in_min % 60))
         return in_time
 
+    @property
+    def release_id(self) -> str:
+        return self.__release_id
+
 
 def search_song(query, lim=25):
     """Search the song using the API and return the
@@ -68,7 +72,7 @@ def search_song(query, lim=25):
 
 def get_more_data(song):
     """Get extra data for the song like cover art"""
-    id = song.__release_id
+    id = song.release_id
 
     cover_art = musicbrainzngs.get_image_list(id)
     song.artwork_url_100 = cover_art["images"][0]["image"]

@@ -92,7 +92,7 @@ class DEFAULTS:
 
         # The available metadata providers
         self.AVAILABLE_METADATA_PROVIDERS = self.METADATA_PROVIDERS + \
-            ['deezer', 'lastfm']  # add new ones here
+            ['deezer', 'lastfm', 'musicbrainz']  # add new ones here
 
         self.VALID_FORMATS = ['mp3', 'm4a', 'opus']
 

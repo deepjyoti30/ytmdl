@@ -192,6 +192,8 @@ def set_MP3_data(song, song_path):
 
         audio.save()
 
+        logger.debug("Passed song release date: ", song.release_date)
+
         data.add(TYER(encoding=3, text=song.release_date))
         data.add(TIT2(encoding=3, text=song.track_name))
         data.add(TPE1(encoding=3, text=song.artist_name))
