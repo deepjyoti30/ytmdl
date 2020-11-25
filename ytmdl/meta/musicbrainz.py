@@ -25,6 +25,9 @@ class MusicBrainzSong():
         self.artwork_url_100 = ""
         self.track_time = self.__get_length(SONG)
 
+        # Below will be used to fetch extra data
+        self.__release_id = SONG['release-list'][0]['id']
+
     def __get_length(self, song):
         """Try to extract the length of the song"""
         try:
@@ -61,6 +64,16 @@ def search_song(query, lim=25):
         data.append(MusicBrainzSong(recording))
 
     return data
+
+
+def get_more_data(song):
+    """Get extra data for the song like cover art"""
+    id = song.__release_id
+
+    cover_art = musicbrainzngs.get_image_list(id)
+    song.artwork_url_100 = cover_art["images"][0]["image"]
+
+    return song
 
 
 if __name__ == "__main__":
