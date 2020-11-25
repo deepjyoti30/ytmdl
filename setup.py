@@ -27,7 +27,8 @@ req_pkgs = [
             'pyDes',
             'urllib3',
             'simber',
-            'rich'
+            'rich',
+            'musicbrainzngs'
           ]
 
 
