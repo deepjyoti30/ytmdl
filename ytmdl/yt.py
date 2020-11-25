@@ -2,7 +2,6 @@
 """Definition of functions that are used to interact with youtube."""
 
 import requests
-from bs4 import BeautifulSoup
 import os
 import youtube_dl
 from re import match

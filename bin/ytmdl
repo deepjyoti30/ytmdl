@@ -19,6 +19,7 @@ import argparse
 from xdg.BaseDirectory import xdg_cache_home
 from os import path
 from simber import Logger
+from youtube_dl.utils import ExtractorError
 from ytmdl import (
             dir,
             song,
@@ -211,10 +212,17 @@ def main(args):
     if len(args.SONG_NAME) > 1:
         song_name = ' '.join(args.SONG_NAME)
     elif not args.SONG_NAME:
-        # Fetch the title of the song
-        song_name = yt.get_title(args.url)
-        logger.debug(song_name)
-        logger.hold()
+
+        try:
+            # Fetch the title of the song
+            song_name = yt.get_title(args.url)
+            logger.debug(song_name)
+            logger.hold()
+        except ExtractorError:
+            if args.ignore_errors:
+                return
+            logger.critical("Wasn't able to extract song data.",
+                            "Use `--ignore-errors` to ignore this error")
 
         # Ask the user if they want to go with the extracted
         # title or if they would like to change it.
