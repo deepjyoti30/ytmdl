@@ -88,11 +88,11 @@ class DEFAULTS:
         self.CONFIG_PATH = os.path.join(xdg_config_home, 'ytmdl')
 
         # The default metadata providers
-        self.METADATA_PROVIDERS = ['itunes', 'gaana', 'saavn']
+        self.METADATA_PROVIDERS = ['itunes', 'gaana']
 
         # The available metadata providers
         self.AVAILABLE_METADATA_PROVIDERS = self.METADATA_PROVIDERS + \
-            ['deezer', 'lastfm', 'musicbrainz']  # add new ones here
+            ['deezer', 'lastfm', 'musicbrainz', 'saavn']  # add new ones here
 
         self.VALID_FORMATS = ['mp3', 'm4a', 'opus']
 
