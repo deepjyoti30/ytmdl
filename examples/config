@@ -6,14 +6,14 @@
 #-----------------------------------------#
 #
 # To change defaults just remove the hash(#)
-# from thw beginning of the line.
+# from the beginning of the line.
 # The will be read as a single line comment.
 #
 #*****************************************
 # The SONG_DIR is the directory where all the songs will be saved.
 # In order to change it, simply remove the hash from beginning
 # And change the path to your desired one.
-# In case the path has spaces in in, include it in a " "
+# In case the path has spaces in it, include it in a " "
 # Following is a simple folder path example
 #
 #SONG_DIR = "path/to/your/desired/folder"
