@@ -40,7 +40,7 @@ from ytmdl.__version__ import __version__
 # init colorama for windows
 init()
 
-LOGGER_OUTTEMPLATE = " %a{}==>{}% ".format(Style.BRIGHT, Style.RESET_ALL)
+LOGGER_OUTTEMPLATE = " %a{}==>{}%".format(Style.BRIGHT, Style.RESET_ALL)
 LOGGER_FILEFORMAT = "[{logger}]:[{time}]: "
 logger = Logger('ytmdl',
                 log_path=path.join(xdg_cache_home,'ytmdl/logs/log.cat'),
