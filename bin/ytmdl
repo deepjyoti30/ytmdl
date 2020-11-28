@@ -12,7 +12,8 @@
 """
 
 from __future__ import unicode_literals
-import sys
+from typing import Union
+
 from colorama import init
 from colorama import Fore, Style
 import argparse
@@ -369,7 +370,7 @@ def main(args):
         logger.info('Done')
 
 
-def search(song_name, args):
+def search(song_name, args) -> Union[str, str]:
     """Search the song on YouTube, ask the user for an input and accordingly
     return a selected song.
 
@@ -459,7 +460,6 @@ def download(link, yt_title, args) -> str:
         raise DownloadError(link, path)
 
     logger.info('Downloaded!')
-
     return path
 
 
