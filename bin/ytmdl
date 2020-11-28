@@ -33,6 +33,7 @@ from ytmdl import (
             manual,
             stringutils,
 )
+from ytmdl.exceptions import DownloadError
 from ytmdl.__version__ import __version__
 
 # init colorama for windows
@@ -287,24 +288,18 @@ def main(args):
 
     link, yt_title = search(song_name=song_name, args=args)
 
-    logger.info('Downloading {}{}{} in {}{}kbps{}'.format(
-        Fore.LIGHTMAGENTA_EX,
-        yt_title,
-        Style.RESET_ALL,
-        Fore.LIGHTYELLOW_EX,
-        defaults.DEFAULT.SONG_QUALITY,
-        Style.RESET_ALL
-    ))
-    path = yt.dw(link, args.proxy, yt_title, passed_format)
-
-    if type(path) is not str:
-        if not args.ignore_errors:
-            logger.critical("ERROR: {}".format(path))
-        else:
+    # Try to download the song
+    # TODO: Change the way ignore-errors is used in order to handle playlists
+    try:
+        path = download(link, yt_title, args)
+    except DownloadError as dw_error:
+        if args.ignore_errors:
             logger.info("--ignore-errors passed. Skipping this song!")
             return
-    else:
-        logger.info('Downloaded!')
+
+        logger.critical("ERROR: {}".format(dw_error))
+           
+
 
     if passed_format == 'mp3':
         logger.info('Converting to mp3...')
@@ -461,14 +456,9 @@ def download(link, yt_title, args) -> str:
 
     if type(path) is not str:
         # Probably an error occured
-        
-        if not args.ignore_errors:
-            logger.critical("ERROR: {}".format(path))
-        else:
-            logger.info("--ignore-errors passed. Skipping this song!")
-            return
-    else:
-        logger.info('Downloaded!')
+        raise DownloadError(link, path)
+
+    logger.info('Downloaded!')
 
     return path
 
