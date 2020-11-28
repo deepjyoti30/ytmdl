@@ -41,3 +41,18 @@ class ConvertError(Exception):
 
     def __str__(self) -> str:
         return self.__message
+
+
+class NoMetaError(Exception):
+    """Exception to be raised when no metadata is found."""
+    def __init__(self, song) -> None:
+        super().__init__()
+
+        self.__message = self.__build_message(song)
+
+    def __build_message(self, song) -> str:
+        """Build the error message"""
+        return "No metadata found for `{}`".format(song)
+
+    def __str__(self) -> str:
+        return self.__message

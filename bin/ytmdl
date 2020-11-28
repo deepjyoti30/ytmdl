@@ -34,7 +34,7 @@ from ytmdl import (
             manual,
             stringutils,
 )
-from ytmdl.exceptions import DownloadError, ConvertError
+from ytmdl.exceptions import DownloadError, ConvertError, NoMetaError
 from ytmdl.__version__ import __version__
 
 # init colorama for windows
@@ -479,8 +479,7 @@ def meta(conv_name: str, song_name: str, search_by: str, args):
 
     # If no meta was found raise error
     if not TRACK_INFO:
-        # TODO: Raise exception here
-        pass
+        raise NoMetaError(search_by)
 
     logger.info('Setting data...')
     option = song.setData(TRACK_INFO, IS_QUIET, conv_name, PASSED_FORMAT, args.choice)
