@@ -461,6 +461,7 @@ def download(link, yt_title, args) -> str:
 
     if type(path) is not str:
         # Probably an error occured
+        
         if not args.ignore_errors:
             logger.critical("ERROR: {}".format(path))
         else:

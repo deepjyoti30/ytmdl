@@ -15,5 +15,6 @@ __all__ = ['ytmdl',
            'manual',
            'logger',
            'trim',
-           'saavn'
+           'saavn',
+           'exceptions'
            ]
