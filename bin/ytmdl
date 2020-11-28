@@ -248,10 +248,6 @@ def main(args):
     if not utility.is_present('ffmpeg'):
         logger.critical("ffmpeg is not installed. Please install it!")
 
-    # Check if youtube-dl is installed.
-    if not utility.is_present('youtube-dl'):
-        logger.critical("youtube-dl is not installed. Please install it!")
-
     passed_format = args.format.lower()
 
     logger.debug("proxy passed: {}".format(args.proxy))
