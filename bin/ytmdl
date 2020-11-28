@@ -500,17 +500,17 @@ def metadata(args, conv_name, song_name, search_by):
     PASSED_FORMAT = args.format
     IS_QUIET = args.quiet
 
-    option = None
-
     if args.manual_meta:
         # Read the values from the user.
         TRACK_INFO = manual.get_data(song_name)
-        option = 0
+
+        # Since above code will return a list with just
+        # one element, the option will be set to 0 by
+        # default and won't ask the user
     else:
         # Else add metadata in ordinary way
         logger.info('Getting song data for {}...'.format(search_by))
         TRACK_INFO = metadata.SEARCH_SONG(search_by, filters=[args.artist, args.album])
-
 
     # If no meta was found raise error
     if not TRACK_INFO:
