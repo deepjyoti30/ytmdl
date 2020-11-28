@@ -295,51 +295,16 @@ def main(args):
         logger.critical('ERROR: {}'.format(convert_error))
 
     # Trim the song
-    trim(args, conv_name)
+    trim(conv_name, args)
 
     logger.debug("Skip Meta: {}".format(args.skip_meta))
 
-    if args.manual_meta:
-        # Read the values from the user.
-        TRACK_INFO = manual.get_data(song_name)
-        option = 0
-
-        option = song.setData(TRACK_INFO, is_quiet, conv_name, passed_format, args.choice)
-
-        if type(option) is not int:
-            logger.critical('ERROR: {}'.format(option))
-
-        # Get the status of moving the song
-        move_status = dir.cleanup(TRACK_INFO, option, passed_format)
-    elif not args.skip_meta:
-        logger.info('Getting song data for {}...'.format(song_metadata))
-
-        TRACK_INFO = metadata.SEARCH_SONG(song_metadata, filters=[args.artist, args.album])
-
-        # declare a variable to store the option
-        option = 0
-
-        if not TRACK_INFO:
-            if not args.ignore_errors:
-                logger.critical('No data was found!\a')
-            else:
-                logger.warning("Ignoring {} since no data was found.".format(
-                    song_name))
-                return
-        else:
-            prepend.PREPEND(1)
-            print('Setting data...')
-
-            option = song.setData(TRACK_INFO, is_quiet, conv_name, passed_format, args.choice)
-
-            if type(option) is not int:
-                logger.critical('ERROR: {}'.format(option))
-
-        # Get the status of moving the song
-        move_status = dir.cleanup(TRACK_INFO, option, passed_format)
-    else:
-        # If meta data is supposed to be skipped, go for a dry cleanup.
+    if args.skip_meta:
+        # Do a dry cleanup
         move_status = dir.dry_cleanup(conv_name, song_name)
+    else:
+        track_selected = metadata(conv_name, song_name, song_metadata, args)
+        move_status = dir.cleanup([track_selected], 0, passed_format)
 
     if move_status:
         # If move_status would be False, program will exit from there
@@ -467,7 +432,7 @@ def convert(path: str, passed_format: str) -> str:
     return conv_name
 
 
-def trim(args, name: str) -> None:
+def trim(name: str, args) -> None:
     """Trim the song of unwanted noise by making calls to the
     internal functions.
     """
@@ -490,7 +455,7 @@ def trim(args, name: str) -> None:
     trim.Trim(name)
 
 
-def metadata(args, conv_name, song_name, search_by):
+def metadata(conv_name: str, song_name: str, search_by: str, args):
     """Handle adding the metadata for the passed song.
     
     We will use the passed name to search for metadata, ask
@@ -524,8 +489,7 @@ def metadata(args, conv_name, song_name, search_by):
         # TODO: Raise exception
         logger.critical('ERROR: {}'.format(option))
 
-    # Get the status of moving the song
-    move_status = dir.cleanup(TRACK_INFO, option, PASSED_FORMAT)
+    return TRACK_INFO[option]
 
 
 def extract_data():
