@@ -443,6 +443,35 @@ def search(song_name, args):
     return URL, data[0]["title"]
 
 
+def download(link, yt_title, args) -> str:
+    """Download the song by using the passed link.
+    
+    The song will be saved with the passed title.
+    Return the saved path of the song.
+    """
+    logger.info('Downloading {}{}{} in {}{}kbps{}'.format(
+        Fore.LIGHTMAGENTA_EX,
+        yt_title,
+        Style.RESET_ALL,
+        Fore.LIGHTYELLOW_EX,
+        defaults.DEFAULT.SONG_QUALITY,
+        Style.RESET_ALL
+    ))
+    path = yt.dw(link, args.proxy, yt_title, args.passed_format)
+
+    if type(path) is not str:
+        # Probably an error occured
+        if not args.ignore_errors:
+            logger.critical("ERROR: {}".format(path))
+        else:
+            logger.info("--ignore-errors passed. Skipping this song!")
+            return
+    else:
+        logger.info('Downloaded!')
+
+    return path
+
+
 def extract_data():
     """Extract the arguments and act accordingly."""
     args = arguments()
