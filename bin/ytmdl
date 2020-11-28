@@ -260,7 +260,6 @@ def main(args):
     if not utility.is_present('youtube-dl'):
         logger.critical("youtube-dl is not installed. Please install it!")
 
-    is_quiet = args.quiet
     passed_format = args.format.lower()
 
     logger.debug("proxy passed: {}".format(args.proxy))
@@ -313,10 +312,12 @@ def main(args):
     try:
         track_selected = meta(conv_name, song_name, song_metadata, args)
     except NoMetaError as no_meta_error:
-        logger.critical(str(no_meta_error))
+        if not args.ignore_errors:
+            logger.critical(str(no_meta_error))
         return
     except MetadataError as metadata_error:
-        logger.critical(str(metadata_error))
+        if not args.ignore_errors:
+            logger.critical(str(metadata_error))
         return
 
     if dir.cleanup([track_selected], 0, passed_format):
