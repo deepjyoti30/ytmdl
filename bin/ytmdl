@@ -490,6 +490,44 @@ def trim(args, name: str) -> None:
     trim.Trim(name)
 
 
+def metadata(args, conv_name, song_name, search_by):
+    """Handle adding the metadata for the passed song.
+    
+    We will use the passed name to search for metadata, ask
+    the user for a choice and accordingly add the meta to
+    the song.
+    """
+    PASSED_FORMAT = args.format
+    IS_QUIET = args.quiet
+
+    option = None
+
+    if args.manual_meta:
+        # Read the values from the user.
+        TRACK_INFO = manual.get_data(song_name)
+        option = 0
+    else:
+        # Else add metadata in ordinary way
+        logger.info('Getting song data for {}...'.format(search_by))
+        TRACK_INFO = metadata.SEARCH_SONG(search_by, filters=[args.artist, args.album])
+
+
+    # If no meta was found raise error
+    if not TRACK_INFO:
+        # TODO: Raise exception here
+        pass
+
+    logger.info('Setting data...')
+    option = song.setData(TRACK_INFO, IS_QUIET, conv_name, PASSED_FORMAT, args.choice)
+
+    if type(option) is not int:
+        # TODO: Raise exception
+        logger.critical('ERROR: {}'.format(option))
+
+    # Get the status of moving the song
+    move_status = dir.cleanup(TRACK_INFO, option, PASSED_FORMAT)
+
+
 def extract_data():
     """Extract the arguments and act accordingly."""
     args = arguments()
