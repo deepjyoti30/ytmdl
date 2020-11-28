@@ -13,7 +13,7 @@ from ytmdl.stringutils import (
 )
 from ytmdl.defaults import DEFAULT
 from ytmdl.prepend import PREPEND
-from ytmdl.logger import Logger
+from simber import Logger
 from colorama import Fore, Style
 
 logger = Logger("cache")

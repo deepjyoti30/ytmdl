@@ -1,13 +1,12 @@
 #*****************************************#
-#*-------------config for ytmdl ----------#
+#*-------------config for ytmdl-----------#
 #
 #-----------------------------------------#
-#------PLEASE DON'T LEAVE ANY BLANK LINE---#
+#------PLEASE DON'T LEAVE ANY BLANK LINES---#
 #-----------------------------------------#
 #
 # To change defaults just remove the hash(#)
-# from thw beginning of the line.
-# The will be read as a single line comment.
+# from the beginning of the line.
 #
 #*****************************************
 # The SONG_DIR is the directory where all the songs will be saved.
@@ -47,12 +46,15 @@
 # The METADATA_PROVIDERS value is a comma separated
 # values that specifies wich API providers to use for getting
 # the song metadata. Available values right now are:
-# itunes, gaana, deezer, lastfm. saavn.
+# itunes, gaana, deezer, lastfm, musicbrainz, saavn.
 # Please check the github page of ytmdl for more information.
 #
 #METADATA_PROVIDERS = "itunes, gaana"
+#
 #*****************************************#
-# The DEFAULT_FORMAT denotes what to use as default between
-# m4a and mp3
+# The DEFAULT_FORMAT denotes what to use as default for downloading.
+# Available values are:
+# mp3, m4a, opus
+#
 #DEFAULT_FORMAT = "mp3"
 #

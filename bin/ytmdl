@@ -12,30 +12,41 @@
 """
 
 from __future__ import unicode_literals
-import sys
+
 from colorama import init
-from colorama import Fore, Style
+from colorama import Style
 import argparse
+from xdg.BaseDirectory import xdg_cache_home
+from os import path
+from simber import Logger
+from youtube_dl.utils import ExtractorError
 from ytmdl import (
             dir,
-            song,
             yt,
             defaults,
-            prepend,
             setupConfig,
             cache,
             utility,
-            metadata,
-            manual,
-            logger,
-            stringutils,
+)
+from ytmdl.exceptions import (
+    DownloadError, ConvertError, NoMetaError, MetadataError
+)
+from ytmdl.core import (
+    search, download, convert, trim, meta
 )
 from ytmdl.__version__ import __version__
 
 # init colorama for windows
 init()
 
-logger = logger.Logger('ytmdl')
+LOGGER_OUTTEMPLATE = " %a{}==>{}%".format(Style.BRIGHT, Style.RESET_ALL)
+LOGGER_FILEFORMAT = "[{logger}]:[{time}]: "
+logger = Logger('ytmdl',
+                log_path=path.join(xdg_cache_home,'ytmdl/logs/log.cat'),
+                format=LOGGER_OUTTEMPLATE,
+                file_format=LOGGER_FILEFORMAT,
+                update_all=True
+)
 
 
 def arguments():
@@ -106,6 +117,7 @@ def arguments():
                         is false.", action='store_true')
     parser.add_argument('--version', action='version', version=__version__,
                         help='show the program version number and exit')
+    parser.add_argument('--get-opts', action="store_true", help=argparse.SUPPRESS)
 
     playlist_group = parser.add_argument_group("Playlist")
     playlist_group.add_argument(
@@ -142,6 +154,13 @@ def arguments():
              passed playlist.",
         action="store_true"
     )
+    playlist_group.add_argument(
+        "--title-as-name",
+        help="Use the title of the video as the name of the song to search\
+            for metadata. If not passed, user will be asked if they\
+            want to use a different name and continue accordingly.",
+        action="store_true"
+    )
     
     logger_group = parser.add_argument_group("Logger")
     logger_group.add_argument(
@@ -171,46 +190,7 @@ def arguments():
 def main(args):
     """Run on program call."""
 
-    if args.list_level:
-        logger.list_available_levels()
-        exit(0)
-
-    # Update the logger flags, in case those are not the default ones.
-    if args.level.lower != "info":
-        logger.update_level(args.level.upper())
-
-    if args.disable_file:
-        logger.update_disable_file(True)
-        logger.debug("Writing logs to file disabled")
-
-    # Just a message to make the user aware of the current running state
-    logger.debug("Logger running in DEBUG mode")
-    logger.debug("Passed args: {}".format(args))
-
-    # Check if --setup is passed
-    if not setupConfig.check_config_setup():
-        logger.debug("Config not present, creating default.")
-        setupConfig.make_config()
-        logger.debug("Config created")
-        logger.info("Created new config since none was present")
-
-    if not args.SONG_NAME and not args.url:
-        logger.critical("Song Name is required. Check 'ytmdl --help' for help.")
-
-    logger.debug(args.SONG_NAME)
-    if len(args.SONG_NAME) > 1:
-        song_name = ' '.join(args.SONG_NAME)
-    elif not args.SONG_NAME:
-        # Fetch the title of the song
-        song_name = yt.get_title(args.url)
-        logger.debug(song_name)
-        logger.hold()
-
-        # Ask the user if they want to go with the extracted
-        # title or if they would like to change it.
-        song_name = utility.get_new_title(song_name)
-    else:
-        song_name = args.SONG_NAME[0]
+    song_name = extract_song_name(args)
 
     logger.debug(song_name)
     logger.hold()
@@ -224,6 +204,7 @@ def main(args):
     if not utility.is_present('ffmpeg'):
         logger.critical("ffmpeg is not installed. Please install it!")
 
+<<<<<<< HEAD
     # Check if youtube-dl is installed.
     if not utility.is_present('youtube-dl'):
         logger.critical("youtube-dl is not installed. Please install it!")
@@ -250,6 +231,8 @@ def main(args):
     is_quiet = args.quiet
     url = args.url
     passed_choice = args.choice
+=======
+>>>>>>> unstable
     passed_format = args.format.lower()
 
     logger.debug("proxy passed: {}".format(args.proxy))
@@ -264,150 +247,122 @@ def main(args):
     else:
         song_metadata = song_name
 
-    # If the url is passed then get the data
-    if url is not None:
-        data = []
 
-        # Strip unwanted stuff from the URL
-        url = stringutils.srtip_unwanted_words_from_url(url)
+    link, yt_title = search(song_name=song_name, args=args)
 
-        # Get video data from youtube
-        temp_data = yt.scan_video(yt.get_href(url), args.proxy)
-
-        # Sometimes the temp_data may be returned as unauthorized, skip that
-        if type(temp_data) is str and temp_data.lower() == "Unauthorized".lower():
-            if args.ignore_errors:
-                logger.warning("{}: is unauthorized".format(url))
-                return
-            else:
-                logger.critical("{}: is unauthorized".format(url))
-
-        data.append(temp_data)
-
-        # link to dw the song
-        link = url
-
-        # In this case choice will be 0
-        choice = 0
-    else:
-        if is_quiet:
-            logger.info('Quiet is enabled')
-
-        logger.info('Searching Youtube for {}{}{}'.format(
-                Fore.LIGHTYELLOW_EX,
-                song_name,
-                Style.RESET_ALL
-        ))
-
-        data = yt.search(song_name, not args.disable_metaadd,
-                                args.proxy,
-                                kw=[args.artist, args.album])
-        
-        # Handle the exception if urls has len 0
-        if len(data) == 0:
-            logger.critical("No song found. Please try again with a different keyword.")
-
-        if not is_quiet:
-            # Ask for a choice
-            choice = song.getChoice(data, 'mp3')
-        else:
-            if passed_choice is not None and passed_choice <= len(data):
-                choice = passed_choice - 1
-                logger.info("Using {} as choice".format(passed_choice))
-            else:
-                choice = 0
-
-        link = 'https://youtube.com{}'.format(data[int(choice)]['href'])
-
-    # Declare a var to store the name of the yt video
-    logger.debug("{}".format(data[choice]))
-    yt_title = data[choice]['title']
-
-    logger.info('Downloading {}{}{} in {}{}kbps{}'.format(
-        Fore.LIGHTMAGENTA_EX,
-        yt_title,
-        Style.RESET_ALL,
-        Fore.LIGHTYELLOW_EX,
-        defaults.DEFAULT.SONG_QUALITY,
-        Style.RESET_ALL
-    ))
-    path = yt.dw(link, args.proxy, yt_title, passed_format)
-
-    if type(path) is not str:
-        if not args.ignore_errors:
-            logger.critical("ERROR: {}".format(path))
-        else:
+    # Try to download the song
+    # TODO: Change the way ignore-errors is used in order to handle playlists
+    try:
+        path = download(link, yt_title, args)
+    except DownloadError as dw_error:
+        if args.ignore_errors:
             logger.info("--ignore-errors passed. Skipping this song!")
             return
-    else:
-        logger.info('Downloaded!')
 
-    if passed_format == 'mp3':
-        logger.info('Converting to mp3...')
-        conv_name = utility.convert_to_mp3(path)
-    elif passed_format == 'opus':
-        logger.info('Converting to opus')
-        conv_name = utility.convert_to_opus(path)
-    elif passed_format == 'm4a':
-        conv_name = path
-
-    if type(conv_name) is not str:
-        logger.critical('ERROR: {}'.format(conv_name))
+        logger.critical("ERROR: {}".format(dw_error))
+        return
 
 
-    # Trim the song if the trim option is passed.
-    if args.trim and trim_has_dependencies:
-        logger.info("Passing the song to get trimmed.")
-        trim.Trim(conv_name)
+    # Try to convert the song
+    try:
+        conv_name = convert(path, passed_format)
+    except ConvertError as convert_error:
+        logger.critical('ERROR: {}'.format(convert_error))
+        return
+
+    # Trim the song
+    trim(conv_name, args)
 
     logger.debug("Skip Meta: {}".format(args.skip_meta))
 
-    if args.manual_meta:
-        # Read the values from the user.
-        TRACK_INFO = manual.get_data(song_name)
-        option = 0
+    if args.skip_meta:
+        # Do a dry cleanup
+        if dir.dry_cleanup(conv_name, song_name):
+            logger.info("Done")
+            return
 
-        option = song.setData(TRACK_INFO, is_quiet, conv_name, passed_format, choice)
+    # Else fill the meta by searching
+    try:
+        track_selected = meta(conv_name, song_name, song_metadata, args)
+    except NoMetaError as no_meta_error:
+        if not args.ignore_errors:
+            logger.critical(str(no_meta_error))
+        return
+    except MetadataError as metadata_error:
+        if not args.ignore_errors:
+            logger.critical(str(metadata_error))
+        return
 
-        if type(option) is not int:
-            logger.critical('ERROR: {}'.format(option))
+    if dir.cleanup([track_selected], 0, passed_format):
+        logger.info("Done")
 
-        # Get the status of moving the song
-        move_status = dir.cleanup(TRACK_INFO, option, passed_format)
-    elif not args.skip_meta:
-        logger.info('Getting song data for {}...'.format(song_metadata))
 
-        TRACK_INFO = metadata.SEARCH_SONG(song_metadata, filters=[args.artist, args.album])
+def pre_checks(args):
+    """Run some checks in order to make sure the basic things are
+    working all right.
+    """
+    if args.list_level:
+        logger.list_available_levels()
+        exit(0)
 
-        # declare a variable to store the option
-        option = 0
+    # Update the logger flags, in case those are not the default ones.
+    if args.level.lower != "info":
+        logger.update_level(args.level.upper())
 
-        if not TRACK_INFO:
-            logger.critical('No data was found!\a')
-        else:
-            prepend.PREPEND(1)
-            print('Setting data...')
+    if args.disable_file:
+        logger.update_disable_file(True)
+        logger.debug("Writing logs to file disabled")
 
-            option = song.setData(TRACK_INFO, is_quiet, conv_name, passed_format, choice)
+    # Just a message to make the user aware of the current running state
+    logger.debug("Logger running in DEBUG mode")
+    logger.debug("Passed args: {}".format(args))
 
-            if type(option) is not int:
-                logger.critical('ERROR: {}'.format(option))
+    # Check if --setup is passed
+    if not setupConfig.check_config_setup():
+        logger.debug("Config not present, creating default.")
+        setupConfig.make_config()
+        logger.debug("Config created")
+        logger.info("Created new config since none was present")
 
-        # Get the status of moving the song
-        move_status = dir.cleanup(TRACK_INFO, option, passed_format)
-    else:
-        # If meta data is supposed to be skipped, go for a dry cleanup.
-        move_status = dir.dry_cleanup(conv_name, song_name)
+    # If options is asked for
+    if args.get_opts:
+        print(" ".join(("--{}".format(opt.replace("_", "-")) for opt in vars(args))))
+        exit(0)
 
-    if move_status:
-        # If move_status would be False, program will exit from there
-        # after showing the error.
-        logger.info('Done')
+    if not args.SONG_NAME and not args.url:
+        logger.critical("Song Name is required. Check 'ytmdl --help' for help.")
+
+
+def extract_song_name(args) -> str:
+    """Extract the name of the song from the given args"""
+    logger.debug(args.SONG_NAME)
+
+    if args.SONG_NAME:
+        return " ".join(args.SONG_NAME)
+
+    # If song name is not passed then try to extract
+    # the title of the song using the URL.
+    try:
+        # Fetch the title of the song
+        song_name = yt.get_title(args.url)
+    except ExtractorError:
+        if not args.ignore_errors:
+            logger.critical("Wasn't able to extract song data.",
+                        "Use `--ignore-errors` to ignore this error")
+        return
+
+    # Ask the user if they want to go with the extracted
+    # title or if they would like to change it.
+    if not args.title_as_name:
+        song_name = utility.get_new_title(song_name)
+
+    return song_name
 
 
 def extract_data():
     """Extract the arguments and act accordingly."""
     args = arguments()
+    pre_checks(args)
 
     if args.list is not None:
         songs = utility.get_songs(args.list)

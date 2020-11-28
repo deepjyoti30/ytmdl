@@ -5,9 +5,10 @@ import glob
 import shutil
 from html import unescape
 
-from ytmdl import defaults, logger
+from ytmdl import defaults
+from simber import Logger
 
-logger = logger.Logger("Dir")
+logger = Logger("Dir")
 
 
 def cleanup(TRACK_INFO, index, datatype):

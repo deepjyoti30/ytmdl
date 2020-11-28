@@ -1,7 +1,7 @@
 """Handle inserting metadata manually."""
 
 from datetime import datetime
-from ytmdl.logger import Logger
+from simber import Logger
 from re import sub, match
 
 

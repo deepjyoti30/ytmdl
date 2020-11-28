@@ -8,7 +8,6 @@ init()
 
 def PREPEND(state):
     """PREPEND is used to print ==> in front of the lines.
-
     They are colorised according to their status.
     If everything is good then green else red.
     """
