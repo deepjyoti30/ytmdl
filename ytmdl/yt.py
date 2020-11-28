@@ -332,5 +332,21 @@ def get_title(url):
         return ""
 
 
+def get_chapters(url):
+    """Get the chapters of the passed URL.
+
+    An example video: https://www.youtube.com/watch?v=Yxd-X8P-GtY
+    """
+    ydl_opts = {
+        "quiet": True,
+        'nocheckcertificate': True,
+        'source_address': '0.0.0.0'
+    }
+
+    info = youtube_dl.YoutubeDL(ydl_opts).extract_info(url, False)
+
+    return info["chapters"]
+
+
 if __name__ == '__main__':
     print(defaults.DEFAULT.SONG_QUALITY)
