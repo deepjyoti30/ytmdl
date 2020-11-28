@@ -295,7 +295,7 @@ def main(args):
         logger.critical('ERROR: {}'.format(convert_error))
 
     # Trim the song
-    trim()
+    trim(args, conv_name)
 
     logger.debug("Skip Meta: {}".format(args.skip_meta))
 
