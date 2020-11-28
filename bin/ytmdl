@@ -258,19 +258,6 @@ def main(args):
     if not utility.is_present('youtube-dl'):
         logger.critical("youtube-dl is not installed. Please install it!")
 
-    # Check if we need to import trim. Importing it is realy inefficient if
-    # the user is not going to use it.
-    trim_has_dependencies = True
-    if args.trim:
-        logger.debug("Need to trim the song, importing the trim module.")
-        try:
-            from ytmdl import trim
-        except ImportError:
-            trim_has_dependencies = False
-            logger.error("Dependencies needed for trim are not installed. Please use the"
-                          " [noise-clean] specifier when installing ytmdl. The script will"
-                          " continue without trimming.")
-
     is_quiet = args.quiet
     passed_format = args.format.lower()
 
@@ -307,11 +294,8 @@ def main(args):
     except ConvertError as convert_error:
         logger.critical('ERROR: {}'.format(convert_error))
 
-
-    # Trim the song if the trim option is passed.
-    if args.trim and trim_has_dependencies:
-        logger.info("Passing the song to get trimmed.")
-        trim.Trim(conv_name)
+    # Trim the song
+    trim()
 
     logger.debug("Skip Meta: {}".format(args.skip_meta))
 
@@ -481,6 +465,29 @@ def convert(path: str, passed_format: str) -> str:
         raise ConvertError(conv_name)
 
     return conv_name
+
+
+def trim(args, name: str) -> None:
+    """Trim the song of unwanted noise by making calls to the
+    internal functions.
+    """
+    # Check if we need to import trim. Importing it is realy inefficient if
+    # the user is not going to use it.
+    if not args.trim:
+        return
+
+    logger.debug("Need to trim the song, importing the trim module.")
+    try:
+        from ytmdl import trim
+    except ImportError:
+        logger.error("Dependencies needed for trim are not installed. Please use the"
+                     " [noise-clean] specifier when installing ytmdl. The script will"
+                     " continue without trimming.")
+        return
+
+    # Trim the song if the trim option is passed.
+    logger.info("Passing the song to get trimmed.")
+    trim.Trim(name)
 
 
 def extract_data():
