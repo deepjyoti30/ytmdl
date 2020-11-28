@@ -34,7 +34,7 @@ from ytmdl import (
             manual,
             stringutils,
 )
-from ytmdl.exceptions import DownloadError
+from ytmdl.exceptions import DownloadError, ConvertError
 from ytmdl.__version__ import __version__
 
 # init colorama for windows
@@ -301,17 +301,11 @@ def main(args):
         logger.critical("ERROR: {}".format(dw_error))
 
 
-    if passed_format == 'mp3':
-        logger.info('Converting to mp3...')
-        conv_name = utility.convert_to_mp3(path)
-    elif passed_format == 'opus':
-        logger.info('Converting to opus')
-        conv_name = utility.convert_to_opus(path)
-    elif passed_format == 'm4a':
-        conv_name = path
-
-    if type(conv_name) is not str:
-        logger.critical('ERROR: {}'.format(conv_name))
+    # Try to convert the song
+    try:
+        conv_name = convert(path, passed_format)
+    except ConvertError as convert_error:
+        logger.critical('ERROR: {}'.format(convert_error))
 
 
     # Trim the song if the trim option is passed.
@@ -460,6 +454,33 @@ def download(link, yt_title, args) -> str:
 
     logger.info('Downloaded!')
     return path
+
+
+def convert(path: str, passed_format: str) -> str:
+    """Conver the song into the proper format as asked by
+    the user.
+    """
+    FORMAT_CONVERSION_MAP = {
+        "mp3": utility.convert_to_mp3,
+        "opus": utility.convert_to_opus
+    }
+
+    # If it is m4a, don't convert
+    if passed_format == "m4a":
+        return path
+
+    # Else the format needs to be in the list
+    # It should probably in the list since the check
+    # is done once before by the main function
+    if passed_format not in FORMAT_CONVERSION_MAP.keys():
+        return
+
+    conv_name = FORMAT_CONVERSION_MAP.get(passed_format)(path)
+
+    if type(conv_name) is not str:
+        raise ConvertError(conv_name)
+
+    return conv_name
 
 
 def extract_data():
