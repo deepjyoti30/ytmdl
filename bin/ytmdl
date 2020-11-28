@@ -153,6 +153,13 @@ def arguments():
              passed playlist.",
         action="store_true"
     )
+    playlist_group.add_argument(
+        "--title-as-name",
+        help="Use the title of the video as the name of the song to search\
+            for metadata. If not passed, user will be asked if they\
+            want to use a different name and continue accordingly.",
+        action="store_true"
+    )
     
     logger_group = parser.add_argument_group("Logger")
     logger_group.add_argument(
@@ -228,7 +235,8 @@ def main(args):
 
         # Ask the user if they want to go with the extracted
         # title or if they would like to change it.
-        song_name = utility.get_new_title(song_name)
+        if not args.title_as_name:
+            song_name = utility.get_new_title(song_name)
     else:
         song_name = args.SONG_NAME[0]
 
