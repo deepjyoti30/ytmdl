@@ -49,7 +49,7 @@ def convert_to_mp3r(path):
         return e
 
 
-def convert_to_mp3(path, start=None, end=None):
+def convert_to_mp3(path, start=None, end=None, cleanup_after_done=True):
     """Covert to mp3 using the python ffmpeg module."""
     new_name = path + '_new.mp3'
     try:
@@ -65,8 +65,11 @@ def convert_to_mp3(path, start=None, end=None):
             job = job.trim(start=start, end=end)
 
         job.run()
+
         # Delete the temp file now
-        remove(path)
+        if cleanup_after_done:
+            remove(path)
+
         return new_name
     except ffmpeg._run.Error:
         # This error is usually thrown where ffmpeg doesn't have to
@@ -76,7 +79,7 @@ def convert_to_mp3(path, start=None, end=None):
         return new_name
 
 
-def convert_to_opus(path, start=None, end=None):
+def convert_to_opus(path, start=None, end=None, cleanup_after_done=True):
     """Covert to opus using the python ffmpeg module."""
     new_name = path + '_new.opus'
     try:
@@ -89,8 +92,11 @@ def convert_to_opus(path, start=None, end=None):
             job = job.trim(start=start, end=end)
 
         job.run()
+
         # Delete the temp file now
-        remove(path)
+        if cleanup_after_done:
+            remove(path)
+
         return new_name
     except ffmpeg._run.Error:
         # This error is usually thrown where ffmpeg doesn't have to
@@ -100,11 +106,43 @@ def convert_to_opus(path, start=None, end=None):
         return new_name
 
 
+def extract_m4a(path, start=None, end=None, cleanup_after_done=True):
+    """Extract a m4a file from the given path based on the start
+    and end passed.
+
+    This function is to be called internally only for supporting
+    songs with chapters as supported by YouTube.
+    """
+    if not start and not end:
+        logger.error("Cannot trim without start and end")
+
+    new_name = path + '_new.m4a'
+    try:
+        job = ffmpeg.input(path).output(new_name).trim(start, end)
+        job.run()
+
+        if cleanup_after_done:
+            remove(path)
+
+        return new_name
+    except ffmpeg._run.Error:
+        return new_name
+
+
 def extract_part_convert(path, format, start, end):
     """Extract part of the file using the path provided and accordingly
     convert to the given format.
     """
-    pass
+    FORMAT_MAP = {
+        "mp3": convert_to_mp3,
+        "opus": convert_to_opus,
+        "m4a": extract_m4a
+    }
+
+    # Format will be checked by the main function so no need
+    # to check here.
+    converted_name = FORMAT_MAP.get(format)(path, start, end, False)
+    return converted_name
 
 
 def is_valid(dir_path):
