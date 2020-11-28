@@ -220,9 +220,7 @@ def main(args):
         logger.critical("Song Name is required. Check 'ytmdl --help' for help.")
 
     logger.debug(args.SONG_NAME)
-    if len(args.SONG_NAME) > 1:
-        song_name = ' '.join(args.SONG_NAME)
-    elif not args.SONG_NAME:
+    if not args.SONG_NAME:
 
         try:
             # Fetch the title of the song
@@ -242,7 +240,7 @@ def main(args):
         if not args.title_as_name:
             song_name = utility.get_new_title(song_name)
     else:
-        song_name = args.SONG_NAME[0]
+        song_name = " ".join(args.SONG_NAME)
 
     logger.debug(song_name)
     logger.hold()
