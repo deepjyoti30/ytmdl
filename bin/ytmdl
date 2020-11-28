@@ -303,7 +303,7 @@ def main(args):
         # Do a dry cleanup
         move_status = dir.dry_cleanup(conv_name, song_name)
     else:
-        track_selected = metadata(conv_name, song_name, song_metadata, args)
+        track_selected = meta(conv_name, song_name, song_metadata, args)
         move_status = dir.cleanup([track_selected], 0, passed_format)
 
     if move_status:
@@ -455,7 +455,7 @@ def trim(name: str, args) -> None:
     trim.Trim(name)
 
 
-def metadata(conv_name: str, song_name: str, search_by: str, args):
+def meta(conv_name: str, song_name: str, search_by: str, args):
     """Handle adding the metadata for the passed song.
     
     We will use the passed name to search for metadata, ask
