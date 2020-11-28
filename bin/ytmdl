@@ -270,8 +270,6 @@ def main(args):
                           " continue without trimming.")
 
     is_quiet = args.quiet
-    url = args.url
-    passed_choice = args.choice
     passed_format = args.format.lower()
 
     logger.debug("proxy passed: {}".format(args.proxy))
@@ -286,60 +284,8 @@ def main(args):
     else:
         song_metadata = song_name
 
-    # If the url is passed then get the data
-    if url is not None:
-        data = []
 
-        # Strip unwanted stuff from the URL
-        url = stringutils.srtip_unwanted_words_from_url(url)
-
-        # Get video data from youtube
-        temp_data = yt.scan_video(yt.get_href(url), args.proxy)
-
-        # Sometimes the temp_data may be returned as unauthorized, skip that
-        if type(temp_data) is str and temp_data.lower() == "Unauthorized".lower():
-            if args.ignore_errors:
-                logger.warning("{}: is unauthorized".format(url))
-                return
-            else:
-                logger.critical("{}: is unauthorized".format(url))
-
-        data.append(temp_data)
-
-        # link to dw the song
-        link = url
-
-        # In this case choice will be 0
-        choice = 0
-    else:
-        if is_quiet:
-            logger.info('Quiet is enabled')
-
-        logger.info('Searching Youtube for {}{}{}'.format(
-                Fore.LIGHTYELLOW_EX,
-                song_name,
-                Style.RESET_ALL
-        ))
-
-        data = yt.search(song_name, not args.disable_metaadd,
-                                args.proxy,
-                                kw=[args.artist, args.album])
-        
-        # Handle the exception if urls has len 0
-        if len(data) == 0:
-            logger.critical("No song found. Please try again with a different keyword.")
-
-        if not is_quiet:
-            # Ask for a choice
-            choice = song.getChoice(data, 'mp3')
-        else:
-            if passed_choice is not None and passed_choice <= len(data):
-                choice = passed_choice - 1
-                logger.info("Using {} as choice".format(passed_choice))
-            else:
-                choice = 0
-
-        link = 'https://youtube.com{}'.format(data[int(choice)]['href'])
+    link, yt_title = search(song_name=song_name, args=args)
 
     # Declare a var to store the name of the yt video
     logger.debug("{}".format(data[choice]))
@@ -430,6 +376,74 @@ def main(args):
         # If move_status would be False, program will exit from there
         # after showing the error.
         logger.info('Done')
+
+
+def search(song_name, args):
+    """Search the song on YouTube, ask the user for an input and accordingly
+    return a selected song.
+
+    The song can be extracted either from an URL or the name. If the name is
+    present, we will search on YouTube for the name, ask the user for a choice
+    and accordingly return the choice.
+
+    If the URL is present, we will extract the data from the URL and return it
+    accordingly.
+    """
+    YOUTUBE_LINK_BASE = "https://youtube.com{}"
+    PASSED_CHOICE = args.passed_choice
+    URL = args.url
+    IS_QUIET = args.is_quiet
+
+    if URL is None:
+        if IS_QUIET:
+            logger.info('Quiet is enabled')
+
+        logger.info('Searching Youtube for {}{}{}'.format(
+                Fore.LIGHTYELLOW_EX,
+                song_name,
+                Style.RESET_ALL
+        ))
+
+        data = yt.search(song_name, not args.disable_metaadd,
+                                args.proxy,
+                                kw=[args.artist, args.album])
+        
+        # Handle the exception if urls has len 0
+        if len(data) == 0:
+            logger.critical("No song found. Please try again with a different keyword.")
+
+        if not IS_QUIET:
+            # Ask for a choice
+            choice = song.getChoice(data, 'mp3')
+        elif PASSED_CHOICE is not None and PASSED_CHOICE <= len(data):
+            choice = PASSED_CHOICE - 1
+            logger.info("Using {} as choice".format(PASSED_CHOICE))
+        else:
+            choice = 0
+
+        return YOUTUBE_LINK_BASE.format(data[choice]["href"]), data[choice]["title"]
+
+    # If the url is passed then get the data
+    data = []
+
+    # Strip unwanted stuff from the URL
+    URL = stringutils.srtip_unwanted_words_from_url(URL)
+
+    # Get video data from youtube
+    temp_data = yt.scan_video(yt.get_href(URL), args.proxy)
+
+    # Sometimes the temp_data may be returned as unauthorized, skip that
+    if type(temp_data) is str and temp_data.lower() == "Unauthorized".lower():
+        if args.ignore_errors:
+            logger.warning("{}: is unauthorized".format(URL))
+            return
+        else:
+            logger.critical("{}: is unauthorized".format(URL))
+
+    data.append(temp_data)
+
+    # In this case choice will be 0
+    return URL, data[0]["title"]
 
 
 def extract_data():
