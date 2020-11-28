@@ -286,6 +286,7 @@ def main(args):
             return
 
         logger.critical("ERROR: {}".format(dw_error))
+        return
 
 
     # Try to convert the song
@@ -293,6 +294,7 @@ def main(args):
         conv_name = convert(path, passed_format)
     except ConvertError as convert_error:
         logger.critical('ERROR: {}'.format(convert_error))
+        return
 
     # Trim the song
     trim(conv_name, args)
@@ -301,15 +303,19 @@ def main(args):
 
     if args.skip_meta:
         # Do a dry cleanup
-        move_status = dir.dry_cleanup(conv_name, song_name)
-    else:
-        track_selected = meta(conv_name, song_name, song_metadata, args)
-        move_status = dir.cleanup([track_selected], 0, passed_format)
+        if dir.dry_cleanup(conv_name, song_name):
+            logger.info("Done")
+            return
 
-    if move_status:
-        # If move_status would be False, program will exit from there
-        # after showing the error.
-        logger.info('Done')
+    # Else fill the meta by searching
+    try:
+        track_selected = meta(conv_name, song_name, song_metadata, args)
+    except NoMetaError:
+        logger.critical(str(NoMetaError))
+        return
+
+    if dir.cleanup([track_selected], 0, passed_format):
+        logger.info("Done")
 
 
 def search(song_name, args) -> Union[str, str]:
