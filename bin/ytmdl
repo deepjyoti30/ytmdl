@@ -190,25 +190,7 @@ def arguments():
 def main(args):
     """Run on program call."""
 
-    logger.debug(args.SONG_NAME)
-    if not args.SONG_NAME:
-        # If song name is not passed then try to extract
-        # the title of the song using the URL.
-        try:
-            # Fetch the title of the song
-            song_name = yt.get_title(args.url)
-        except ExtractorError:
-            if not args.ignore_errors:
-                logger.critical("Wasn't able to extract song data.",
-                            "Use `--ignore-errors` to ignore this error")
-            return
-
-        # Ask the user if they want to go with the extracted
-        # title or if they would like to change it.
-        if not args.title_as_name:
-            song_name = utility.get_new_title(song_name)
-    else:
-        song_name = " ".join(args.SONG_NAME)
+    song_name = extract_song_name(args)
 
     logger.debug(song_name)
     logger.hold()
@@ -320,6 +302,32 @@ def pre_checks(args):
 
     if not args.SONG_NAME and not args.url:
         logger.critical("Song Name is required. Check 'ytmdl --help' for help.")
+
+
+def extract_song_name(args) -> str:
+    """Extract the name of the song from the given args"""
+    logger.debug(args.SONG_NAME)
+
+    if args.SONG_NAME:
+        return " ".join(args.SONG_NAME)
+
+    # If song name is not passed then try to extract
+    # the title of the song using the URL.
+    try:
+        # Fetch the title of the song
+        song_name = yt.get_title(args.url)
+    except ExtractorError:
+        if not args.ignore_errors:
+            logger.critical("Wasn't able to extract song data.",
+                        "Use `--ignore-errors` to ignore this error")
+        return
+
+    # Ask the user if they want to go with the extracted
+    # title or if they would like to change it.
+    if not args.title_as_name:
+        song_name = utility.get_new_title(song_name)
+
+    return song_name
 
 
 def extract_data():
