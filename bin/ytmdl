@@ -287,10 +287,6 @@ def main(args):
 
     link, yt_title = search(song_name=song_name, args=args)
 
-    # Declare a var to store the name of the yt video
-    logger.debug("{}".format(data[choice]))
-    yt_title = data[choice]['title']
-
     logger.info('Downloading {}{}{} in {}{}kbps{}'.format(
         Fore.LIGHTMAGENTA_EX,
         yt_title,
@@ -335,7 +331,7 @@ def main(args):
         TRACK_INFO = manual.get_data(song_name)
         option = 0
 
-        option = song.setData(TRACK_INFO, is_quiet, conv_name, passed_format, choice)
+        option = song.setData(TRACK_INFO, is_quiet, conv_name, passed_format, args.choice)
 
         if type(option) is not int:
             logger.critical('ERROR: {}'.format(option))
@@ -361,7 +357,7 @@ def main(args):
             prepend.PREPEND(1)
             print('Setting data...')
 
-            option = song.setData(TRACK_INFO, is_quiet, conv_name, passed_format, choice)
+            option = song.setData(TRACK_INFO, is_quiet, conv_name, passed_format, args.choice)
 
             if type(option) is not int:
                 logger.critical('ERROR: {}'.format(option))
@@ -389,10 +385,11 @@ def search(song_name, args):
     If the URL is present, we will extract the data from the URL and return it
     accordingly.
     """
+    # Declare some default values
     YOUTUBE_LINK_BASE = "https://youtube.com{}"
-    PASSED_CHOICE = args.passed_choice
+    PASSED_CHOICE = args.choice
     URL = args.url
-    IS_QUIET = args.is_quiet
+    IS_QUIET = args.quiet
 
     if URL is None:
         if IS_QUIET:
