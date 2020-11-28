@@ -190,32 +190,6 @@ def arguments():
 def main(args):
     """Run on program call."""
 
-    if args.list_level:
-        logger.list_available_levels()
-        exit(0)
-
-    # Update the logger flags, in case those are not the default ones.
-    if args.level.lower != "info":
-        logger.update_level(args.level.upper())
-
-    if args.disable_file:
-        logger.update_disable_file(True)
-        logger.debug("Writing logs to file disabled")
-
-    # Just a message to make the user aware of the current running state
-    logger.debug("Logger running in DEBUG mode")
-    logger.debug("Passed args: {}".format(args))
-
-    # Check if --setup is passed
-    if not setupConfig.check_config_setup():
-        logger.debug("Config not present, creating default.")
-        setupConfig.make_config()
-        logger.debug("Config created")
-        logger.info("Created new config since none was present")
-
-    if not args.SONG_NAME and not args.url:
-        logger.critical("Song Name is required. Check 'ytmdl --help' for help.")
-
     logger.debug(args.SONG_NAME)
     if not args.SONG_NAME:
         # If song name is not passed then try to extract
@@ -312,14 +286,46 @@ def main(args):
         logger.info("Done")
 
 
-def extract_data():
-    """Extract the arguments and act accordingly."""
-    args = arguments()
+def pre_checks(args):
+    """Run some checks in order to make sure the basic things are
+    working all right.
+    """
+    if args.list_level:
+        logger.list_available_levels()
+        exit(0)
+
+    # Update the logger flags, in case those are not the default ones.
+    if args.level.lower != "info":
+        logger.update_level(args.level.upper())
+
+    if args.disable_file:
+        logger.update_disable_file(True)
+        logger.debug("Writing logs to file disabled")
+
+    # Just a message to make the user aware of the current running state
+    logger.debug("Logger running in DEBUG mode")
+    logger.debug("Passed args: {}".format(args))
+
+    # Check if --setup is passed
+    if not setupConfig.check_config_setup():
+        logger.debug("Config not present, creating default.")
+        setupConfig.make_config()
+        logger.debug("Config created")
+        logger.info("Created new config since none was present")
 
     # If options is asked for
     if args.get_opts:
         print(" ".join(("--{}".format(opt.replace("_", "-")) for opt in vars(args))))
-        return
+        exit(0)
+
+    if not args.SONG_NAME and not args.url:
+        logger.critical("Song Name is required. Check 'ytmdl --help' for help.")
+
+
+def extract_data():
+    """Extract the arguments and act accordingly."""
+    args = arguments()
+    pre_checks(args)
 
     if args.list is not None:
         songs = utility.get_songs(args.list)
