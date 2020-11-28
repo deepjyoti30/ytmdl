@@ -221,19 +221,16 @@ def main(args):
 
     logger.debug(args.SONG_NAME)
     if not args.SONG_NAME:
-
+        # If song name is not passed then try to extract
+        # the title of the song using the URL.
         try:
             # Fetch the title of the song
             song_name = yt.get_title(args.url)
-            logger.debug(song_name)
-            logger.hold()
         except ExtractorError:
-            if args.ignore_errors:
-                return
-
-            # If ignore was not passed exit
-            logger.critical("Wasn't able to extract song data.",
+            if not args.ignore_errors:
+                logger.critical("Wasn't able to extract song data.",
                             "Use `--ignore-errors` to ignore this error")
+            return
 
         # Ask the user if they want to go with the extracted
         # title or if they would like to change it.
