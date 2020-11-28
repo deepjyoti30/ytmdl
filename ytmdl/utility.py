@@ -49,18 +49,22 @@ def convert_to_mp3r(path):
         return e
 
 
-def convert_to_mp3(path):
+def convert_to_mp3(path, start=None, end=None):
     """Covert to mp3 using the python ffmpeg module."""
     new_name = path + '_new.mp3'
     try:
-        ffmpeg.input(path).output(
-                            new_name,
-                            loglevel='panic',
-                            ar=44100,
-                            ac=2,
-                            ab='{}k'.format(defaults.DEFAULT.SONG_QUALITY),
-                            f='mp3'
-                        ).run()
+        job = ffmpeg.input(path).output(
+                                new_name,
+                                loglevel='panic',
+                                ar=44100,
+                                ac=2,
+                                ab='{}k'.format(defaults.DEFAULT.SONG_QUALITY),
+                                f='mp3'
+                            )
+        if start and end:
+            job = job.trim(start=start, end=end)
+
+        job.run()
         # Delete the temp file now
         remove(path)
         return new_name
@@ -72,15 +76,19 @@ def convert_to_mp3(path):
         return new_name
 
 
-def convert_to_opus(path):
+def convert_to_opus(path, start=None, end=None):
     """Covert to opus using the python ffmpeg module."""
     new_name = path + '_new.opus'
     try:
-        ffmpeg.input(path).output(
+        job = ffmpeg.input(path).output(
                             new_name,
                             loglevel='panic',
                             f='opus'
-                        ).run()
+                        )
+        if start and end:
+            job = job.trim(start=start, end=end)
+
+        job.run()
         # Delete the temp file now
         remove(path)
         return new_name
@@ -90,6 +98,13 @@ def convert_to_opus(path):
         # The bug is from ffmpeg, I'm just adding this catch to
         # handle that.
         return new_name
+
+
+def extract_part_convert(path, format, start, end):
+    """Extract part of the file using the path provided and accordingly
+    convert to the given format.
+    """
+    pass
 
 
 def is_valid(dir_path):
