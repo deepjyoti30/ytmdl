@@ -299,7 +299,6 @@ def main(args):
             return
 
         logger.critical("ERROR: {}".format(dw_error))
-           
 
 
     if passed_format == 'mp3':
