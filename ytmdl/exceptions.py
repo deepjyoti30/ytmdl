@@ -56,3 +56,24 @@ class NoMetaError(Exception):
 
     def __str__(self) -> str:
         return self.__message
+
+
+class MetadataError(Exception):
+    """Exception for metadata related errors while setting metadata
+
+    This is only to be raised when something goes wrong while setting
+    the metadata for the song.
+    """
+    def __init__(self, song) -> None:
+        super().__init__()
+
+        self.__message = self.__build_message(song)
+
+    def __build_message(self, song) -> str:
+        """Build the error message"""
+        return "Something went wrong while setting metadata for `{}`".format(
+            song
+        )
+
+    def __str__(self) -> str:
+        return self.__message

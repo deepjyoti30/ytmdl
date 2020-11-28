@@ -34,7 +34,9 @@ from ytmdl import (
             manual,
             stringutils,
 )
-from ytmdl.exceptions import DownloadError, ConvertError, NoMetaError
+from ytmdl.exceptions import (
+    DownloadError, ConvertError, NoMetaError, MetadataError
+)
 from ytmdl.__version__ import __version__
 
 # init colorama for windows
@@ -310,8 +312,11 @@ def main(args):
     # Else fill the meta by searching
     try:
         track_selected = meta(conv_name, song_name, song_metadata, args)
-    except NoMetaError:
-        logger.critical(str(NoMetaError))
+    except NoMetaError as no_meta_error:
+        logger.critical(str(no_meta_error))
+        return
+    except MetadataError as metadata_error:
+        logger.critical(str(metadata_error))
         return
 
     if dir.cleanup([track_selected], 0, passed_format):
@@ -491,8 +496,7 @@ def meta(conv_name: str, song_name: str, search_by: str, args):
     option = song.setData(TRACK_INFO, IS_QUIET, conv_name, PASSED_FORMAT, args.choice)
 
     if type(option) is not int:
-        # TODO: Raise exception
-        logger.critical('ERROR: {}'.format(option))
+        raise MetadataError(search_by)
 
     return TRACK_INFO[option]
 
