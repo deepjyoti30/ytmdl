@@ -118,14 +118,16 @@ def extract_m4a(path, start=None, end=None, cleanup_after_done=True):
 
     new_name = path + '_new.m4a'
     try:
-        job = ffmpeg.input(path).output(new_name).trim(start, end)
+        job = ffmpeg.input(path).output(
+                    new_name, ss=start, to=end, loglevel="panic")
         job.run()
 
         if cleanup_after_done:
             remove(path)
 
         return new_name
-    except ffmpeg._run.Error:
+    except ffmpeg._run.Error as e:
+        logger.warning(str(e))
         return new_name
 
 

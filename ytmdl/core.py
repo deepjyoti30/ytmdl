@@ -135,7 +135,8 @@ def convert(
     # We need to check if start and end are passed.
     # If those are passed it means only a part of the song is
     # to be extracted.
-    if start and end:
+    logger.debug("{}:{}".format(start, end))
+    if start is not None and end is not None:
         conv_name = utility.extract_part_convert(
                         path, passed_format, start, end)
 
