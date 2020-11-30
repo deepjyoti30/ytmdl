@@ -249,7 +249,13 @@ def main(args):
         post_processing(song_title, song_metadata, passed_format, path, args)
 
 
-def post_processing(song_name:str, song_metadata:str, passed_format:str, path: str, args:object) -> None:
+def post_processing(
+    song_name: str,
+    song_metadata: str,
+    passed_format: str,
+    path: str,
+    args: object
+) -> None:
     """Handle all the activities post search of the song.
     
     This function will handle the following:
