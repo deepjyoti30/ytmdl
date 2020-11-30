@@ -224,8 +224,16 @@ def main(args):
     # Try to extract the chapters
     chapters = yt.get_chapters(link)
 
+    songs_to_download = [{"title": yt_title}]
     # If the chapters are present, we will have to iterate and extract each chapter
-    post_search(link, yt_title, song_name, song_metadata, passed_format, args)
+    if chapters:
+        # TODO: Update the songs_to_download list
+        pass
+
+    logger.debug(songs_to_download)
+    for song in songs_to_download:
+        song_title = song.get("title", None)
+        post_search(link, song_title, song_name, song_metadata, passed_format, args)
 
 
 def post_search(link:str, yt_title:str, song_name:str, song_metadata:str, passed_format:str, args:object) -> None:
