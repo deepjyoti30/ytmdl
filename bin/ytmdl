@@ -246,7 +246,11 @@ def main(args):
     logger.debug(songs_to_download)
     for song in songs_to_download:
         song_title = song.get("title", None)
-        post_processing(song_title, song_metadata, passed_format, path, args)
+        start_time = song.get("start_time", None)
+        end_time = song.get("end_time", None)
+
+        # Pass the song for post processing
+        post_processing(song_title, song_metadata, passed_format, path, start_time, end_time, args)
 
 
 def post_processing(
@@ -254,6 +258,8 @@ def post_processing(
     song_metadata: str,
     passed_format: str,
     path: str,
+    start_time: float,
+    end_time: float,
     args: object
 ) -> None:
     """Handle all the activities post search of the song.
@@ -263,7 +269,7 @@ def post_processing(
     """
     # Try to convert the song
     try:
-        conv_name = convert(path, passed_format)
+        conv_name = convert(path, passed_format, start_time, end_time)
     except ConvertError as convert_error:
         logger.critical('ERROR: {}'.format(convert_error))
         return

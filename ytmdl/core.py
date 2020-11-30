@@ -136,7 +136,8 @@ def convert(
     # If those are passed it means only a part of the song is
     # to be extracted.
     if start and end:
-        conv_name = utility.extract_part_convert(path, passed_format, start, end)
+        conv_name = utility.extract_part_convert(
+                        path, passed_format, start, end)
 
         # We need to raise exception if something went wrong
         if type(conv_name) is not str:
