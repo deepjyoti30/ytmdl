@@ -37,7 +37,7 @@ def cleanup(TRACK_INFO, index, datatype, remove_cached=True):
 
         shutil.move(SONG, os.path.join(DIR, SONG_NAME))
 
-        if remove_cache:
+        if remove_cached:
             _delete_cached_songs(datatype)
 
         logger.info('Moved to {}...'.format(DIR))

@@ -263,6 +263,9 @@ def main(args):
             args
         )
 
+    # Delete the cached songs
+    dir._delete_cached_songs(passed_format)
+
 
 def post_processing(
     song_name: str,
