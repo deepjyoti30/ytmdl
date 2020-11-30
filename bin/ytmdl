@@ -118,6 +118,10 @@ def arguments():
     parser.add_argument('--version', action='version', version=__version__,
                         help='show the program version number and exit')
     parser.add_argument('--get-opts', action="store_true", help=argparse.SUPPRESS)
+    parser.add_argument("--keep-chapter-name", action="store_true", help="Keep the title \
+                        extracted from the chapter in order to search for the metadata. If \
+                        not passed, the user will be asked if they'd like to change the title \
+                        with which the metadata will be searched.")
 
     playlist_group = parser.add_argument_group("Playlist")
     playlist_group.add_argument(
@@ -257,8 +261,10 @@ def main(args):
             logger.debug("Has the attribute")
             # Update the song_metadata with the name of the chapter
             song_metadata = song.get("title")
+
             # Ask the user if they would like to change the name
-            song_metadata = utility.get_new_title(song_metadata)
+            song_metadata = utility.get_new_title(song_metadata) if \
+                not args.keep_chapter_name else song_metadata
 
         # Pass the song for post processing
         try:
