@@ -236,7 +236,7 @@ def main(args):
     # Try to extract the chapters
     chapters = yt.get_chapters(link)
 
-    songs_to_download = [{"title": yt_title}]
+    songs_to_download = [{}]
     # If the chapters are present, we will have to iterate and extract each chapter
     if chapters:
         songs_to_download.clear()
@@ -245,9 +245,12 @@ def main(args):
 
     logger.debug(songs_to_download)
     for song in songs_to_download:
-        song_title = song.get("title", None)
+        song_title = song.get("title", yt_title)
         start_time = song.get("start_time", None)
         end_time = song.get("end_time", None)
+
+        # Update the song_metadata with the name of the chapter
+        song_metadata = song.get("title", song_metadata)
 
         # Pass the song for post processing
         post_processing(song_title, song_metadata, passed_format, path, start_time, end_time, args)
@@ -267,6 +270,7 @@ def post_processing(
     This function will handle the following:
     Convert, Trim, Metadata, Cleaning up.
     """
+    logger.debug("song_name: ", song_name, " song_meta: ", song_metadata)
     # Try to convert the song
     try:
         conv_name = convert(path, passed_format, start_time, end_time)
