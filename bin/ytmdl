@@ -253,7 +253,15 @@ def main(args):
         song_metadata = song.get("title", song_metadata)
 
         # Pass the song for post processing
-        post_processing(song_title, song_metadata, passed_format, path, start_time, end_time, args)
+        post_processing(
+            song_title,
+            song_metadata,
+            passed_format, 
+            path, 
+            start_time, 
+            end_time, 
+            args
+        )
 
 
 def post_processing(
@@ -301,7 +309,7 @@ def post_processing(
             logger.critical(str(metadata_error))
         return
 
-    if dir.cleanup([track_selected], 0, passed_format):
+    if dir.cleanup([track_selected], 0, passed_format, remove_cached=False):
         logger.info("Done")
 
 
