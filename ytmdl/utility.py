@@ -52,18 +52,23 @@ def convert_to_mp3r(path):
 def convert_to_mp3(path, start=None, end=None, cleanup_after_done=True):
     """Covert to mp3 using the python ffmpeg module."""
     new_name = path + '_new.mp3'
+    params = {
+        "loglevel": "panic",
+        "ar": 44100,
+        "ac": 2,
+        "ab": '{}k'.format(defaults.DEFAULT.SONG_QUALITY),
+        "f": "mp3"
+    }
+
     try:
+        if start is not None and end is not None:
+            params["ss"] = start
+            params["to"] = end
+
         job = ffmpeg.input(path).output(
                                 new_name,
-                                loglevel='panic',
-                                ar=44100,
-                                ac=2,
-                                ab='{}k'.format(defaults.DEFAULT.SONG_QUALITY),
-                                f='mp3'
+                                **params
                             )
-        if start and end:
-            job = job.trim(start=start, end=end)
-
         job.run()
 
         # Delete the temp file now
@@ -82,15 +87,20 @@ def convert_to_mp3(path, start=None, end=None, cleanup_after_done=True):
 def convert_to_opus(path, start=None, end=None, cleanup_after_done=True):
     """Covert to opus using the python ffmpeg module."""
     new_name = path + '_new.opus'
+    params = {
+        "loglevel": "panic",
+        "f": "opus"
+    }
+
     try:
+        if start is not None and end is not None:
+            params["ss"] = start
+            params["to"] = end
+
         job = ffmpeg.input(path).output(
                             new_name,
-                            loglevel='panic',
-                            f='opus'
+                            **params
                         )
-        if start and end:
-            job = job.trim(start=start, end=end)
-
         job.run()
 
         # Delete the temp file now
