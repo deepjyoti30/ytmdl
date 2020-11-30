@@ -118,7 +118,12 @@ def download(link, yt_title, args) -> str:
     return path
 
 
-def convert(path: str, passed_format: str) -> str:
+def convert(
+    path: str,
+    passed_format: str,
+    start: float = None,
+    end: float = None
+) -> str:
     """Conver the song into the proper format as asked by
     the user.
     """
@@ -126,6 +131,18 @@ def convert(path: str, passed_format: str) -> str:
         "mp3": utility.convert_to_mp3,
         "opus": utility.convert_to_opus
     }
+
+    # We need to check if start and end are passed.
+    # If those are passed it means only a part of the song is
+    # to be extracted.
+    if start and end:
+        conv_name = utility.extract_part_convert(path, passed_format, start, end)
+
+        # We need to raise exception if something went wrong
+        if type(conv_name) is not str:
+            raise ConvertError(conv_name)
+
+        return conv_name
 
     # If it is m4a, don't convert
     if passed_format == "m4a":
