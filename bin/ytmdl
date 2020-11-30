@@ -239,6 +239,9 @@ def main(args):
     songs_to_download = [{}]
     # If the chapters are present, we will have to iterate and extract each chapter
     if chapters:
+        logger.info("The song has chapters in it.",
+            "Each part will be extracted and worked accordingly.")
+
         songs_to_download.clear()
         for chapter in chapters:
             songs_to_download.append(chapter)
