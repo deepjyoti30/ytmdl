@@ -25,8 +25,9 @@
 </p>
 
 <br/>
-<a href="#web-app">Web App</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="#why-this">Why this?</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="#support-the-project">Support the Project</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="#requirements">Requirements</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="#isntallation">Installation</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="#usage">Usage</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="#configuration">Configuration</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="https://github.com/deepjyoti30/ytmdl/wiki/contribution">Contribution</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="https://github.com/deepjyoti30/ytmdl/wiki/Acknowledgements">Acknowledgements</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="https://github.com/deepjyoti30/ytmdl/wiki/help">Need help</a>
-<br/>
+
+### \[[Web App](#web-app)] \[[Why This?](#why-this)] \[[Support the Project](#support-the-project)] \[[Installation](#installation)] \[[Configuration](#configuration)] \[[WiKi](https://github.com/deepjyoti30/ytmdl/wiki/)]
+
 <br/>
 </div>
 
