@@ -6,6 +6,7 @@ from ytmdl import defaults, stringutils
 from shutil import which
 import ffmpeg
 from simber import Logger
+from rich.prompt import Confirm, Prompt
 
 logger = Logger("Utility")
 
@@ -200,15 +201,13 @@ def get_new_title(old_title):
             "Most extracted titles are not accurate and they affect the meta search"
             )
 
-    is_change = input("Would you like to change?[Y/n] ")
-    # Replace space
-    is_change = stringutils.replace_space(is_change, '')
+    is_change = Confirm.ask("Would you like to change", default=True)
 
-    if len(is_change) and is_change[0].lower() == 'n':
+    if not is_change:
         return old_title
 
     # Else ask for new title
-    title = str(input("Enter the new title: "))
+    title = Prompt.ask("Enter new title")
     return title
 
 
