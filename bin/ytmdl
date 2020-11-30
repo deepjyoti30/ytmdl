@@ -252,8 +252,13 @@ def main(args):
         start_time = song.get("start_time", None)
         end_time = song.get("end_time", None)
 
-        # Update the song_metadata with the name of the chapter
-        song_metadata = song.get("title", song_metadata)
+
+        if "title" in song.keys():
+            logger.debug("Has the attribute")
+            # Update the song_metadata with the name of the chapter
+            song_metadata = song.get("title")
+            # Ask the user if they would like to change the name
+            song_metadata = utility.get_new_title(song_metadata)
 
         # Pass the song for post processing
         try:
