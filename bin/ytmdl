@@ -230,7 +230,7 @@ def main(args):
             logger.info("--ignore-errors passed. Skipping this song!")
             return
 
-        logger.critical("ERROR: {}".format(dw_error))
+        logger.critical("ERROR: {}".format(dw_error), ". Pass `--ignore-errors` to ignore this.")
         return
 
     # Try to extract the chapters
@@ -253,15 +253,25 @@ def main(args):
         song_metadata = song.get("title", song_metadata)
 
         # Pass the song for post processing
-        post_processing(
-            song_title,
-            song_metadata,
-            passed_format, 
-            path, 
-            start_time, 
-            end_time, 
-            args
-        )
+        try:
+            post_processing(
+                song_title,
+                song_metadata,
+                passed_format, 
+                path, 
+                start_time, 
+                end_time, 
+                args
+            )
+        except Exception as e:
+            if args.ignore_errors:
+                logger.warning("Ignoring error: ", str(e))
+                continue
+
+            # Else exit
+            logger.critical("Error occurred: ", str(e),
+                ". Exiting. Pass `--ignore-errors` if you want errors \
+                like this to be ignored")
 
     # Delete the cached songs
     dir._delete_cached_songs(passed_format)
@@ -305,11 +315,11 @@ def post_processing(
         track_selected = meta(conv_name, song_name, song_metadata, args)
     except NoMetaError as no_meta_error:
         if not args.ignore_errors:
-            logger.critical(str(no_meta_error))
+            logger.critical(str(no_meta_error), ". Pass `--ignore-errors` to ignore this.")
         return
     except MetadataError as metadata_error:
         if not args.ignore_errors:
-            logger.critical(str(metadata_error))
+            logger.critical(str(metadata_error), ". Pass `--ignore-errors` to ignore this.")
         return
 
     if dir.cleanup([track_selected], 0, passed_format, remove_cached=False):
