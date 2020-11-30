@@ -109,9 +109,9 @@ usage: ytmdl [-h] [-q] [--song SONG-METADATA] [--choice CHOICE]
              [--artist ARTIST] [--album ALBUM] [--disable-metaadd]
              [--skip-meta] [-m] [--proxy URL] [--url URL]
              [--list PATH TO LIST] [--nolocal] [--format FORMAT] [--trim]
-             [--version] [--pl-start NUMBER] [--pl-end NUMBER]
-             [--pl-items ITEM_SPEC] [--ignore-errors] [--title-as-name]
-             [--level LEVEL] [--disable-file] [--list-level]
+             [--version] [--keep-chapter-name] [--pl-start NUMBER]
+             [--pl-end NUMBER] [--pl-items ITEM_SPEC] [--ignore-errors]
+             [--title-as-name] [--level LEVEL] [--disable-file] [--list-level]
              [SONG_NAME [SONG_NAME ...]]
 
 positional arguments:
@@ -140,6 +140,10 @@ optional arguments:
                         there are speeches, noise etc before/after the start
                         of the song. Default is false.
   --version             show the program version number and exit
+  --keep-chapter-name   Keep the title extracted from the chapter in order to
+                        search for the metadata. If not passed, the user will
+                        be asked if they'd like to change the title with which
+                        the metadata will be searched.
 
 Metadata:
   --song SONG-METADATA  The song to search in Metadata. Particularly useful
