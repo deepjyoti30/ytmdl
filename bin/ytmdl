@@ -221,6 +221,19 @@ def main(args):
 
     link, yt_title = search(song_name=song_name, args=args)
 
+    # Try to extract the chapters
+    chapters = yt.get_chapters(link)
+
+    # If the chapters are present, we will have to iterate and extract each chapter
+    post_search(link, yt_title, song_name, song_metadata, passed_format, args)
+
+
+def post_search(link:str, yt_title:str, song_name:str, song_metadata:str, passed_format:str, args:object) -> None:
+    """Handle all the activities post search of the song.
+    
+    This function will handle the following:
+    Download, Convert, Trim, Metadata, Cleaning up.
+    """
     # Try to download the song
     # TODO: Change the way ignore-errors is used in order to handle playlists
     try:
