@@ -7,7 +7,7 @@ from xdg.BaseDirectory import xdg_config_home
 
 
 config_text = '''#*****************************************#
-#*-------------config for ytmdl ----------#
+#*-------------config for ytmdl-----------#
 #
 #-----------------------------------------#
 #------PLEASE DON\'T LEAVE ANY BLANK LINES---#
@@ -54,13 +54,16 @@ config_text = '''#*****************************************#
 # The METADATA_PROVIDERS value is a comma separated
 # values that specifies wich API providers to use for getting
 # the song metadata. Available values right now are:
-# itunes, gaana, deezer, lastfm. saavn.
+# "{{supported_providers}}".
 # Please check the github page of ytmdl for more information.
 #
 #METADATA_PROVIDERS = "itunes, gaana"
+#
 #*****************************************#
-# The DEFAULT_FORMAT denotes what to use as default between
-# m4a and mp3
+# The DEFAULT_FORMAT denotes what to use as default for downloading.
+# Available values are:
+# "{{supported_formats}}"
+#
 #DEFAULT_FORMAT = "mp3"
 #'''
 
@@ -88,11 +91,11 @@ class DEFAULTS:
         self.CONFIG_PATH = os.path.join(xdg_config_home, 'ytmdl')
 
         # The default metadata providers
-        self.METADATA_PROVIDERS = ['itunes', 'gaana', 'saavn']
+        self.METADATA_PROVIDERS = ['itunes', 'gaana']
 
         # The available metadata providers
         self.AVAILABLE_METADATA_PROVIDERS = self.METADATA_PROVIDERS + \
-            ['deezer', 'lastfm']  # add new ones here
+            ['deezer', 'lastfm', 'musicbrainz', 'saavn']  # add new ones here
 
         self.VALID_FORMATS = ['mp3', 'm4a', 'opus']
 
@@ -130,6 +133,21 @@ class DEFAULTS:
             return path
 
 
+def render_config_template() -> str:
+    """Render the config template in order ot get the updated
+    config
+    """
+    providers = ", ".join(DEFAULTS().AVAILABLE_METADATA_PROVIDERS)
+    formats = ", ".join(DEFAULTS().VALID_FORMATS)
+
+    rendered_content = config_text
+    rendered_content = rendered_content.replace('"{{supported_providers}}"',
+                                                providers)
+    rendered_content = rendered_content.replace('"{{supported_formats}}"',
+                                                formats)
+    return rendered_content
+
+
 def make_config():
     """Copy the config file to .config folder."""
     # Remove the current config from SONG_TEMP_DIR
@@ -150,7 +168,7 @@ def make_config():
 
     # Now write the config text to config file
     with open(config_path, 'w') as write_config:
-        write_config.write(config_text)
+        write_config.write(render_config_template())
 
 
 def checkConfig():
@@ -286,5 +304,9 @@ def GIVE_DEFAULT(self, keyword):
 
 
 if __name__ == '__main__':
-    make_config()
-    exit(0)
+    # Create the config in the examples directory
+    try:
+        with open("examples/config", 'w') as write_config:
+            write_config.write(render_config_template())
+    except Exception:
+        print("You need to run this script in root directory of ytmdl")

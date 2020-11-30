@@ -22,6 +22,7 @@ from mutagen.flac import Picture
 from base64 import b64encode
 import requests
 import os
+from rich.prompt import IntPrompt
 
 from ytmdl import prepend, defaults
 from simber import Logger
@@ -142,10 +143,10 @@ def getChoice(SONG_INFO, type):
         if PRINT_WHOLE:
             print_choice(beg, results, SONG_INFO, type)
         prepend.PREPEND(1)
-        choice = input('Enter Choice [default is 1] ')
-        if not choice:
-            choice = 1
+        choice = IntPrompt.ask('Enter Choice', default=1)
+
         choice = int(choice)
+
         # If the choice is 6 then try to print more results
         if choice <= results and choice > 0:
             break
@@ -190,6 +191,8 @@ def set_MP3_data(song, song_path):
             pass
 
         audio.save()
+
+        logger.debug("Passed song release date: ", song.release_date)
 
         data.add(TYER(encoding=3, text=song.release_date))
         data.add(TIT2(encoding=3, text=song.track_name))

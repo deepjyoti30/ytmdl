@@ -26,7 +26,9 @@ req_pkgs = [
             'youtube_search',
             'pyDes',
             'urllib3',
-            'simber'
+            'simber',
+            'rich',
+            'musicbrainzngs'
           ]
 
 
