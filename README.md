@@ -23,6 +23,12 @@
 <p>
 <a href="https://ko-fi.com/deepjyoti30"><img src="https://raw.githubusercontent.com/adi1090x/files/master/other/kofi.png" alt="Support me on ko-fi"></a>
 </p>
+
+<br/>
+
+### \[[Web App](#web-app)] \[[Why This?](#why-this)] \[[Support the Project](#support-the-project)] \[[Installation](#installation)] \[[Configuration](#configuration)] \[[WiKi](https://github.com/deepjyoti30/ytmdl/wiki/)]
+
+<br/>
 </div>
 
 ## Web App
@@ -47,5 +53,208 @@ If you like my work, consider buying me a coffee or donating. In case you want t
 <a href="https://ko-fi.com/deepjyoti30" target="_blank"><img alt="undefined" src="https://img.shields.io/badge/KoFi-deepjyoti30-red?style=for-the-badge&logo=ko-fi"></a>
 </p>
 
+## Requirements
 
-### \[[Installation](https://github.com/deepjyoti30/ytmdl/wiki/installation)] \[[Getting Started](https://github.com/deepjyoti30/ytmdl/wiki/getting-started)] \[[Wiki](https://github.com/deepjyoti30/ytmdl/wiki)] \[[Help](https://github.com/deepjyoti30/ytmdl/wiki/help)]
+- Python 3.x
+- ffmpeg
+
+## Installation
+
+- [PyPi](#pypi)
+- [Arch Linux](#arch-linux)
+- [Gentoo](#gentoo)
+- [Manual](#manual)
+
+### PyPI
+
+```console
+pip install ytmdl
+```
+
+>NOTE: System wide installation requires `sudo`
+
+### Arch Linux
+
+`ytmdl` is available in AUR as `ytmdl`. It can be found [here](https://aur.archlinux.org/packages/ytmdl/)
+
+>NOTE: The git version is availble as `ytmdl-git` in AUR.
+
+### Gentoo
+
+`ytmdl` can be installed in Gentoo by the following commands
+
+```console
+# First set up src_prepare-overlay (as root)
+emerge -av --noreplace app-eselect/eselect-repository
+eselect repository enable src_prepare-overlay
+emaint sync -r src_prepare-overlay
+# Finally emerge ytmdl (as root)
+emerge -av --autounmask net-misc/ytmdl
+```
+
+Available in **src_prepare-overlay** [here](https://gitlab.com/src_prepare/src_prepare-overlay)
+
+### Manual
+
+`ytmdl` can be manually installed by the following command
+
+```console
+git clone https://github.com/deepjyoti30/ytmdl && cd ytmdl && sudo python setup.py install
+```
+
+## Usage
+
+```console
+usage: ytmdl [-h] [-q] [--song SONG-METADATA] [--choice CHOICE]
+             [--artist ARTIST] [--album ALBUM] [--disable-metaadd]
+             [--skip-meta] [-m] [--proxy URL] [--url URL]
+             [--list PATH TO LIST] [--nolocal] [--format FORMAT] [--trim]
+             [--version] [--pl-start NUMBER] [--pl-end NUMBER]
+             [--pl-items ITEM_SPEC] [--ignore-errors] [--title-as-name]
+             [--level LEVEL] [--disable-file] [--list-level]
+             [SONG_NAME [SONG_NAME ...]]
+
+positional arguments:
+  SONG_NAME             Name of the song to download. Can be an URL to a
+                        playlist as well. It will be automatically recognized.
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -q, --quiet           Don't ask the user to select songs if more than one
+                        search result. The first result in each case will be
+                        considered.
+  --proxy URL           Use the specified HTTP/HTTPS/SOCKS proxy. To enable
+                        SOCKS proxy, specify a proper scheme. For example
+                        socks5://127.0.0.1:1080/. Pass in an empty string
+                        (--proxy "") for direct connection
+  --url URL             Youtube song link.
+  --list PATH TO LIST   Download list of songs. The list should have one song
+                        name in every line.
+  --nolocal             Don't search locally for the song before downloading.
+  --format FORMAT       The format in which the song should be downloaded.
+                        Default is mp3, but can be set in config. Available
+                        options are ['mp3', 'm4a', 'opus']
+  --trim, -t            Trim out the audio from the song. Use underlying
+                        speech and music segmentation engine to determine and
+                        keep only the music in the file. Useful in songs where
+                        there are speeches, noise etc before/after the start
+                        of the song. Default is false.
+  --version             show the program version number and exit
+
+Metadata:
+  --song SONG-METADATA  The song to search in Metadata. Particularly useful
+                        for songs that have the names in a different language
+                        in YouTube. For Example, greek songs.
+  --choice CHOICE       The choice that the user wants to go for. Usefull to
+                        pass along with --quiet. Choices start at 1
+  --artist ARTIST       The name of the song's artist. Pass it with a song
+                        name.
+  --album ALBUM         The name of the song's album. Pass it with a song
+                        name.
+  --disable-metaadd     Disable addition of passed artist and album keyword to
+                        the youtube search in order to get a more accurate
+                        result. (Default: false)
+  --skip-meta           Skip setting the metadata and just copy the converted
+                        song to the destination directory. '--manual-meta'
+                        will override this option, pass only one of them.
+  -m, --manual-meta     Manually enter song details.
+
+Playlist:
+  --pl-start NUMBER     Playlist video to start at (default is 1)
+  --pl-end NUMBER       Playlist video to end at (default is last)
+  --pl-items ITEM_SPEC  Playlist video items to download. Specify indices of
+                        the videos present in the playlist seperated by commas
+                        like: '--playlist-items 1, 2, 4, 6' if you want to
+                        download videos indexed 1, 2, 4 and 6. Range can also
+                        be passed like: '--playlist-items 1-3, 5-7' to
+                        download the videos indexed at 1, 2, 3, 5, 6, 7.
+  --ignore-errors       Ignore if downloading any video fails in a playlist.
+                        If passed, the execution will move to the next video
+                        in the passed playlist.
+  --title-as-name       Use the title of the video as the name of the song to
+                        search for metadata. If not passed, user will be asked
+                        if they want to use a different name and continue
+                        accordingly.
+
+Logger:
+  --level LEVEL         The level of the logger that will be used while
+                        verbosing. Use `--list-level` to check available
+                        options.
+  --disable-file        Disable logging to files
+  --list-level          List all the available logger levels.
+```
+
+## Configuration
+
+### Setup
+
+The defaults can be changed by editing the config file in ytmdl folder in your .config folder
+
+The config will be created automatically the first time you run `ytmdl` and will be present in ~/.config/ytmdl/config
+
+However, it can be created manually by the following command
+
+```console
+mkdir -p ~/.config/ytmdl; curl https://raw.githubusercontent.com/deepjyoti30/ytmdl/master/examples/config > ~/.config/ytmdl/config
+```
+
+Above command will download the config from the repo and save it in the `~/.config/ytmdl/` directory.
+
+### Supported Options
+
+As of the latest development branch, the following options can be changed from the config
+
+| Name                 | Description                                        | Default                        |
+|:--------------------:|----------------------------------------------------|--------------------------------|
+| `SONG_DIR`           | Directory to save the songs in after editing       | Current direcotry              |
+| `SONG_QUALITY`       | Quality of the song                                | 320kbps                        |
+| `METADATA_PROVIDERS` | Which API providers to use for metadata            | all supported options are used |
+| `DEFAULT_FORMAT`     | Default format of the song                         | mp3                            |
+
+### Advanced Configuration
+
+#### Dynamically storing songs
+
+`SONG_DIR` field also takes values that are extracted from the song being downloaded
+
+The `SONG_DIR` field needs to be passed some special values in order to achieve that. The string is scanned and when a `$` sign occurs, the special string will start and each directory can be seperated by using an `->` sign.
+
+To save the song in the `/dir/<album_name>/<artist_name>/<title>/<song_name>.mp3` format, the following needs to be added in the `SONG_DIR` field.
+
+```
+SONG_DIR="/dir$Album->Artist->Title"
+```
+
+Above will extract to the following directory structure when a song named `Internet` by artist `Post Malone` from the album `Hollywood's Bleeding`
+
+```
+|--dir
+   |--Hollywood's Bleeding
+      |--Post Malone
+         |--Internet
+            |--Internet.mp3
+```
+
+In order to pass the name with which the song should be saved, the last attribute can be passed between `[]`.
+
+If the `SONG_DIR` field is `/dir$Album->[Artist]` will extract to the following directory structure
+
+```
+|--dir
+   |--Hollywood's Bleeding
+      |--Post Malone.mp3
+```
+
+#### Supported options for dynamic storing
+
+As of the latest source, the following options can be passed to the special string in order to create dynamic directories
+
+| Name          |                               |
+|:-------------:|-------------------------------|
+| `Artist`      | Artist Of the Song            |
+| `Album`       | Album Of the Song             |
+| `Title`       | Title Of the Song             |
+| `Genre`       | Genre Of the Song             |
+| `TrackNumber` | TrackNumber Of the Song       |
+| `ReleaseDate` | ReleaseDate Of the Song       |
+
