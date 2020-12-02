@@ -85,6 +85,38 @@ def convert_to_mp3(path, start=None, end=None, cleanup_after_done=True):
         return new_name
 
 
+def convert_to_opus(path, start=None, end=None, cleanup_after_done=True):
+    """Covert to opus using the python ffmpeg module."""
+    new_name = path + '_new.opus'
+    params = {
+        "loglevel": "panic",
+        "f": "opus"
+    }
+
+    try:
+        if start is not None and end is not None:
+            params["ss"] = start
+            params["to"] = end
+
+        job = ffmpeg.input(path).output(
+                            new_name,
+                            **params
+                        )
+        job.run()
+
+        # Delete the temp file now
+        if cleanup_after_done:
+            remove(path)
+
+        return new_name
+    except ffmpeg._run.Error:
+        # This error is usually thrown where ffmpeg doesn't have to
+        # overwrite a file.
+        # The bug is from ffmpeg, I'm just adding this catch to
+        # handle that.
+        return new_name
+
+
 def extract_m4a(path, start=None, end=None, cleanup_after_done=True):
     """Extract a m4a file from the given path based on the start
     and end passed.
