@@ -6,6 +6,7 @@ from ytmdl import defaults, stringutils
 from shutil import which
 import ffmpeg
 from simber import Logger
+from rich.prompt import Confirm, Prompt
 
 logger = Logger("Utility")
 
@@ -52,18 +53,23 @@ def convert_to_mp3r(path):
 def convert_to_mp3(path, start=None, end=None, cleanup_after_done=True):
     """Covert to mp3 using the python ffmpeg module."""
     new_name = path + '_new.mp3'
+    params = {
+        "loglevel": "panic",
+        "ar": 44100,
+        "ac": 2,
+        "ab": '{}k'.format(defaults.DEFAULT.SONG_QUALITY),
+        "f": "mp3"
+    }
+
     try:
+        if start is not None and end is not None:
+            params["ss"] = start
+            params["to"] = end
+
         job = ffmpeg.input(path).output(
                                 new_name,
-                                loglevel='panic',
-                                ar=44100,
-                                ac=2,
-                                ab='{}k'.format(defaults.DEFAULT.SONG_QUALITY),
-                                f='mp3'
+                                **params
                             )
-        if start and end:
-            job = job.trim(start=start, end=end)
-
         job.run()
 
         # Delete the temp file now
@@ -83,15 +89,20 @@ def convert_to_mp3(path, start=None, end=None, cleanup_after_done=True):
 def convert_to_opus(path, start=None, end=None, cleanup_after_done=True):
     """Covert to opus using the python ffmpeg module."""
     new_name = path + '_new.opus'
+    params = {
+        "loglevel": "panic",
+        "f": "opus"
+    }
+
     try:
+        if start is not None and end is not None:
+            params["ss"] = start
+            params["to"] = end
+
         job = ffmpeg.input(path).output(
                             new_name,
-                            loglevel='panic',
-                            f='opus'
+                            **params
                         )
-        if start and end:
-            job = job.trim(start=start, end=end)
-
         job.run()
 
         # Delete the temp file now
@@ -121,14 +132,16 @@ def extract_m4a(path, start=None, end=None, cleanup_after_done=True):
 
     new_name = path + '_new.m4a'
     try:
-        job = ffmpeg.input(path).output(new_name).trim(start, end)
+        job = ffmpeg.input(path).output(
+                    new_name, ss=start, to=end, loglevel="panic")
         job.run()
 
         if cleanup_after_done:
             remove(path)
 
         return new_name
-    except ffmpeg._run.Error:
+    except ffmpeg._run.Error as e:
+        logger.warning(str(e))
         return new_name
 
 
@@ -191,15 +204,13 @@ def get_new_title(old_title):
             "Most extracted titles are not accurate and they affect the meta search"
             )
 
-    is_change = input("Would you like to change?[Y/n] ")
-    # Replace space
-    is_change = stringutils.replace_space(is_change, '')
+    is_change = Confirm.ask("Would you like to change", default=True)
 
-    if len(is_change) and is_change[0].lower() == 'n':
+    if not is_change:
         return old_title
 
     # Else ask for new title
-    title = str(input("Enter the new title: "))
+    title = Prompt.ask("Enter new title")
     return title
 
 

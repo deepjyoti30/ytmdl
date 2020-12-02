@@ -11,7 +11,7 @@ from simber import Logger
 logger = Logger("Dir")
 
 
-def cleanup(TRACK_INFO, index, datatype):
+def cleanup(TRACK_INFO, index, datatype, remove_cached=True):
     """Move the song from temp to $HOME/Music dir."""
     try:
         SONG = glob.glob(os.path.join(
@@ -37,7 +37,8 @@ def cleanup(TRACK_INFO, index, datatype):
 
         shutil.move(SONG, os.path.join(DIR, SONG_NAME))
 
-        _delete_cached_songs(datatype)
+        if remove_cached:
+            _delete_cached_songs(datatype)
 
         logger.info('Moved to {}...'.format(DIR))
         return True
