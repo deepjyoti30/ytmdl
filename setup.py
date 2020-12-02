@@ -18,7 +18,6 @@ req_pkgs = [
             'colorama',
             'bs4',
             'downloader-cli',
-            # 'lxml',
             'pyxdg',
             'ffmpeg-python',
             'pysocks',

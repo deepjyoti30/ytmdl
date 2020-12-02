@@ -262,28 +262,6 @@ def fix_image_url(url):
     return url
 
 
-def get_lyrics(link):
-    try:
-        if '/song/' in link:
-            link = link.replace("/song/", '/lyrics/')
-            link_ = link.split('/')
-            link_[-2] = link_[-2]+'-lyrics'
-            link = '/'.join(link_)
-            source = requests.get(link).text
-            soup = BeautifulSoup(source, 'lxml')
-            res = soup.find(class_='u-disable-select')
-            lyrics = str(res).replace("<span>", "")
-            lyrics = lyrics.replace("</span>", "")
-            lyrics = lyrics.replace("<br/>", "\n")
-            lyrics = lyrics.replace('<p class="lyrics"> ', '')
-            lyrics = lyrics.replace("</p>", '')
-            lyrics = lyrics.split("<p>")[1]
-            return (lyrics)
-    except Exception:
-        print_exc()
-        return None
-
-
 def expand_url(url):
     try:
         session = requests.Session()
