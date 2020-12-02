@@ -5,12 +5,9 @@ author: cyberboysumanjay (https://github.com/cyberboysumanjay)
 """
 
 import urllib3
-import re
 from traceback import print_exc
-import ast
 import json
 from pyDes import *
-import os
 import base64
 from bs4 import BeautifulSoup
 import requests
