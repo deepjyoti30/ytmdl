@@ -77,3 +77,23 @@ class MetadataError(Exception):
 
     def __str__(self) -> str:
         return self.__message
+
+
+class ExtractError(Exception):
+    """
+    Exception for errors that arise while extracting any detail
+    related to the song.
+
+    This is only to be raise when some extraction related error
+    occurs.
+    """
+    def __init__(self, song) -> None:
+        super().__init__()
+
+        self.__message = self.__build_message(song)
+
+    def __build_message(self, song) -> str:
+        return "Couldn't extract data for: {}".format(song)
+
+    def __str__(self) -> str:
+        return self.__message

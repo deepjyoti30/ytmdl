@@ -4,6 +4,7 @@
 import requests
 import os
 import youtube_dl
+from youtube_dl.utils import DownloadError
 from re import match
 from ytmdl import defaults, utility, stringutils
 from downloader_cli.download import Download
@@ -11,6 +12,7 @@ import traceback
 from sys import stdout
 from youtube_search import YoutubeSearch
 from simber import Logger
+from ytmdl.exceptions import ExtractError
 
 
 logger = Logger("yt")
@@ -323,10 +325,12 @@ def get_title(url):
     logger.debug(url)
 
     ydl = youtube_dl.YoutubeDL(ydl_opts)
-    data = ydl.extract_info(url, False)
 
     try:
+        data = ydl.extract_info(url, False)
         return stringutils.remove_yt_words(data["title"])
+    except DownloadError:
+        raise ExtractError(url)
     except KeyError:
         logger.error("Wasn't able to extract the name of the song.")
         return ""

@@ -19,7 +19,7 @@ import argparse
 from xdg.BaseDirectory import xdg_cache_home
 from os import path
 from simber import Logger
-from youtube_dl.utils import ExtractorError
+from youtube_dl.utils import DownloadError
 from ytmdl import (
             dir,
             yt,
@@ -29,7 +29,8 @@ from ytmdl import (
             utility,
 )
 from ytmdl.exceptions import (
-    DownloadError, ConvertError, NoMetaError, MetadataError
+    DownloadError, ConvertError, NoMetaError, MetadataError,
+    ExtractError
 )
 from ytmdl.core import (
     search, download, convert, trim, meta
@@ -388,7 +389,7 @@ def extract_song_name(args) -> str:
     try:
         # Fetch the title of the song
         song_name = yt.get_title(args.url)
-    except ExtractorError:
+    except ExtractError:
         if not args.ignore_errors:
             logger.critical("Wasn't able to extract song data.",
                         "Use `--ignore-errors` to ignore this error")
