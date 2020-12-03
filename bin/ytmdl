@@ -19,7 +19,6 @@ import argparse
 from xdg.BaseDirectory import xdg_cache_home
 from os import path
 from simber import Logger
-from youtube_dl.utils import DownloadError
 from ytmdl import (
             dir,
             yt,
