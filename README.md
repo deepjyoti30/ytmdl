@@ -55,7 +55,7 @@ If you like my work, consider buying me a coffee or donating. In case you want t
 
 ## Requirements
 
-- Python 3.x
+- Python 3.6.1
 - ffmpeg
 
 ## Installation
