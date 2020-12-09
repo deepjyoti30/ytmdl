@@ -120,6 +120,26 @@ def print_choice(beg, end, SONG_INFO, type):
         print(Style.RESET_ALL, end='')
 
 
+def get_default(songs, type="mp3") -> int:
+    """Get the default song that will be selected if the user
+    doesn't select a value.
+    """
+    # If the user is asked to select metadata, then just return
+    # 1
+    if type != "mp3":
+        return 1
+
+    # Else, we need to find the first verified music video present.
+    choice = 1
+
+    for index in range(0, len(songs)):
+        if songs[index]['verified_music']:
+            choice = index + 1
+            break
+
+    return choice
+
+
 def getChoice(SONG_INFO, type):
     """If more than 1 result from getData then ask for a choice."""
     # Print 5 of the search results
@@ -137,13 +157,15 @@ def getChoice(SONG_INFO, type):
 
     PRINT_WHOLE = True
 
+    default_choice = get_default(SONG_INFO, type)
+
     beg = 0
     while True:
         # Print the results first
         if PRINT_WHOLE:
             print_choice(beg, results, SONG_INFO, type)
         prepend.PREPEND(1)
-        choice = IntPrompt.ask('Enter Choice', default=1)
+        choice = IntPrompt.ask('Enter Choice', default=default_choice)
 
         choice = int(choice)
 
