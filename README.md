@@ -45,6 +45,11 @@ __This app is not yet another youtube-dl clone.__
 
 ## Support the Project?
 
+Help the development of this project by becoming a backer or a sponsor.
+
+### [Become a Backer](https://opencollective.com/ytmdl#backer)
+### [Become a sponsor](https://opencollective.com/ytmdl#sponsor)
+
 If you like my work, consider buying me a coffee or donating. In case you want to become a patron, join my [Pateron](https://www.patreon.com/deepjyoti30)
 
 <p align="left">
