@@ -388,7 +388,8 @@ def main(args):
 
         if not TRACK_INFO:
             if not args.ignore_errors:
-                logger.critical('No data was found!\a')
+                logger.error('No data was found, withholding file in cache!')
+                logger.critical('Use \'--skip-meta\' to ignore this error, or provide meta via \'--manual-meta\'.\a')
             else:
                 logger.warning("Ignoring {} since no data was found.".format(
                     song_name))
