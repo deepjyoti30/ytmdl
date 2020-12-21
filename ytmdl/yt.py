@@ -233,7 +233,7 @@ def scan_video(url, proxy):
     if proxy is not None:
         proxies['http'] = proxy
     try:
-        search_tmplt = "http://www.youtube.com/oembed?url={}&format=json"
+        search_tmplt = "https://www.youtube.com/oembed?url={}&format=json"
         search_url = search_tmplt.format(url)
         r = requests.get(search_url, proxies=proxies)
 
