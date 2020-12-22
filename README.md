@@ -112,12 +112,12 @@ git clone https://github.com/deepjyoti30/ytmdl && cd ytmdl && sudo python setup.
 ```console
 usage: ytmdl [-h] [-q] [--song SONG-METADATA] [--choice CHOICE]
              [--artist ARTIST] [--album ALBUM] [--disable-metaadd]
-             [--skip-meta] [-m] [--proxy URL] [--url URL]
+             [--skip-meta] [-m] [--disable-sort] [--proxy URL] [--url URL]
              [--list PATH TO LIST] [--nolocal] [--format FORMAT] [--trim]
              [--version] [--keep-chapter-name] [--pl-start NUMBER]
              [--pl-end NUMBER] [--pl-items ITEM_SPEC] [--ignore-errors]
              [--title-as-name] [--level LEVEL] [--disable-file] [--list-level]
-             [SONG_NAME [SONG_NAME ...]]
+             [SONG_NAME ...]
 
 positional arguments:
   SONG_NAME             Name of the song to download. Can be an URL to a
@@ -167,6 +167,9 @@ Metadata:
                         song to the destination directory. '--manual-meta'
                         will override this option, pass only one of them.
   -m, --manual-meta     Manually enter song details.
+  --disable-sort        Disable sorting of the metadata before asking for
+                        input. Useful if the song is in some other language
+                        and/or just a few providers are used.
 
 Playlist:
   --pl-start NUMBER     Playlist video to start at (default is 1)
