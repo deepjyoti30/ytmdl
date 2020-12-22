@@ -209,7 +209,8 @@ def meta(conv_name: str, song_name: str, search_by: str, args):
         # Else add metadata in ordinary way
         logger.info('Getting song data for {}...'.format(search_by))
         TRACK_INFO = metadata.SEARCH_SONG(search_by, filters=[
-                                          args.artist, args.album])
+                                          args.artist, args.album],
+                                          disable_sort=args.disable_sort)
 
     # If no meta was found raise error
     if not TRACK_INFO:
