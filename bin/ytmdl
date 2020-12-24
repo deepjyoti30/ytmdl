@@ -433,7 +433,7 @@ def extract_data():
 
         # Check if data is actually returned
         if songs is None:
-            logger.error("Couldn't extract playlist data!")
+            logger.critical("Couldn't extract playlist data!")
 
         logger.info("Playlist: {}".format(playlist_name))
         logger.info("{} songs found".format(len(songs)))
