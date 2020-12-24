@@ -306,7 +306,7 @@ def get_playlist(
         logger.warning(
             "Something went wrong while extracting the playlist data."
         )
-        return None
+        return None, None
 
 
 def get_title(url):
