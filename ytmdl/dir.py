@@ -205,5 +205,5 @@ def dry_cleanup(current_path, passed_name):
         logger.info('Moved to {}...'.format(DEST))
         return True
     except Exception as e:
-        logger.critical("{}".format(e))
+        logger.error("{}".format(e))
         return False
