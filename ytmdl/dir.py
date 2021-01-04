@@ -46,8 +46,8 @@ def cleanup(TRACK_INFO, index, datatype, remove_cached=True):
                 SONG_NAME = name + '.mp3'
                 SONG = SONG_NAME
 
-        dest_filename = __replace_special_characters(
-                            os.path.join(DIR, SONG_NAME))
+        dest_filename = os.path.join(
+                            DIR, __replace_special_characters(SONG_NAME))
         shutil.move(SONG, dest_filename)
 
         if remove_cached:
@@ -198,8 +198,9 @@ def dry_cleanup(current_path, passed_name):
         logger.debug("Moving to: {}".format(DEST))
 
         # Create the destination file name
-        dest_filename = __replace_special_characters(
-                            os.path.join(DEST, new_basename))
+        dest_filename = os.path.join(
+                            DEST, __replace_special_characters(new_basename))
+
         shutil.move(current_path, dest_filename)
 
         logger.info('Moved to {}...'.format(DEST))
