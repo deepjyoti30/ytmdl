@@ -4,11 +4,22 @@ import os
 import glob
 import shutil
 from html import unescape
+from re import sub
 
 from ytmdl import defaults
 from simber import Logger
 
 logger = Logger("Dir")
+
+
+def __replace_special_characters(passed_name: str) -> str:
+    """
+    In the passed name, replace the special characters like
+    / with a `-` so that it does not raise any errors
+    related to the OS while moving the file
+    """
+    # TODO: Also add support for removing backslash
+    return sub(r'/', '-', passed_name)
 
 
 def cleanup(TRACK_INFO, index, datatype, remove_cached=True):
@@ -35,7 +46,9 @@ def cleanup(TRACK_INFO, index, datatype, remove_cached=True):
                 SONG_NAME = name + '.mp3'
                 SONG = SONG_NAME
 
-        shutil.move(SONG, os.path.join(DIR, SONG_NAME))
+        dest_filename = __replace_special_characters(
+                            os.path.join(DIR, SONG_NAME))
+        shutil.move(SONG, dest_filename)
 
         if remove_cached:
             _delete_cached_songs(datatype)
@@ -183,7 +196,11 @@ def dry_cleanup(current_path, passed_name):
         DEST = defaults.DEFAULT.SONG_DIR
 
         logger.debug("Moving to: {}".format(DEST))
-        shutil.move(current_path, os.path.join(DEST, new_basename))
+
+        # Create the destination file name
+        dest_filename = __replace_special_characters(
+                            os.path.join(DEST, new_basename))
+        shutil.move(current_path, dest_filename)
 
         logger.info('Moved to {}...'.format(DEST))
         return True
