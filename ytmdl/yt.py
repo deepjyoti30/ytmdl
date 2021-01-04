@@ -251,7 +251,7 @@ def is_playlist(url):
     Check if the passed URL is a youtube playlist
     URL.
     """
-    playlist_part = r"https?://www\.youtube\.com/playlist\?list=.*?$"
+    playlist_part = r"https?://(www\.|music\.)?youtube\.com/playlist\?list=.*?$"
     return match(playlist_part, url)
 
 
