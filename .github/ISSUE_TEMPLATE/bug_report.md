@@ -11,8 +11,8 @@ assignees: ''
 
 ## Checklist
 
-[ ] I have searched for similar bugs in the issues.
-[ ] I will add the bug label to this issue.
+- [ ] I have searched for similar bugs in the issues.
+- [ ] I will add the bug label to this issue.
 
 ## Version Info
 
