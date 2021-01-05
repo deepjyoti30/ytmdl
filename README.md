@@ -101,11 +101,26 @@ Available in **src_prepare-overlay** [here](https://gitlab.com/src_prepare/src_p
 
 ### Manual
 
-`ytmdl` can be manually installed by the following command
+You can manually install `ytmdl` by cloning this repository and running the `setup.py` script.
 
-```console
-git clone https://github.com/deepjyoti30/ytmdl && cd ytmdl && sudo python setup.py install
-```
+1. Install `setuptools` if it isn't already:
+
+    ```console
+     pip install setuptools
+     ```
+
+1. Clone this repo:
+
+    ```console
+    git clone https://github.com/deepjyoti30/ytmdl   
+    ```
+
+1. Move into the `ytmdl` directory and run the `setup.py` script:
+
+    ```console
+    cd ytmdl
+    sudo python setup.py install
+    ```
 
 ## Usage
 
