@@ -109,6 +109,7 @@ You can manually install `ytmdl` by closing this repository and running the `set
     ```console
     git clone https://github.com/deepjyoti30/ytmdl   
     ```
+
 1. Move into the `ytmdl` directory and run the `setup.py` script:
 
     ```console
