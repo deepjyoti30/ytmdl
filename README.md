@@ -96,9 +96,9 @@ Available in **src_prepare-overlay** [here](https://gitlab.com/src_prepare/src_p
 
 ### Manual
 
-You can manually install `ytmdl` by closing this repository and running the `setup.py` script.
+You can manually install `ytmdl` by cloning this repository and running the `setup.py` script.
 
-1. Install `python3-setuptools` if it isn't already:
+1. Install `setuptools` if it isn't already:
 
     ```console
      pip install setuptools
