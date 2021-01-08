@@ -61,9 +61,15 @@ def get_more_data(song):
 
     # Update the songs attributes
     song.track_number = 1
-    song.collection_name = track_details["track"]["album"]["title"]
-    song.track_time = song._convert_time(track_details["track"]["duration"])
-    song.release_date = track_details["track"]["wiki"]["published"]
+
+    try:
+        song.collection_name = track_details["track"]["album"]["title"]
+        song.track_time = song._convert_time(track_details["track"]["duration"])
+        song.release_date = track_details["track"]["wiki"]["published"]
+    except KeyError:
+        # This happens because last.fm do not have consistent data for some songs
+        # Just ignore this errors if they occur.
+        pass
 
     return song
 

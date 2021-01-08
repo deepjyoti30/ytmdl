@@ -287,8 +287,8 @@ def main(args):
 
             # Else exit
             logger.critical("Error occurred: ", str(e),
-                ". Exiting. Pass `--ignore-errors` if you want errors \
-                like this to be ignored")
+                ". Exiting. Pass `--ignore-errors` if you want errors"
+                "like this to be ignored")
 
     # Delete the cached songs
     dir._delete_cached_songs(passed_format)
