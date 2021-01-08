@@ -119,7 +119,7 @@ def download(link, yt_title, args) -> str:
 
 
 def convert(path: str, passed_format: str) -> str:
-    """Conver the song into the proper format as asked by
+    """Convert the song into the proper format as asked by
     the user.
     """
     FORMAT_CONVERSION_MAP = {
