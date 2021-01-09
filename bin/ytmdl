@@ -375,7 +375,7 @@ def pre_checks(args):
         print(" ".join(("--{}".format(opt.replace("_", "-")) for opt in vars(args))))
         exit(0)
 
-    if not args.SONG_NAME and not args.url:
+    if not args.SONG_NAME and not args.url and not args.list:
         logger.critical("Song Name is required. Check 'ytmdl --help' for help.")
 
 
