@@ -68,6 +68,7 @@ If you like my work, consider buying me a coffee or donating. In case you want t
 - [PyPi](#pypi)
 - [Arch Linux](#arch-linux)
 - [Gentoo](#gentoo)
+- [Windows](#windows)
 - [Manual](#manual)
 
 ### PyPI
@@ -98,6 +99,28 @@ emerge -av --autounmask net-misc/ytmdl
 ```
 
 Available in **src_prepare-overlay** [here](https://gitlab.com/src_prepare/src_prepare-overlay)
+
+### Windows
+
+You need to install `ffmpeg` in order for `ytmdl` to work properly. This can be done by downloading the `ffmpeg` binary from [here](https://ffmpeg.org/download.html). Once downloaded, extract the file and find the `ffmpeg.exe` file. Copy the directory's path and add it to PATH in the following way.
+
+```console
+setx path "%path%;C:\your\path\here\"
+```
+
+Once `ffmpeg` is installed, install `ytmdl` using the following command
+
+```console
+pip install ytmdl
+```
+
+>NOTE: You'll need to have Python 3.6.1 or more installed.
+
+Optionally, also install the latest version of `downloader-cli` and `simber` using the following command:
+
+```console
+pip install simber downloader --upgrade
+```
 
 ### Manual
 
