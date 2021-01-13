@@ -2,7 +2,7 @@
 """Setup ytmdl."""
 
 import setuptools
-from os import path
+from os import path, name
 from warnings import warn
 
 with open("README.md", "r") as fh:
@@ -18,7 +18,6 @@ req_pkgs = [
             'colorama',
             'bs4',
             'downloader-cli',
-            'lxml',
             'pyxdg',
             'ffmpeg-python',
             'pysocks',
@@ -54,6 +53,12 @@ params = {
     'data_files': data_files,
 }
 
+params["scripts"] = ['bin/ytmdl']
+
+# Install a bat script for Windows users
+if name == 'nt':
+    params["scripts"].append("bin/ytmdl.bat")
+
 
 if __name__ == '__main__':
     setuptools.setup(
@@ -70,9 +75,11 @@ if __name__ == '__main__':
             "Programming Language :: Python :: 3",
             "License :: OSI Approved :: MIT License",
             "Operating System :: OS Independent",
+            "Development Status :: 5 - Production/Stable",
+            "Environment :: Console",
+            "Topic :: Multimedia :: Sound/Audio",
         ),
         python_requires=">=3.*",
-        scripts=['bin/ytmdl'],
         install_requires=req_pkgs,
         setup_requires=req_pkgs,
         extras_require=extra_features,

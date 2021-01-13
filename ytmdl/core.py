@@ -118,7 +118,12 @@ def download(link, yt_title, args) -> str:
     return path
 
 
-def convert(path: str, passed_format: str) -> str:
+def convert(
+    path: str,
+    passed_format: str,
+    start: float = None,
+    end: float = None
+) -> str:
     """Convert the song into the proper format as asked by
     the user.
     """
@@ -126,6 +131,20 @@ def convert(path: str, passed_format: str) -> str:
         "mp3": utility.convert_to_mp3,
         "opus": utility.convert_to_opus
     }
+
+    # We need to check if start and end are passed.
+    # If those are passed it means only a part of the song is
+    # to be extracted.
+    logger.debug("{}:{}".format(start, end))
+    if start is not None and end is not None:
+        conv_name = utility.extract_part_convert(
+                        path, passed_format, start, end)
+
+        # We need to raise exception if something went wrong
+        if type(conv_name) is not str:
+            raise ConvertError(conv_name)
+
+        return conv_name
 
     # If it is m4a, don't convert
     if passed_format == "m4a":
@@ -190,7 +209,8 @@ def meta(conv_name: str, song_name: str, search_by: str, args):
         # Else add metadata in ordinary way
         logger.info('Getting song data for {}...'.format(search_by))
         TRACK_INFO = metadata.SEARCH_SONG(search_by, filters=[
-                                          args.artist, args.album])
+                                          args.artist, args.album],
+                                          disable_sort=args.disable_sort)
 
     # If no meta was found raise error
     if not TRACK_INFO:

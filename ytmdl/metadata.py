@@ -158,7 +158,7 @@ def _extend_to_be_sorted_and_rest(provider_data, to_be_sorted, rest, filters):
         rest.extend(provider_data[10:])
 
 
-def SEARCH_SONG(q="Tera Buzz", filters=[]):
+def SEARCH_SONG(q="Tera Buzz", filters=[], disable_sort=False):
     """Do the task by calling other functions."""
     to_be_sorted = []
     rest = []
@@ -199,6 +199,10 @@ def SEARCH_SONG(q="Tera Buzz", filters=[]):
 
     if not to_be_sorted:
         return None
+
+    # If sorting is disabled, return as is
+    if disable_sort:
+        return to_be_sorted
 
     # Send the data to get sorted
     sorted_data = _search_tokens(q, to_be_sorted)

@@ -19,7 +19,6 @@ import argparse
 from xdg.BaseDirectory import xdg_cache_home
 from os import path
 from simber import Logger
-from youtube_dl.utils import ExtractorError
 from ytmdl import (
             dir,
             yt,
@@ -29,7 +28,8 @@ from ytmdl import (
             utility,
 )
 from ytmdl.exceptions import (
-    DownloadError, ConvertError, NoMetaError, MetadataError
+    DownloadError, ConvertError, NoMetaError, MetadataError,
+    ExtractError
 )
 from ytmdl.core import (
     search, download, convert, trim, meta
@@ -90,6 +90,9 @@ def arguments():
                         action="store_true")
     metadata_group.add_argument('-m', '--manual-meta', help="Manually enter song\
                         details.", action="store_true")
+    metadata_group.add_argument("--disable-sort", help="Disable sorting of the metadata \
+                        before asking for input. Useful if the song is in some other language \
+                        and/or just a few providers are used.", action="store_true")
 
     parser.add_argument('--proxy', help='Use the specified HTTP/HTTPS/SOCKS proxy. To enable '
                         'SOCKS proxy, specify a proper scheme. For example '
@@ -118,6 +121,10 @@ def arguments():
     parser.add_argument('--version', action='version', version=__version__,
                         help='show the program version number and exit')
     parser.add_argument('--get-opts', action="store_true", help=argparse.SUPPRESS)
+    parser.add_argument("--keep-chapter-name", action="store_true", help="Keep the title \
+                        extracted from the chapter in order to search for the metadata. If \
+                        not passed, the user will be asked if they'd like to change the title \
+                        with which the metadata will be searched.")
 
     playlist_group = parser.add_argument_group("Playlist")
     playlist_group.add_argument(
@@ -230,13 +237,81 @@ def main(args):
             logger.info("--ignore-errors passed. Skipping this song!")
             return
 
-        logger.critical("ERROR: {}".format(dw_error))
+        logger.critical("ERROR: {}".format(dw_error), ". Pass `--ignore-errors` to ignore this.")
         return
 
+    # Try to extract the chapters
+    chapters = yt.get_chapters(link)
 
+    songs_to_download = [{}]
+    # If the chapters are present, we will have to iterate and extract each chapter
+    if chapters:
+        logger.info("The song has chapters in it.",
+            "Each part will be extracted and worked accordingly.")
+
+        songs_to_download.clear()
+        for chapter in chapters:
+            songs_to_download.append(chapter)
+
+    logger.debug(songs_to_download)
+    for song in songs_to_download:
+        song_title = song.get("title", yt_title)
+        start_time = song.get("start_time", None)
+        end_time = song.get("end_time", None)
+
+
+        if "title" in song.keys():
+            logger.debug("Has the attribute")
+            # Update the song_metadata with the name of the chapter
+            song_metadata = song.get("title")
+
+            # Ask the user if they would like to change the name
+            song_metadata = utility.get_new_title(song_metadata) if \
+                not args.keep_chapter_name else song_metadata
+
+        # Pass the song for post processing
+        try:
+            post_processing(
+                song_title,
+                song_metadata,
+                passed_format, 
+                path, 
+                start_time, 
+                end_time, 
+                args
+            )
+        except Exception as e:
+            if args.ignore_errors:
+                logger.warning("Ignoring error: ", str(e))
+                continue
+
+            # Else exit
+            logger.critical("Error occurred: ", str(e),
+                ". Exiting. Pass `--ignore-errors` if you want errors"
+                "like this to be ignored")
+
+    # Delete the cached songs
+    dir._delete_cached_songs(passed_format)
+
+
+def post_processing(
+    song_name: str,
+    song_metadata: str,
+    passed_format: str,
+    path: str,
+    start_time: float,
+    end_time: float,
+    args: object
+) -> None:
+    """Handle all the activities post search of the song.
+    
+    This function will handle the following:
+    Convert, Trim, Metadata, Cleaning up.
+    """
+    logger.debug("song_name: ", song_name, " song_meta: ", song_metadata)
     # Try to convert the song
     try:
-        conv_name = convert(path, passed_format)
+        conv_name = convert(path, passed_format, start_time, end_time)
     except ConvertError as convert_error:
         logger.critical('ERROR: {}'.format(convert_error))
         return
@@ -257,14 +332,14 @@ def main(args):
         track_selected = meta(conv_name, song_name, song_metadata, args)
     except NoMetaError as no_meta_error:
         if not args.ignore_errors:
-            logger.critical(str(no_meta_error))
+            logger.critical(str(no_meta_error), ". Pass `--ignore-errors` to ignore this.")
         return
     except MetadataError as metadata_error:
         if not args.ignore_errors:
-            logger.critical(str(metadata_error))
+            logger.critical(str(metadata_error), ". Pass `--ignore-errors` to ignore this.")
         return
 
-    if dir.cleanup([track_selected], 0, passed_format):
+    if dir.cleanup([track_selected], 0, passed_format, remove_cached=False):
         logger.info("Done")
 
 
@@ -300,7 +375,7 @@ def pre_checks(args):
         print(" ".join(("--{}".format(opt.replace("_", "-")) for opt in vars(args))))
         exit(0)
 
-    if not args.SONG_NAME and not args.url:
+    if not args.SONG_NAME and not args.url and not args.list:
         logger.critical("Song Name is required. Check 'ytmdl --help' for help.")
 
 
@@ -316,7 +391,7 @@ def extract_song_name(args) -> str:
     try:
         # Fetch the title of the song
         song_name = yt.get_title(args.url)
-    except ExtractorError:
+    except ExtractError:
         if not args.ignore_errors:
             logger.critical("Wasn't able to extract song data.",
                         "Use `--ignore-errors` to ignore this error")
@@ -358,7 +433,7 @@ def extract_data():
 
         # Check if data is actually returned
         if songs is None:
-            logger.error("Couldn't extract playlist data!")
+            logger.critical("Couldn't extract playlist data!")
 
         logger.info("Playlist: {}".format(playlist_name))
         logger.info("{} songs found".format(len(songs)))

@@ -4,6 +4,7 @@
 import requests
 import os
 import youtube_dl
+from youtube_dl.utils import DownloadError
 from re import match
 from ytmdl import defaults, utility, stringutils
 from downloader_cli.download import Download
@@ -11,6 +12,7 @@ import traceback
 from sys import stdout
 from youtube_search import YoutubeSearch
 from simber import Logger
+from ytmdl.exceptions import ExtractError
 
 
 logger = Logger("yt")
@@ -231,7 +233,7 @@ def scan_video(url, proxy):
     if proxy is not None:
         proxies['http'] = proxy
     try:
-        search_tmplt = "http://www.youtube.com/oembed?url={}&format=json"
+        search_tmplt = "https://www.youtube.com/oembed?url={}&format=json"
         search_url = search_tmplt.format(url)
         r = requests.get(search_url, proxies=proxies)
 
@@ -249,11 +251,8 @@ def is_playlist(url):
     Check if the passed URL is a youtube playlist
     URL.
     """
-    playlist_part = "https://www.youtube.com/playlist?list"
-    if playlist_part in url:
-        return True
-    else:
-        return False
+    playlist_part = r"https?://(www\.|music\.)?youtube\.com/playlist\?list=.*?$"
+    return match(playlist_part, url)
 
 
 def get_playlist(
@@ -307,7 +306,7 @@ def get_playlist(
         logger.warning(
             "Something went wrong while extracting the playlist data."
         )
-        return None
+        return None, None
 
 
 def get_title(url):
@@ -323,10 +322,12 @@ def get_title(url):
     logger.debug(url)
 
     ydl = youtube_dl.YoutubeDL(ydl_opts)
-    data = ydl.extract_info(url, False)
 
     try:
+        data = ydl.extract_info(url, False)
         return stringutils.remove_yt_words(data["title"])
+    except DownloadError:
+        raise ExtractError(url)
     except KeyError:
         logger.error("Wasn't able to extract the name of the song.")
         return ""

@@ -18,7 +18,7 @@
 
 [![forthebadge made-with-python](http://ForTheBadge.com/images/badges/made-with-python.svg)](https://www.python.org/)<br/><br/>
 <img src="https://img.shields.io/badge/Maintained%3F-Yes-blueviolet?style=for-the-badge">
-![Travis (.org)](https://img.shields.io/travis/deepjyoti30/ytmdl?style=for-the-badge) [![License](https://img.shields.io/badge/License-MIT-pink.svg?style=for-the-badge)](LICENSE.md) ![PyPI](https://img.shields.io/pypi/v/ytmdl?style=for-the-badge) ![AUR](https://img.shields.io/aur/version/ytmdl?color=red&style=for-the-badge) [![Downloads](https://img.shields.io/badge/dynamic/json?style=for-the-badge&maxAge=86400&label=downloads&query=%24.total_downloads&url=https%3A%2F%2Fapi.pepy.tech%2Fapi%2Fprojects%2Fytmdl)](https://img.shields.io/badge/dynamic/json?style=for-the-badge&maxAge=86400&label=downloads&query=%24.total_downloads&url=https%3A%2F%2Fapi.pepy.tech%2Fapi%2Fprojects%2Fytmdl) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-lightblue.svg?style=for-the-badge)](http://makeapullrequest.com) [![Telegram](https://img.shields.io/badge/Telegram-YTMDL-blue.svg?style=for-the-badge)](https://t.me/ytmdl)
+![Travis (.org)](https://img.shields.io/travis/deepjyoti30/ytmdl?style=for-the-badge) ![[RepoStatus](https://repostatus.deepjyoti30.dev)](https://apis.deepjyoti30.dev/repostatus/badge?repo=deepjyoti30%2Fytmdl&style=for-the-badge) [![License](https://img.shields.io/badge/License-MIT-pink.svg?style=for-the-badge)](LICENSE.md) ![PyPI](https://img.shields.io/pypi/v/ytmdl?style=for-the-badge) ![AUR](https://img.shields.io/aur/version/ytmdl?color=red&style=for-the-badge) [![Downloads](https://img.shields.io/badge/dynamic/json?style=for-the-badge&maxAge=86400&label=downloads&query=%24.total_downloads&url=https%3A%2F%2Fapi.pepy.tech%2Fapi%2Fprojects%2Fytmdl)](https://img.shields.io/badge/dynamic/json?style=for-the-badge&maxAge=86400&label=downloads&query=%24.total_downloads&url=https%3A%2F%2Fapi.pepy.tech%2Fapi%2Fprojects%2Fytmdl) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-lightblue.svg?style=for-the-badge)](http://makeapullrequest.com) [![Telegram](https://img.shields.io/badge/Telegram-YTMDL-blue.svg?style=for-the-badge)](https://t.me/ytmdl)
 
 <p>
 <a href="https://ko-fi.com/deepjyoti30"><img src="https://raw.githubusercontent.com/adi1090x/files/master/other/kofi.png" alt="Support me on ko-fi"></a>
@@ -45,6 +45,11 @@ __This app is not yet another youtube-dl clone.__
 
 ## Support the Project?
 
+Help the development of this project by becoming a backer or a sponsor.
+
+### [Become a Backer](https://opencollective.com/ytmdl#backer)
+### [Become a sponsor](https://opencollective.com/ytmdl#sponsor)
+
 If you like my work, consider buying me a coffee or donating. In case you want to become a patron, join my [Pateron](https://www.patreon.com/deepjyoti30)
 
 <p align="left">
@@ -55,7 +60,7 @@ If you like my work, consider buying me a coffee or donating. In case you want t
 
 ## Requirements
 
-- Python 3.x
+- Python 3.6.1
 - ffmpeg
 
 ## Installation
@@ -96,23 +101,38 @@ Available in **src_prepare-overlay** [here](https://gitlab.com/src_prepare/src_p
 
 ### Manual
 
-`ytmdl` can be manually installed by the following command
+You can manually install `ytmdl` by cloning this repository and running the `setup.py` script.
 
-```console
-git clone https://github.com/deepjyoti30/ytmdl && cd ytmdl && sudo python setup.py install
-```
+1. Install `setuptools` if it isn't already:
+
+    ```console
+     pip install setuptools
+     ```
+
+1. Clone this repo:
+
+    ```console
+    git clone https://github.com/deepjyoti30/ytmdl   
+    ```
+
+1. Move into the `ytmdl` directory and run the `setup.py` script:
+
+    ```console
+    cd ytmdl
+    sudo python setup.py install
+    ```
 
 ## Usage
 
 ```console
 usage: ytmdl [-h] [-q] [--song SONG-METADATA] [--choice CHOICE]
              [--artist ARTIST] [--album ALBUM] [--disable-metaadd]
-             [--skip-meta] [-m] [--proxy URL] [--url URL]
+             [--skip-meta] [-m] [--disable-sort] [--proxy URL] [--url URL]
              [--list PATH TO LIST] [--nolocal] [--format FORMAT] [--trim]
-             [--version] [--pl-start NUMBER] [--pl-end NUMBER]
-             [--pl-items ITEM_SPEC] [--ignore-errors] [--title-as-name]
-             [--level LEVEL] [--disable-file] [--list-level]
-             [SONG_NAME [SONG_NAME ...]]
+             [--version] [--keep-chapter-name] [--pl-start NUMBER]
+             [--pl-end NUMBER] [--pl-items ITEM_SPEC] [--ignore-errors]
+             [--title-as-name] [--level LEVEL] [--disable-file] [--list-level]
+             [SONG_NAME ...]
 
 positional arguments:
   SONG_NAME             Name of the song to download. Can be an URL to a
@@ -140,6 +160,10 @@ optional arguments:
                         there are speeches, noise etc before/after the start
                         of the song. Default is false.
   --version             show the program version number and exit
+  --keep-chapter-name   Keep the title extracted from the chapter in order to
+                        search for the metadata. If not passed, the user will
+                        be asked if they'd like to change the title with which
+                        the metadata will be searched.
 
 Metadata:
   --song SONG-METADATA  The song to search in Metadata. Particularly useful
@@ -158,6 +182,9 @@ Metadata:
                         song to the destination directory. '--manual-meta'
                         will override this option, pass only one of them.
   -m, --manual-meta     Manually enter song details.
+  --disable-sort        Disable sorting of the metadata before asking for
+                        input. Useful if the song is in some other language
+                        and/or just a few providers are used.
 
 Playlist:
   --pl-start NUMBER     Playlist video to start at (default is 1)
