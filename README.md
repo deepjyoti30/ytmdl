@@ -111,7 +111,7 @@ setx path "%path%;C:\your\path\here\"
 Once `ffmpeg` is installed, install `ytmdl` using the following command
 
 ```console
-pip install ytmdl
+pip install ytmdl --upgrade
 ```
 
 >NOTE: You'll need to have Python 3.6.1 or more installed.
@@ -119,7 +119,7 @@ pip install ytmdl
 Optionally, also install the latest version of `downloader-cli` and `simber` using the following command:
 
 ```console
-pip install simber downloader --upgrade
+pip install simber downloader-cli --upgrade
 ```
 
 ### Manual
