@@ -124,7 +124,7 @@ def convert(
     start: float = None,
     end: float = None
 ) -> str:
-    """Conver the song into the proper format as asked by
+    """Convert the song into the proper format as asked by
     the user.
     """
     FORMAT_CONVERSION_MAP = {
