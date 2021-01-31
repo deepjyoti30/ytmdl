@@ -228,6 +228,11 @@ def main(args):
 
     link, yt_title = search(song_name=song_name, args=args)
 
+    # Check if this song is supposed to be skipped.
+    if not link:
+        logger.warning("Skipping this song!")
+        return
+
     # Try to download the song
     # TODO: Change the way ignore-errors is used in order to handle playlists
     try:

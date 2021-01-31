@@ -66,6 +66,11 @@ def search(song_name, args) -> Union[str, str]:
         else:
             choice = 0
 
+        # Check if choice if -2. If it is that, then we need to stop executing
+        # of the current song and gracefully exit.
+        if choice == -2:
+            return False, False
+
         return (
             YOUTUBE_LINK_BASE.format(data[choice]["href"]),
             data[choice]["title"]
