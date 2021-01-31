@@ -2,7 +2,7 @@
 
 import subprocess
 from os import remove, path, popen
-from ytmdl import defaults, stringutils
+from ytmdl import defaults, prepend
 from shutil import which
 import ffmpeg
 from simber import Logger
@@ -209,6 +209,24 @@ def get_new_title(old_title):
     # Else ask for new title
     title = Prompt.ask("Enter new title")
     return title
+
+
+def get_new_meta_search_by(old_search_by):
+    """
+    Ask the user to enter a new title to search the metadata with.
+
+    This function will be called when the user explicitly asks for a
+    different title to search the metadata with.
+    """
+    prepend.PREPEND(1)
+    new_search_by = Prompt.ask("Enter new title to search metadata with",
+                               default=old_search_by)
+
+    if new_search_by == old_search_by:
+        logger.info("You can disable this behaviour by removing the"
+                    "`--ask-meta-name` flag.")
+
+    return new_search_by
 
 
 if __name__ == "__main__":

@@ -203,6 +203,10 @@ def meta(conv_name: str, song_name: str, search_by: str, args):
     PASSED_FORMAT = args.format
     IS_QUIET = args.quiet
 
+    # Check if the user wants a new name for metadata
+    if args.ask_meta_name:
+        search_by = utility.get_new_meta_search_by(search_by)
+
     if args.manual_meta:
         # Read the values from the user.
         TRACK_INFO = manual.get_data(song_name)
