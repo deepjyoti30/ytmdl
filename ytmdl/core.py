@@ -223,7 +223,12 @@ def meta(conv_name: str, song_name: str, search_by: str, args):
 
     # If no meta was found raise error
     if not TRACK_INFO:
-        raise NoMetaError(search_by)
+        # Check if we are supposed to add manual meta
+        if args.on_meta_error != "manual":
+            raise NoMetaError(search_by)
+
+        TRACK_INFO = manual.get_data(song_name)
+        return TRACK_INFO
 
     logger.info('Setting data...')
     option = song.setData(TRACK_INFO, IS_QUIET, conv_name, PASSED_FORMAT,
