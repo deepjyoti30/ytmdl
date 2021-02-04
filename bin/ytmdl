@@ -342,11 +342,11 @@ def post_processing(
     try:
         track_selected = meta(conv_name, song_name, song_metadata, args)
     except NoMetaError as no_meta_error:
-        if not args.ignore_errors or args.on_meta_error == 'exit':
-            logger.critical(str(no_meta_error), ". Pass `--ignore-errors` to ignore this.")
-        elif args.on_meta_error == 'skip':
+        if args.on_meta_error == 'skip':
             if dir.dry_cleanup(conv_name, song_name):
                 logger.info("Done")
+        elif not args.ignore_errors or args.on_meta_error == 'exit':
+            logger.critical(str(no_meta_error), ". Pass `--ignore-errors` to ignore this.")
         return
     except MetadataError as metadata_error:
         if not args.ignore_errors:
@@ -390,7 +390,7 @@ def pre_checks(args):
         exit(0)
 
     # Extract on-meta-error
-    logger.debug("on_meta_error before: ", args.on_meta_error)
+    logger.debug("on_meta_error before: ", str(args.on_meta_error))
     on_meta_error = args.on_meta_error
     if on_meta_error not in defaults.DEFAULT.ON_ERROR_OPTIONS:
         args.on_meta_error = defaults.DEFAULT.ON_ERROR_DEFAULT
