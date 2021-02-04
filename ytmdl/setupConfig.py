@@ -71,7 +71,7 @@ config_text = '''#*****************************************#
 # happen for various reasons like lack of metadata or network issues.
 # Available options are:
 # "{{supported_on_error_options}}"
-# ON_META_ERROR = "exit"
+#ON_META_ERROR = "exit"
 #'''
 
 
@@ -268,6 +268,15 @@ def checkValidity(keyword, value):
             if provider in possM:
                 return True
         return False
+    elif keyword == "ON_META_ERROR":
+        if not value:
+            logger.warning("On meta error value is empty. \
+                    Default will be used")
+            return False
+
+        if value not in DEFAULTS().ON_ERROR_OPTIONS:
+            return False
+        return True
 
 
 def retDefault(keyword):
@@ -280,6 +289,8 @@ def retDefault(keyword):
         return DEFAULTS().SONG_DIR
     elif keyword == 'METADATA_PROVIDERS':
         return DEFAULTS().METADATA_PROVIDERS
+    elif keyword == "ON_META_ERROR":
+        return DEFAULTS().ON_ERROR_DEFAULT
 
 
 def GIVE_DEFAULT(self, keyword):
