@@ -150,7 +150,8 @@ You can manually install `ytmdl` by cloning this repository and running the `set
 ```console
 usage: ytmdl [-h] [-q] [--song SONG-METADATA] [--choice CHOICE]
              [--artist ARTIST] [--album ALBUM] [--disable-metaadd]
-             [--skip-meta] [-m] [--disable-sort] [--proxy URL] [--url URL]
+             [--skip-meta] [-m] [--disable-sort] [--ask-meta-name]
+             [--on-meta-error ON_META_ERROR] [--proxy URL] [--url URL]
              [--list PATH TO LIST] [--nolocal] [--format FORMAT] [--trim]
              [--version] [--keep-chapter-name] [--pl-start NUMBER]
              [--pl-end NUMBER] [--pl-items ITEM_SPEC] [--ignore-errors]
@@ -208,6 +209,12 @@ Metadata:
   --disable-sort        Disable sorting of the metadata before asking for
                         input. Useful if the song is in some other language
                         and/or just a few providers are used.
+  --ask-meta-name       Ask the user to enter a seperate name for searching
+                        the metadata (Default: false)
+  --on-meta-error ON_META_ERROR
+                        What to do if adding the metadata fails for some
+                        reasong like lack of metadata or perhaps a network
+                        issue. Options are ['exit', 'skip', 'manual']
 
 Playlist:
   --pl-start NUMBER     Playlist video to start at (default is 1)
@@ -232,6 +239,7 @@ Logger:
                         options.
   --disable-file        Disable logging to files
   --list-level          List all the available logger levels.
+
 ```
 
 ## Configuration
@@ -260,6 +268,7 @@ As of the latest development branch, the following options can be changed from t
 | `SONG_QUALITY`       | Quality of the song                                | 320kbps                        |
 | `METADATA_PROVIDERS` | Which API providers to use for metadata            | all supported options are used |
 | `DEFAULT_FORMAT`     | Default format of the song                         | mp3                            |
+| `ON_META_ERROR`      | What to do if error occurs while writing meta      | exit                           |
 
 ### Advanced Configuration
 
