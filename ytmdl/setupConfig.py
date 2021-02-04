@@ -65,6 +65,13 @@ config_text = '''#*****************************************#
 # "{{supported_formats}}"
 #
 #DEFAULT_FORMAT = "mp3"
+#
+#*****************************************#
+# What to do when something goes wrong while adding the metadata. This can
+# happen for various reasons like lack of metadata or network issues.
+# Available options are:
+# "{{supported_on_error_options}}"
+# ON_META_ERROR = "exit"
 #'''
 
 
@@ -100,6 +107,10 @@ class DEFAULTS:
         self.VALID_FORMATS = ['mp3', 'm4a', 'opus']
 
         self.DEFAULT_FORMAT = 'mp3'
+
+        self.ON_ERROR_OPTIONS = ['exit', 'skip', 'manual']
+
+        self.ON_ERROR_DEFAULT = 'exit'
 
     def _get_music_dir(self):
         """Get the dir the file will be saved to."""
@@ -137,14 +148,22 @@ def render_config_template() -> str:
     """Render the config template in order ot get the updated
     config
     """
-    providers = ", ".join(DEFAULTS().AVAILABLE_METADATA_PROVIDERS)
-    formats = ", ".join(DEFAULTS().VALID_FORMATS)
+    defaults_obj = DEFAULTS()
+    providers = ", ".join(defaults_obj.AVAILABLE_METADATA_PROVIDERS)
+    formats = ", ".join(defaults_obj.VALID_FORMATS)
+    on_error_options = ", ".join(defaults_obj.ON_ERROR_OPTIONS)
+
+    KEYWORD_MAP = {
+        '"{{supported_providers}}"': providers,
+        '"{{supported_formats}}"': formats,
+        '"{{supported_on_error_options}}"': on_error_options
+    }
 
     rendered_content = config_text
-    rendered_content = rendered_content.replace('"{{supported_providers}}"',
-                                                providers)
-    rendered_content = rendered_content.replace('"{{supported_formats}}"',
-                                                formats)
+
+    for keyword, value in KEYWORD_MAP.items():
+        rendered_content = rendered_content.replace(keyword, value)
+
     return rendered_content
 
 
