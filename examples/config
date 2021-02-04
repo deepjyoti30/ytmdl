@@ -58,3 +58,11 @@
 #
 #DEFAULT_FORMAT = "mp3"
 #
+#*****************************************#
+# What to do when something goes wrong while adding the metadata. This can
+# happen for various reasons like lack of metadata or network issues.
+# Available options are:
+# exit, skip, manual
+#
+#ON_META_ERROR = "exit"
+#

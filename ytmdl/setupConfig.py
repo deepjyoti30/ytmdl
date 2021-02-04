@@ -71,6 +71,7 @@ config_text = '''#*****************************************#
 # happen for various reasons like lack of metadata or network issues.
 # Available options are:
 # "{{supported_on_error_options}}"
+#
 #ON_META_ERROR = "exit"
 #'''
 

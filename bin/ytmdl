@@ -98,7 +98,7 @@ def arguments():
     metadata_group.add_argument("--on-meta-error", help="What to do if adding the metadata fails \
                         for some reasong like lack of metadata or perhaps a network issue. \
                         Options are {}".format(defaults.DEFAULT.ON_ERROR_OPTIONS),
-                        type=str, default=defaults.DEFAULT.ON_ERROR_DEFAULT)
+                        type=str, default=None)
 
     parser.add_argument('--proxy', help='Use the specified HTTP/HTTPS/SOCKS proxy. To enable '
                         'SOCKS proxy, specify a proper scheme. For example '
@@ -385,6 +385,14 @@ def pre_checks(args):
     if args.get_opts:
         print(" ".join(("--{}".format(opt.replace("_", "-")) for opt in vars(args))))
         exit(0)
+
+    # Extract on-meta-error
+    logger.debug("on_meta_error before: ", args.on_meta_error)
+    on_meta_error = args.on_meta_error
+    if on_meta_error not in defaults.DEFAULT.ON_ERROR_OPTIONS:
+        args.on_meta_error = defaults.DEFAULT.ON_ERROR_DEFAULT
+
+    logger.debug("on_meta_error after: ", args.on_meta_error)
 
     if not args.SONG_NAME and not args.url and not args.list:
         logger.critical("Song Name is required. Check 'ytmdl --help' for help.")
