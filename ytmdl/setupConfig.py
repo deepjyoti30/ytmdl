@@ -226,7 +226,7 @@ def checkValidity(keyword, value):
         if '$' in value:
             pos = value.find('$')
             value = value[:pos]
-        return os.path.isdir(value)
+        return os.path.isdir(os.path.expanduser(value))
     elif keyword == 'QUALITY':
         # Possible values that QUALITY can take
         possQ = ['320', '192']
