@@ -346,7 +346,7 @@ def get_chapters(url):
 
     info = youtube_dl.YoutubeDL(ydl_opts).extract_info(url, False)
 
-    return info["chapters"]
+    return info.get("chapters", None)
 
 
 if __name__ == '__main__':
