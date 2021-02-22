@@ -64,7 +64,8 @@ def search(song_name, args) -> Union[str, str]:
             choice = PASSED_CHOICE - 1
             logger.info("Using {} as choice".format(PASSED_CHOICE))
         else:
-            choice = 0
+            # Extract the verified music result if valid
+            choice = song.get_default(data) - 1
 
         # Check if choice if -2. If it is that, then we need to stop executing
         # of the current song and gracefully exit.

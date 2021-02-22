@@ -376,7 +376,9 @@ def setData(SONG_INFO, is_quiet, song_path, datatype='mp3', choice=None):
     # this is where we define which need it and where to get
     # it from
 
+    logger.debug(choice)
     option = _get_option(SONG_INFO, is_quiet, choice)
+    logger.debug(option)
 
     song = SONG_INFO[option]
 
