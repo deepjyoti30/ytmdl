@@ -145,8 +145,7 @@ def getChoice(SONG_INFO, type):
     # Print 5 of the search results
     # In case less, print all
 
-    prepend.PREPEND(1)
-    print('Choose One {}'.format(
+    logger.info('Choose One {}'.format(
                         '(One with [M] is verified music)'
                         if type == 'mp3' else ''))
 
@@ -167,10 +166,14 @@ def getChoice(SONG_INFO, type):
         prepend.PREPEND(1)
         choice = IntPrompt.ask('Enter Choice', default=default_choice)
 
+        logger.debug(choice)
         choice = int(choice)
 
-        # If the choice is 6 then try to print more results
-        if choice <= results and choice > 0:
+        # If the choice is 0 then try to print more results
+        # The choice is valid if it is in the range and it is greater than 0
+        # We also need to break when the user enters -1 which means the exec
+        # will skip the current song
+        if (choice <= len(SONG_INFO) and choice > 0) or choice == -1:
             break
         elif choice == 0 and results < len(SONG_INFO):
             PRINT_WHOLE = True
@@ -179,9 +182,7 @@ def getChoice(SONG_INFO, type):
         else:
             PRINT_WHOLE = False
 
-    choice = int(choice)
-    choice -= 1
-    return choice
+    return choice - 1
 
 
 def set_MP3_data(song, song_path):
@@ -375,7 +376,9 @@ def setData(SONG_INFO, is_quiet, song_path, datatype='mp3', choice=None):
     # this is where we define which need it and where to get
     # it from
 
+    logger.debug(choice)
     option = _get_option(SONG_INFO, is_quiet, choice)
+    logger.debug(option)
 
     song = SONG_INFO[option]
 

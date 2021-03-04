@@ -93,6 +93,12 @@ def arguments():
     metadata_group.add_argument("--disable-sort", help="Disable sorting of the metadata \
                         before asking for input. Useful if the song is in some other language \
                         and/or just a few providers are used.", action="store_true")
+    metadata_group.add_argument("--ask-meta-name", help="Ask the user to enter a seperate \
+                        name for searching the metadata (Default: false)", action="store_true")
+    metadata_group.add_argument("--on-meta-error", help="What to do if adding the metadata fails \
+                        for some reasong like lack of metadata or perhaps a network issue. \
+                        Options are {}".format(defaults.DEFAULT.ON_ERROR_OPTIONS),
+                        type=str, default=None)
 
     parser.add_argument('--proxy', help='Use the specified HTTP/HTTPS/SOCKS proxy. To enable '
                         'SOCKS proxy, specify a proper scheme. For example '
@@ -228,6 +234,11 @@ def main(args):
 
     link, yt_title = search(song_name=song_name, args=args)
 
+    # Check if this song is supposed to be skipped.
+    if not link:
+        logger.warning("Skipping this song!")
+        return
+
     # Try to download the song
     # TODO: Change the way ignore-errors is used in order to handle playlists
     try:
@@ -331,12 +342,15 @@ def post_processing(
     try:
         track_selected = meta(conv_name, song_name, song_metadata, args)
     except NoMetaError as no_meta_error:
-        if not args.ignore_errors:
-            logger.critical(str(no_meta_error), ". Pass `--ignore-errors` to ignore this.")
+        if args.on_meta_error == 'skip':
+            if dir.dry_cleanup(conv_name, song_name):
+                logger.info("Done")
+        elif not args.ignore_errors or args.on_meta_error == 'exit':
+            logger.critical(str(no_meta_error), ". Pass `--ignore-errors` or `on-meta-error` to ignore this.")
         return
     except MetadataError as metadata_error:
         if not args.ignore_errors:
-            logger.critical(str(metadata_error), ". Pass `--ignore-errors` to ignore this.")
+            logger.critical(str(metadata_error), ". Pass `--ignore-errors` or `on-meta-error` to ignore this.")
         return
 
     if dir.cleanup([track_selected], 0, passed_format, remove_cached=False):
@@ -374,6 +388,14 @@ def pre_checks(args):
     if args.get_opts:
         print(" ".join(("--{}".format(opt.replace("_", "-")) for opt in vars(args))))
         exit(0)
+
+    # Extract on-meta-error
+    logger.debug("on_meta_error before: ", str(args.on_meta_error))
+    on_meta_error = args.on_meta_error
+    if on_meta_error not in defaults.DEFAULT.ON_ERROR_OPTIONS:
+        args.on_meta_error = defaults.DEFAULT.ON_ERROR_DEFAULT
+
+    logger.debug("on_meta_error after: ", args.on_meta_error)
 
     if not args.SONG_NAME and not args.url and not args.list:
         logger.critical("Song Name is required. Check 'ytmdl --help' for help.")

@@ -64,7 +64,13 @@ def search(song_name, args) -> Union[str, str]:
             choice = PASSED_CHOICE - 1
             logger.info("Using {} as choice".format(PASSED_CHOICE))
         else:
-            choice = 0
+            # Extract the verified music result if valid
+            choice = song.get_default(data) - 1
+
+        # Check if choice if -2. If it is that, then we need to stop executing
+        # of the current song and gracefully exit.
+        if choice == -2:
+            return False, False
 
         return (
             YOUTUBE_LINK_BASE.format(data[choice]["href"]),
@@ -198,6 +204,10 @@ def meta(conv_name: str, song_name: str, search_by: str, args):
     PASSED_FORMAT = args.format
     IS_QUIET = args.quiet
 
+    # Check if the user wants a new name for metadata
+    if args.ask_meta_name:
+        search_by = utility.get_new_meta_search_by(search_by)
+
     if args.manual_meta:
         # Read the values from the user.
         TRACK_INFO = manual.get_data(song_name)
@@ -214,7 +224,12 @@ def meta(conv_name: str, song_name: str, search_by: str, args):
 
     # If no meta was found raise error
     if not TRACK_INFO:
-        raise NoMetaError(search_by)
+        # Check if we are supposed to add manual meta
+        if args.on_meta_error != "manual":
+            raise NoMetaError(search_by)
+
+        TRACK_INFO = manual.get_data(song_name)
+        return TRACK_INFO
 
     logger.info('Setting data...')
     option = song.setData(TRACK_INFO, IS_QUIET, conv_name, PASSED_FORMAT,

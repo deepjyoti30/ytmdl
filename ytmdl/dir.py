@@ -34,6 +34,7 @@ def cleanup(TRACK_INFO, index, datatype, remove_cached=True):
         SONG_NAME = os.path.basename(SONG)
 
         DIR = defaults.DEFAULT.SONG_DIR
+        logger.debug(DIR)
 
         # Check if DIR has $ in its path
         # If it does then make those folders accordingly
