@@ -98,7 +98,7 @@ def arguments():
     metadata_group.add_argument("--on-meta-error", help="What to do if adding the metadata fails \
                         for some reasong like lack of metadata or perhaps a network issue. \
                         Options are {}".format(defaults.DEFAULT.ON_ERROR_OPTIONS),
-                        type=str, default=None)
+                        type=str, default='manual')
 
     parser.add_argument('--proxy', help='Use the specified HTTP/HTTPS/SOCKS proxy. To enable '
                         'SOCKS proxy, specify a proper scheme. For example '
@@ -174,7 +174,7 @@ def arguments():
             want to use a different name and continue accordingly.",
         action="store_true"
     )
-    
+
     logger_group = parser.add_argument_group("Logger")
     logger_group.add_argument(
         "--level",
@@ -285,10 +285,10 @@ def main(args):
             post_processing(
                 song_title,
                 song_metadata,
-                passed_format, 
-                path, 
-                start_time, 
-                end_time, 
+                passed_format,
+                path,
+                start_time,
+                end_time,
                 args
             )
         except Exception as e:
@@ -315,7 +315,7 @@ def post_processing(
     args: object
 ) -> None:
     """Handle all the activities post search of the song.
-    
+
     This function will handle the following:
     Convert, Trim, Metadata, Cleaning up.
     """

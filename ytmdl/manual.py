@@ -98,6 +98,7 @@ def get_data(query_name):
     meta = Meta()
     meta.track_name = query_name
     meta.read_values()
+    logger.debug('Manually retrieved metadata.')
     return [meta]
 
 

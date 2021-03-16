@@ -229,13 +229,17 @@ def meta(conv_name: str, song_name: str, search_by: str, args):
             raise NoMetaError(search_by)
 
         TRACK_INFO = manual.get_data(song_name)
+        song.setData(TRACK_INFO, IS_QUIET, conv_name, PASSED_FORMAT, args.choice)
         return TRACK_INFO
 
     logger.info('Setting data...')
     option = song.setData(TRACK_INFO, IS_QUIET, conv_name, PASSED_FORMAT,
                           args.choice)
-
-    if type(option) is not int:
+    if option == '~':
+        TRACK_INFO = manual.get_data(song_name)
+        song.setData(TRACK_INFO, IS_QUIET, conv_name, PASSED_FORMAT, args.choice)
+        return TRACK_INFO
+    elif type(option) is not int:
         raise MetadataError(search_by)
 
     return TRACK_INFO[option]
