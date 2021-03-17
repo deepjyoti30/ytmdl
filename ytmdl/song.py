@@ -22,7 +22,7 @@ from mutagen.flac import Picture
 from base64 import b64encode
 import requests
 import os
-from rich.prompt import IntPrompt
+from rich.prompt import Prompt
 
 from ytmdl import prepend, defaults
 from simber import Logger
@@ -119,6 +119,15 @@ def print_choice(beg, end, SONG_INFO, type):
         print(' More results')
         print(Style.RESET_ALL, end='')
 
+    # Always include an option to manually specify metadata.
+    if type == 'metadata':
+        print(Fore.LIGHTMAGENTA_EX, end='')
+        print(' [~]', end='')
+        print(Style.RESET_ALL, end='')
+        print(Fore.YELLOW, end='')
+        print(' Manual Entry')
+        print(Style.RESET_ALL, end='')
+
 
 def get_default(songs, type="mp3") -> int:
     """Get the default song that will be selected if the user
@@ -164,26 +173,33 @@ def getChoice(SONG_INFO, type):
         if PRINT_WHOLE:
             print_choice(beg, results, SONG_INFO, type)
         prepend.PREPEND(1)
-        choice = IntPrompt.ask('Enter Choice', default=default_choice)
-
+        valid_choices = [*range(-1, len(SONG_INFO) + 1)]
+        valid_choices = list(map(str, valid_choices))
+        valid_choices.append('~')
+        logger.debug(valid_choices)
+        choice = Prompt.ask('Enter Choice', choices=valid_choices, default=default_choice, show_choices=False)
         logger.debug(choice)
-        choice = int(choice)
 
-        # If the choice is 0 then try to print more results
-        # The choice is valid if it is in the range and it is greater than 0
-        # We also need to break when the user enters -1 which means the exec
-        # will skip the current song
-        if (choice <= len(SONG_INFO) and choice > 0) or choice == -1:
-            break
-        elif choice == 0 and results < len(SONG_INFO):
-            PRINT_WHOLE = True
-            beg = results
-            results = beg + 5
+        if choice != '~':
+            choice = int(choice)
+
+            # If the choice is 0 then try to print more results
+            # The choice is valid if it is in the range and it is greater than 0
+            # We also need to break when the user enters -1 which means the exec
+            # will skip the current song
+            if (choice <= len(SONG_INFO) and choice > 0) or choice == -1:
+                break
+            elif choice == 0 and results < len(SONG_INFO):
+                PRINT_WHOLE = True
+                beg = results
+                results = beg + 5
+            else:
+                PRINT_WHOLE = False
+
+        # The user has opted to manually enter metadata for this song.
         else:
-            PRINT_WHOLE = False
-
+            return '~'
     return choice - 1
-
 
 def set_MP3_data(song, song_path):
     """
@@ -364,9 +380,11 @@ def _get_option(SONG_INFO, is_quiet, choice):
     if len(SONG_INFO) > 1:
         if not is_quiet:
             option = getChoice(SONG_INFO, 'metadata')
+            if option != '~':
+                option = int(choice)
         elif choice is not None and choice in range(1, len(SONG_INFO)):
-            option = choice
-    return int(option)
+            option = int(choice)
+    return option
 
 
 def setData(SONG_INFO, is_quiet, song_path, datatype='mp3', choice=None):
@@ -380,47 +398,52 @@ def setData(SONG_INFO, is_quiet, song_path, datatype='mp3', choice=None):
     option = _get_option(SONG_INFO, is_quiet, choice)
     logger.debug(option)
 
-    song = SONG_INFO[option]
+    if option != '~':
+        song = SONG_INFO[option]
 
-    get_more_data_dict = preconfig.CONFIG().GET_EXTRA_DATA
+        get_more_data_dict = preconfig.CONFIG().GET_EXTRA_DATA
 
-    # Try to check if the song object has an attribute provider
-    # Deezer has it but other objects don't have it.
-    # If the provider is present then fetch extra data accordingly
+        # Try to check if the song object has an attribute provider
+        # Deezer has it but other objects don't have it.
+        # If the provider is present then fetch extra data accordingly
 
-    if hasattr(song, 'provider') and song.provider in get_more_data_dict:
-        song = get_more_data_dict.get(song.provider, lambda _: None)(song)
+        if hasattr(song, 'provider') and song.provider in get_more_data_dict:
+            song = get_more_data_dict.get(song.provider, lambda _: None)(song)
 
-    if datatype == 'mp3':
-        img_added = set_MP3_data(
-            song,
-            song_path,
-        )
-    elif datatype == 'm4a':
-        img_added = set_M4A_data(
-            song,
-            song_path,
-        )
-    elif datatype == 'opus':
-        img_added = set_OPUS_data(
-            song,
-            song_path
-        )
+        if datatype == 'mp3':
+            img_added = set_MP3_data(
+                song,
+                song_path,
+            )
+        elif datatype == 'm4a':
+            img_added = set_M4A_data(
+                song,
+                song_path,
+            )
+        elif datatype == 'opus':
+            img_added = set_OPUS_data(
+                song,
+                song_path
+            )
 
-    # Show the written stuff in a better format
-    prepend.PREPEND(1)
-    print('================================')
-    print('  || YEAR: ' + song.release_date)
-    print('  || TITLE: ' + song.track_name)
-    print('  || ARTIST: ' + song.artist_name)
-    print('  || ALBUM: ' + song.collection_name)
-    print('  || GENRE: ' + song.primary_genre_name)
-    print('  || TRACK NO: ' + str(song.track_number))
+        # Show the written stuff in a better format
+        prepend.PREPEND(1)
+        print('================================')
+        print('  || YEAR: ' + song.release_date)
+        print('  || TITLE: ' + song.track_name)
+        print('  || ARTIST: ' + song.artist_name)
+        print('  || ALBUM: ' + song.collection_name)
+        print('  || GENRE: ' + song.primary_genre_name)
+        print('  || TRACK NO: ' + str(song.track_number))
 
-    if img_added:
-        print('  || ALBUM COVER ADDED')
+        if img_added:
+            print('  || ALBUM COVER ADDED')
 
-    prepend.PREPEND(1)
-    print('================================')
+        prepend.PREPEND(1)
+        print('================================')
+
+    # Otherwise, the user has opted to enter metadata manually.
+    else:
+        logger.debug('The user is manually entering metadata ...')
 
     return option
