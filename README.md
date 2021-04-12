@@ -206,6 +206,7 @@ Metadata:
                         song to the destination directory. '--manual-meta'
                         will override this option, pass only one of them.
   -m, --manual-meta     Manually enter song details.
+  --itunes-id           Direct lookup from iTunes by id.
   --disable-sort        Disable sorting of the metadata before asking for
                         input. Useful if the song is in some other language
                         and/or just a few providers are used.
