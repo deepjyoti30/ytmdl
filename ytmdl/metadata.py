@@ -84,6 +84,19 @@ def get_from_musicbrainz(SONG_NAME):
         return None
 
 
+def lookup_from_itunes(ID):
+    """Lookup metadata by id using itunespy."""
+    # Try to get the song data from itunes
+    try:
+        SONG_INFO = itunespy.lookup_track(int(ID))
+        # Only keep track results
+        SONG_INFO = [i for i in SONG_INFO if i.type == 'track']
+        return SONG_INFO
+    except Exception as e:
+        _logger_provider_error(e, 'iTunes')
+        return None
+
+
 def _search_tokens(song_name, song_list):
     """Search song in the cache based on simple each word matching."""
     song_name = remove_punct(
