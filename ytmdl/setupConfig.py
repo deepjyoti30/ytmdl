@@ -73,6 +73,12 @@ config_text = '''#*****************************************#
 # "{{supported_on_error_options}}"
 #
 #ON_META_ERROR = "exit"
+#****************************************#
+# ITUNES SETTINGS
+# Which region to use while searching from Itunes.
+#
+# By default, 'US' will be used.
+#ITUNES_COUNTRY = "US"
 #'''
 
 
@@ -112,6 +118,10 @@ class DEFAULTS:
         self.ON_ERROR_OPTIONS = ['exit', 'skip', 'manual']
 
         self.ON_ERROR_DEFAULT = 'exit'
+
+        # Itunes related settings
+        self.ITUNES_COUNTRY_DEFAULT = "US"
+    
 
     def _get_music_dir(self):
         """Get the dir the file will be saved to."""
@@ -279,6 +289,15 @@ def checkValidity(keyword, value):
             return False
         return True
 
+    elif keyword == "ITUNES_COUNTRY":
+        if not value:
+            logger.warning("Itunes Country value is empty. \
+                Default will be used")
+            return False
+
+        # TODO: Perhaps check if valid country
+        return True
+
 
 def retDefault(keyword):
     """Return the DEFAULT value of keyword."""
@@ -292,6 +311,8 @@ def retDefault(keyword):
         return DEFAULTS().METADATA_PROVIDERS
     elif keyword == "ON_META_ERROR":
         return DEFAULTS().ON_ERROR_DEFAULT
+    elif keyword == "ITUNES_COUNTRY":
+        return DEFAULTS().ITUNES_COUNTRY_DEFAULT
 
 
 def GIVE_DEFAULT(self, keyword):
