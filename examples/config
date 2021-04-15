@@ -65,4 +65,10 @@
 # exit, skip, manual
 #
 #ON_META_ERROR = "exit"
+#****************************************#
+# ITUNES SETTINGS
+# Which region to use while searching from Itunes.
+#
+# By default, 'US' will be used.
+#ITUNES_COUNTRY = "US"
 #
