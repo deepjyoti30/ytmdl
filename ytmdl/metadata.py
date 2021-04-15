@@ -27,7 +27,9 @@ def get_from_itunes(SONG_NAME):
     """Try to download the metadata using itunespy."""
     # Try to get the song data from itunes
     try:
-        SONG_INFO = itunespy.search_track(SONG_NAME)
+        # Get the country from the config
+        country = defaults.DEFAULT.ITUNES_COUNTRY
+        SONG_INFO = itunespy.search_track(SONG_NAME, country=country)
         return SONG_INFO
     except Exception as e:
         _logger_provider_error(e, 'iTunes')
