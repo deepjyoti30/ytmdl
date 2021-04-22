@@ -90,7 +90,10 @@ def lookup_from_itunes(ID):
     """Lookup metadata by id using itunespy."""
     # Try to get the song data from itunes
     try:
-        SONG_INFO = itunespy.lookup_track(int(ID))
+        # Get the country from the config
+        country = defaults.DEFAULT.ITUNES_COUNTRY
+        SONG_INFO = itunespy.lookup_track(int(ID), country=country)
+
         # Only keep track results
         SONG_INFO = [i for i in SONG_INFO if i.type == 'track']
         return SONG_INFO
