@@ -26,6 +26,7 @@ class DeezerSongs():
         self.provider = 'deezer'
         self.collection_id = SONG['album']['id']
         self.track_id = SONG['id']
+        self.track_number = "1"
         self.collection_name = SONG['album']['title']
         self.artwork_url_100 = SONG['album']['cover_medium']
         self.track_time = self._convert_time(SONG['duration'])
