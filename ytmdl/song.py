@@ -278,6 +278,7 @@ def set_M4A_data(song, song_path):
         audio["\xa9ART"] = song.artist_name
         audio["\xa9day"] = song.release_date
         audio["\xa9gen"] = song.primary_genre_name
+        audio["trkn"] = [(song.track_number, song.track_count)]
 
         # Adding track number would probably thwor some kind
         # of render error, will leave for later
