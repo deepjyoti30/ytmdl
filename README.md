@@ -270,6 +270,7 @@ As of the latest development branch, the following options can be changed from t
 | `METADATA_PROVIDERS` | Which API providers to use for metadata            | all supported options are used |
 | `DEFAULT_FORMAT`     | Default format of the song                         | mp3                            |
 | `ON_META_ERROR`      | What to do if error occurs while writing meta      | exit                           |
+| `ITUNES_COUNTRY`     | Which region to use while searching from Itunes    | US                             |
 
 ### Advanced Configuration
 
