@@ -286,7 +286,7 @@ def set_M4A_data(song, song_path):
         track_count = song.track_count if hasattr(song, 'track_count') else "1"
         logger.debug("Adding track count")
         logger.debug(f"Count: {track_count}")
-        audio["trkn"] = [(song.track_number, track_count)]
+        audio["trkn"] = [(int(song.track_number), int(track_count))]
 
         audio.save()
 
