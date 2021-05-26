@@ -146,8 +146,8 @@ def getChoice(SONG_INFO, type):
     # In case less, print all
 
     logger.info('Choose One {}'.format(
-                        '(One with [M] is verified music)'
-                        if type == 'mp3' else ''))
+        '(One with [M] is verified music)'
+        if type == 'mp3' else ''))
 
     results = len(SONG_INFO)
 
@@ -278,10 +278,13 @@ def set_M4A_data(song, song_path):
         audio["\xa9ART"] = song.artist_name
         audio["\xa9day"] = song.release_date
         audio["\xa9gen"] = song.primary_genre_name
-        audio["trkn"] = [(song.track_number, song.track_count)]
 
-        # Adding track number would probably thwor some kind
-        # of render error, will leave for later
+        # NOTE: In m4a files, the track number is of the following format
+        # track number / track count
+        # However, we don't have track count for all songs, so
+        # we'll have to find a fallback for that.
+        track_count = song.track_count if hasattr(song, 'track_count') else "1"
+        audio["trkn"] = [(song.track_number, track_count)]
 
         audio.save()
 
@@ -330,7 +333,7 @@ def set_OPUS_data(song, song_path):
             picture.mime = "image/jpeg"
             encoded_data = b64encode(picture.write())
             mutagen_file["metadata_block_picture"] = encoded_data.decode(
-                                                     "ascii")
+                "ascii")
 
             # Remove the image
             os.remove(defaults.DEFAULT.COVER_IMG)
