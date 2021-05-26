@@ -90,6 +90,7 @@ def arguments():
                         action="store_true")
     metadata_group.add_argument('-m', '--manual-meta', help="Manually enter song\
                         details.", action="store_true")
+    metadata_group.add_argument('--itunes-id', help="Direct lookup from itunes.")
     metadata_group.add_argument("--disable-sort", help="Disable sorting of the metadata \
                         before asking for input. Useful if the song is in some other language \
                         and/or just a few providers are used.", action="store_true")
@@ -277,8 +278,11 @@ def main(args):
             song_metadata = song.get("title")
 
             # Ask the user if they would like to change the name
+            #
+            # NOTE: Check if skip meta is passed, we don't need to
+            # extract the new title.
             song_metadata = utility.get_new_title(song_metadata) if \
-                not args.keep_chapter_name else song_metadata
+                not (args.keep_chapter_name and args.skip_meta) else song_metadata
 
         # Pass the song for post processing
         try:
@@ -397,6 +401,9 @@ def pre_checks(args):
 
     logger.debug("on_meta_error after: ", args.on_meta_error)
 
+    # Check the Itunes Country value
+    logger.debug("itunes_country:", defaults.DEFAULT.ITUNES_COUNTRY)
+
     if not args.SONG_NAME and not args.url and not args.list:
         logger.critical("Song Name is required. Check 'ytmdl --help' for help.")
 
@@ -421,7 +428,11 @@ def extract_song_name(args) -> str:
 
     # Ask the user if they want to go with the extracted
     # title or if they would like to change it.
-    if not args.title_as_name:
+    #
+    # NOTE: We don't need the song name if the meta is to be
+    # skipped. So we can skip the next step if --skip-meta is
+    # passed.
+    if not args.title_as_name and not args.skip_meta:
         song_name = utility.get_new_title(song_name)
 
     return song_name

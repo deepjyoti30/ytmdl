@@ -2,6 +2,12 @@
 
 When contributing to this repository, please first discuss the change you wish to make via issue, email, or any other method with the owners of this repository before making a change.
 
+## Branch
+
+> TL;DR: Make the PR's to the `unstable` branch instead of the `master` branch.
+
+Even though the default branch is set to `master`, the actual development happens in the `unstable` branch and thus, all the PR's should be made to the `unstable` branch. The `master` branch is directly used for beta builds (eg: the `-git` version in AUR).
+
 ## Git
 
 - Make sure the commit message is short, simple and easy to understand.

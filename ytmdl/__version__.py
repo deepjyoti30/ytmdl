@@ -1,2 +1,2 @@
 # Store the version of the package
-__version__ = "2021.03.04"
+__version__ = "2021.05.26-dev"

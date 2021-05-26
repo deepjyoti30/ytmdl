@@ -22,7 +22,7 @@ class LastFMSongs():
         self.track_name = SONG['name']
         self.artist_name = SONG['artist']
         self.provider = 'lastfm'
-        self.track_number = ""
+        self.track_number = "1"
         self.collection_name = ""
         self.release_date = ""
         self.artwork_url_100 = SONG["image"][-1]["#text"]
@@ -64,7 +64,8 @@ def get_more_data(song):
 
     try:
         song.collection_name = track_details["track"]["album"]["title"]
-        song.track_time = song._convert_time(track_details["track"]["duration"])
+        song.track_time = song._convert_time(
+            track_details["track"]["duration"])
         song.release_date = track_details["track"]["wiki"]["published"]
     except KeyError:
         # This happens because last.fm do not have consistent data for some songs
