@@ -286,14 +286,14 @@ To save the song in the `/dir/<album_name>/<artist_name>/<title>/<song_name>.mp3
 SONG_DIR="/dir$Album->Artist->Title"
 ```
 
-Above will extract to the following directory structure when a song named `Internet` by artist `Post Malone` from the album `Hollywood's Bleeding`
+Above will extract to the following directory structure when a song named `Cradles` by artist `Sub Urban` from the album `Cradles - Single`
 
 ```
 |--dir
-   |--Hollywood's Bleeding
-      |--Post Malone
-         |--Internet
-            |--Internet.mp3
+   |--Cradles - Single
+      |--Sub Urban
+         |--Cradles
+            |--Cradles.mp3
 ```
 
 In order to pass the name with which the song should be saved, the last attribute can be passed between `[]`.
@@ -302,8 +302,8 @@ If the `SONG_DIR` field is `/dir$Album->[Artist]` will extract to the following 
 
 ```
 |--dir
-   |--Hollywood's Bleeding
-      |--Post Malone.mp3
+   |--Cradles - Single
+      |--Sub Urban.mp3
 ```
 
 #### Supported options for dynamic storing
