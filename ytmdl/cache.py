@@ -40,19 +40,19 @@ class Cache:
         files = []
         for depth in range(0, self.max_depth):
             pattern = '{}{}{}*'.format(
-                                    self.directory,
-                                    '{}'.format(os.sep).join(depth * ['*']),
-                                    song_name
-                                )
+                self.directory,
+                '{}'.format(os.sep).join(depth * ['*']),
+                song_name
+            )
             files.extend(glob(pattern))
 
         return files
 
     def search(self, song_name):
         logger.info(
-                "Searching to see if already present in {}".format(
-                    self.directory)
-            )
+            "Searching to see if already present in {}".format(
+                self.directory)
+        )
         return len(self._get_files(song_name))
 
 
@@ -78,4 +78,4 @@ def main(SONG_NAME=''):
 
 
 if __name__ == "__main__":
-    main("Rockstar")
+    main("Cradles")

@@ -232,7 +232,7 @@ def SEARCH_SONG(q="Tera Buzz", filters=[], disable_sort=False):
 
 
 if __name__ == '__main__':
-    n = SEARCH_SONG("That's what I like", ["Bruno Mars", None])
+    n = SEARCH_SONG("Cradles", ["Sub Urban", None])
 
     for i in n:
         print(i.track_name + ' by ' + i.artist_name + ' of ' + i.collection_name)
