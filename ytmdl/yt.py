@@ -340,7 +340,7 @@ def extract_video_id(url: str) -> str:
     Extract the video ID from the URL.
     """
     try:
-        return parse_qs(urlparse(url=url).query)["videoId"]
+        return parse_qs(urlparse(url=url).query)["v"][0]
     except KeyError:
         raise ExtractError(url)
 
