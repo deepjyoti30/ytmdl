@@ -34,5 +34,4 @@ def get_title_from_ytmusic(videoId: str) -> str:
     try:
         return details["videoDetails"]["title"]
     except KeyError:
-        logger.error("Wasn't able to extract the name of the song.")
-        return ""
+        raise ExtractError(videoId)
