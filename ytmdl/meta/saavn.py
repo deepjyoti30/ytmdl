@@ -137,7 +137,8 @@ def get_song_id(query):
     songs = []
     try:
         res = requests.get(url, headers=headers, data=[('bitrate', '320')])
-        id = res.text.split('"song":{"type":"')[1].split('","image":')[0].split('"id":"')[-1]
+        id = res.text.split('"song":{"type":"')[1].split(
+            '","image":')[0].split('"id":"')[-1]
         return id
     except Exception as e:
         print_exc()

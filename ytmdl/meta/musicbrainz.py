@@ -81,6 +81,6 @@ def get_more_data(song):
 
 
 if __name__ == "__main__":
-    data = search_song("Takin' Shots")
+    data = search_song("Cradles")
     for i in data:
         print("{}:{}".format(i.track_name, i.artist_name))

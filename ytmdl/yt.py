@@ -49,10 +49,10 @@ def progress_handler(d):
 
         percent = d['downloaded_bytes'] / total_bytes * 100
         speed, s_unit, time_left, time_unit = d_obj._get_speed_n_time(
-                    d['downloaded_bytes'],
-                    0,
-                    cur_time=d['elapsed'] - 6
-                )
+            d['downloaded_bytes'],
+            0,
+            cur_time=d['elapsed'] - 6
+        )
 
         status = r"%-7s" % ("%s %s" % (round(f_size_disp), dw_unit))
         if d['speed'] is not None:
@@ -60,8 +60,8 @@ def progress_handler(d):
             status += r"| %-3s " % ("%s %s" % (round(speed), s_unit))
 
         status += r"|| ETA: %-4s " % (
-                                    "%s %s" %
-                                    (round(time_left), time_unit))
+            "%s %s" %
+            (round(time_left), time_unit))
 
         status = d_obj._get_bar(status, length, percent)
         status += r" %-4s" % ("{}%".format(round(percent)))
@@ -113,7 +113,7 @@ def dw(
         song_name='ytmdl_temp.mp3',
         datatype='mp3',
         no_progress=False
-        ):
+):
     """
     Download the song.
 
@@ -256,12 +256,12 @@ def is_playlist(url):
 
 
 def get_playlist(
-            url,
-            proxy,
-            playlist_start=None,
-            playlist_end=None,
-            playlist_items=None
-        ):
+    url,
+    proxy,
+    playlist_start=None,
+    playlist_end=None,
+    playlist_items=None
+):
     """
     Extract the playlist data and return it accordingly.
 
@@ -314,10 +314,10 @@ def get_title(url):
     Return the title of the passed URL.
     """
     ydl_opts = {
-            "quiet": True,
-            'nocheckcertificate': True,
-            'source_address': '0.0.0.0'
-        }
+        "quiet": True,
+        'nocheckcertificate': True,
+        'source_address': '0.0.0.0'
+    }
 
     logger.debug(url)
 
@@ -335,8 +335,6 @@ def get_title(url):
 
 def get_chapters(url):
     """Get the chapters of the passed URL.
-
-    An example video: https://www.youtube.com/watch?v=Yxd-X8P-GtY
     """
     ydl_opts = {
         "quiet": True,
