@@ -3,6 +3,7 @@
 
 import requests
 import os
+from urllib.parse import urlparse, parse_qs
 import youtube_dl
 from youtube_dl.utils import DownloadError
 from re import match
@@ -334,6 +335,16 @@ def __get_title_from_yt(url):
         return ""
 
 
+def extract_video_id(url: str) -> str:
+    """
+    Extract the video ID from the URL.
+    """
+    try:
+        return parse_qs(urlparse(url=url).query)["videoId"]
+    except KeyError:
+        raise ExtractError(url)
+
+
 def get_title(url) -> str:
     """
     Try to get the title of the song.
@@ -349,9 +360,8 @@ def get_title(url) -> str:
     verify_title = False
 
     try:
-        title = get_title_from_ytmusic()
-        if title != "":
-            return title, verify_title
+        title = get_title_from_ytmusic(extract_video_id(url=url))
+        return title, verify_title
     except ExtractError:
         pass
 
