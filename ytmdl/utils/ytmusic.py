@@ -2,11 +2,17 @@
 Handle all the util functions for working with YouTube Music.
 """
 
-
 from ytmusicapi import YTMusic
+from simber import Logger
+
+from ytmdl.exceptions import ExtractError
 
 
-def get_title() -> str:
+# Create logger
+logger = Logger("ytmusic")
+
+
+def get_title(videoId: str) -> str:
     """
     Get the title of the song from the videoID.
 
@@ -17,4 +23,16 @@ def get_title() -> str:
     This is way more effective and correct than
     extracting the title from the YouTube video.
     """
-    pass
+    ytmusic = YTMusic()
+
+    details = ytmusic.get_song(videoId=videoId)
+
+    # Check if error occured
+    if details["playabilityStatus"]["status"] != "OK":
+        raise ExtractError(videoId)
+
+    try:
+        return details["videoDetails"]["title"]
+    except KeyError:
+        logger.error("Wasn't able to extract the name of the song.")
+        return ""
