@@ -438,7 +438,7 @@ def extract_song_name(args) -> str:
     # NOTE: We don't need the song name if the meta is to be
     # skipped. So we can skip the next step if --skip-meta is
     # passed.
-    if not args.title_as_name and not args.skip_meta and not verify_title:
+    if not args.title_as_name and not args.skip_meta and verify_title:
         song_name = utility.get_new_title(song_name)
 
     return song_name
