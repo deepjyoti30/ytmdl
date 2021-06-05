@@ -12,7 +12,7 @@ from ytmdl.exceptions import ExtractError
 logger = Logger("ytmusic")
 
 
-def get_title(videoId: str) -> str:
+def get_title_from_ytmusic(videoId: str) -> str:
     """
     Get the title of the song from the videoID.
 
