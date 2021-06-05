@@ -363,6 +363,7 @@ def get_title(url) -> str:
         title = get_title_from_ytmusic(extract_video_id(url=url))
         return title, verify_title
     except ExtractError:
+        logger.debug(f"YtMusic wasn't able to find title for {url}")
         pass
 
     # Try Youtube as a fallback
