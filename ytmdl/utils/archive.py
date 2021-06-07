@@ -22,7 +22,7 @@ def read_archive_file(file: str) -> List:
     file_path: Path = Path(file).expanduser()
 
     # Check if the file exists
-    if not file_path.exists:
+    if not file_path.exists():
         logger.critical("Passed archive file does not exist. Exiting!")
 
     file_content: List = file_path.open().read().split("\n")
