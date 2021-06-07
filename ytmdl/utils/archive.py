@@ -4,8 +4,13 @@ Handle the archive related feature.
 
 from pathlib import Path
 from typing import List
+from simber import Logger
 
 from ytmdl.yt import extract_video_id
+
+
+# Create logger
+logger = Logger("archive")
 
 
 def read_archive_file(file: str) -> List:
@@ -14,7 +19,13 @@ def read_archive_file(file: str) -> List:
     passed. This file will be read as text and should contain
     videoId's in each line.
     """
-    file_content: List = Path(file).expanduser().open().read().split("\n")
+    file_path: Path = Path(file).expanduser()
+
+    # Check if the file exists
+    if not file_path.exists:
+        logger.critical("Passed archive file does not exist. Exiting!")
+
+    file_content: List = file_path.open().read().split("\n")
     return file_content
 
 

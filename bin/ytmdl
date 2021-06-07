@@ -34,6 +34,10 @@ from ytmdl.exceptions import (
 from ytmdl.core import (
     search, download, convert, trim, meta
 )
+from ytmdl.utils.archive import (
+    read_archive_file,
+    is_present_in_archive
+)
 from ytmdl.__version__ import __version__
 
 # init colorama for windows
@@ -211,6 +215,12 @@ def main(args):
 
     song_name = extract_song_name(args)
 
+    # Extract the archive file contents
+    is_download_archive = args.download_archive is not None
+
+    if is_download_archive:
+        archive_content = read_archive_file(args.download_archive)
+
     logger.debug(song_name)
     logger.hold()
 
@@ -244,7 +254,10 @@ def main(args):
         logger.warning("Skipping this song!")
         return
 
-    logger.debug(link)
+    # If download archive is passed then skip the song.
+    if is_download_archive and is_present_in_archive(archive_content, link):
+        logger.warning("videoId found in the archive file. Skipping the song!")
+        return
 
     # Try to download the song
     # TODO: Change the way ignore-errors is used in order to handle playlists
