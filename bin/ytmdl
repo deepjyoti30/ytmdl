@@ -34,6 +34,10 @@ from ytmdl.exceptions import (
 from ytmdl.core import (
     search, download, convert, trim, meta
 )
+from ytmdl.utils.archive import (
+    read_archive_file,
+    is_present_in_archive
+)
 from ytmdl.__version__ import __version__
 
 # init colorama for windows
@@ -134,6 +138,9 @@ def arguments():
                         extracted from the chapter in order to search for the metadata. If \
                         not passed, the user will be asked if they'd like to change the title \
                         with which the metadata will be searched.")
+    parser.add_argument("--download-archive", help="Skip downloading songs that are present in \
+                        the passed file. The songs are matched by using the videoId.", default=None,
+                        metavar="FILE")
 
     playlist_group = parser.add_argument_group("Playlist")
     playlist_group.add_argument(
@@ -208,6 +215,12 @@ def main(args):
 
     song_name = extract_song_name(args)
 
+    # Extract the archive file contents
+    is_download_archive = args.download_archive is not None
+
+    if is_download_archive:
+        archive_content = read_archive_file(args.download_archive)
+
     logger.debug(song_name)
     logger.hold()
 
@@ -239,6 +252,11 @@ def main(args):
     # Check if this song is supposed to be skipped.
     if not link:
         logger.warning("Skipping this song!")
+        return
+
+    # If download archive is passed then skip the song.
+    if is_download_archive and is_present_in_archive(archive_content, link):
+        logger.warning("videoId found in the archive file. Skipping the song!")
         return
 
     # Try to download the song
