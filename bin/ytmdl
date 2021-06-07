@@ -244,6 +244,8 @@ def main(args):
         logger.warning("Skipping this song!")
         return
 
+    logger.debug(link)
+
     # Try to download the song
     # TODO: Change the way ignore-errors is used in order to handle playlists
     try:
