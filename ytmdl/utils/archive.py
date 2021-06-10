@@ -40,3 +40,18 @@ def is_present_in_archive(file_content: List, youtube_link: str) -> bool:
     video_id: str = extract_video_id(youtube_link)
 
     return video_id in file_content
+
+
+def add_song_to_archive(stream: TextIOWrapper, youtube_link: str) -> None:
+    """
+    Add the passed song to the archive file.
+
+    This method is supposed to be called when the song
+    is considered `worked on` and not just when the song
+    is just downloaded.
+    """
+    video_id: str = extract_video_id(youtube_link)
+
+    # Go to the end of the file
+    stream.seek(0, 2)
+    stream.write(f"\n${video_id}")
