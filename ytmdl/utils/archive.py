@@ -3,8 +3,9 @@ Handle the archive related feature.
 """
 
 from pathlib import Path
-from typing import List
+from typing import List, Union
 from simber import Logger
+from io import TextIOWrapper
 
 from ytmdl.yt import extract_video_id
 
@@ -13,7 +14,7 @@ from ytmdl.yt import extract_video_id
 logger = Logger("archive")
 
 
-def read_archive_file(file: str) -> List:
+def open_archive_stream(file: str) -> Union[List, TextIOWrapper]:
     """
     Read the archive file and extract all the videoId's
     passed. This file will be read as text and should contain
@@ -25,8 +26,9 @@ def read_archive_file(file: str) -> List:
     if not file_path.exists():
         logger.critical("Passed archive file does not exist. Exiting!")
 
-    file_content: List = file_path.open().read().split("\n")
-    return file_content
+    stream: TextIOWrapper = file_path.open("r+")
+    file_content: List = stream.read().split("\n")
+    return file_content, stream
 
 
 def is_present_in_archive(file_content: List, youtube_link: str) -> bool:

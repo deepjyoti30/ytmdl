@@ -35,7 +35,7 @@ from ytmdl.core import (
     search, download, convert, trim, meta
 )
 from ytmdl.utils.archive import (
-    read_archive_file,
+    open_archive_stream,
     is_present_in_archive
 )
 from ytmdl.__version__ import __version__
@@ -219,7 +219,7 @@ def main(args):
     is_download_archive = args.download_archive is not None
 
     if is_download_archive:
-        archive_content = read_archive_file(args.download_archive)
+        archive_content, stream = open_archive_stream(args.download_archive)
 
     logger.debug(song_name)
     logger.hold()
