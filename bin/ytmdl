@@ -35,8 +35,9 @@ from ytmdl.core import (
     search, download, convert, trim, meta
 )
 from ytmdl.utils.archive import (
-    read_archive_file,
-    is_present_in_archive
+    open_archive_stream,
+    is_present_in_archive,
+    add_song_to_archive
 )
 from ytmdl.__version__ import __version__
 
@@ -139,7 +140,8 @@ def arguments():
                         not passed, the user will be asked if they'd like to change the title \
                         with which the metadata will be searched.")
     parser.add_argument("--download-archive", help="Skip downloading songs that are present in \
-                        the passed file. The songs are matched by using the videoId.", default=None,
+                        the passed file. The songs are matched by using the videoId. All downloaded \
+                        song Id's are automatically added to the file.", default=None,
                         metavar="FILE")
 
     playlist_group = parser.add_argument_group("Playlist")
@@ -219,7 +221,7 @@ def main(args):
     is_download_archive = args.download_archive is not None
 
     if is_download_archive:
-        archive_content = read_archive_file(args.download_archive)
+        archive_content, stream = open_archive_stream(args.download_archive)
 
     logger.debug(song_name)
     logger.hold()
@@ -312,7 +314,10 @@ def main(args):
                 path,
                 start_time,
                 end_time,
-                args
+                args,
+                link,
+                stream,
+                is_download_archive
             )
         except Exception as e:
             if args.ignore_errors:
@@ -335,7 +340,10 @@ def post_processing(
     path: str,
     start_time: float,
     end_time: float,
-    args: object
+    args: object,
+    link: str,
+    stream,
+    is_download_archive: bool
 ) -> None:
     """Handle all the activities post search of the song.
 
@@ -356,6 +364,10 @@ def post_processing(
     logger.debug("Skip Meta: {}".format(args.skip_meta))
 
     if args.skip_meta:
+        # Write to the archive file
+        add_song_to_archive(
+            stream=stream, youtube_link=link) if is_download_archive else None
+
         # Do a dry cleanup
         if dir.dry_cleanup(conv_name, song_name):
             logger.info("Done")
@@ -366,8 +378,12 @@ def post_processing(
         track_selected = meta(conv_name, song_name, song_metadata, args)
     except NoMetaError as no_meta_error:
         if args.on_meta_error == 'skip':
-            if dir.dry_cleanup(conv_name, song_name):
-                logger.info("Done")
+            # Write to the archive file
+            add_song_to_archive(
+                stream=stream, youtube_link=link) if is_download_archive else None
+
+        if dir.dry_cleanup(conv_name, song_name):
+            logger.info("Done")
         elif not args.ignore_errors or args.on_meta_error == 'exit':
             logger.critical(
                 str(no_meta_error), ". Pass `--ignore-errors` or `on-meta-error` to ignore this.")
@@ -377,6 +393,10 @@ def post_processing(
             logger.critical(str(
                 metadata_error), ". Pass `--ignore-errors` or `on-meta-error` to ignore this.")
         return
+
+    # Write to the archive file
+    add_song_to_archive(
+        stream=stream, youtube_link=link) if is_download_archive else None
 
     if dir.cleanup([track_selected], 0, passed_format, remove_cached=False):
         logger.info("Done")
