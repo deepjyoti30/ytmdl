@@ -54,4 +54,4 @@ def add_song_to_archive(stream: TextIOWrapper, youtube_link: str) -> None:
 
     # Go to the end of the file
     stream.seek(0, 2)
-    stream.write(f"\n${video_id}")
+    stream.write(f"\n{video_id}")
