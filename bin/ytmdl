@@ -140,7 +140,8 @@ def arguments():
                         not passed, the user will be asked if they'd like to change the title \
                         with which the metadata will be searched.")
     parser.add_argument("--download-archive", help="Skip downloading songs that are present in \
-                        the passed file. The songs are matched by using the videoId.", default=None,
+                        the passed file. The songs are matched by using the videoId. All downloaded \
+                        song Id's are automatically added to the file.", default=None,
                         metavar="FILE")
 
     playlist_group = parser.add_argument_group("Playlist")

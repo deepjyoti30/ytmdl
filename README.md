@@ -191,7 +191,9 @@ optional arguments:
                         the metadata will be searched.
   --download-archive FILE
                         Skip downloading songs that are present in the passed
-                        file. The songs are matched by using the videoId.
+                        file. The songs are matched by using the videoId. All
+                        downloaded song Id's are automatically added to the
+                        file.
 
 Metadata:
   --song SONG-METADATA  The song to search in Metadata. Particularly useful
