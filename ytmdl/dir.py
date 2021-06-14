@@ -26,9 +26,9 @@ def cleanup(TRACK_INFO, index, datatype, remove_cached=True):
     """Move the song from temp to $HOME/Music dir."""
     try:
         SONG = glob.glob(os.path.join(
-                                defaults.DEFAULT.SONG_TEMP_DIR,
-                                '*{}'.format(datatype)
-                            ))
+            defaults.DEFAULT.SONG_TEMP_DIR,
+            '*{}'.format(datatype)
+        ))
         SONG = SONG[0]
 
         SONG_NAME = os.path.basename(SONG)
@@ -48,7 +48,7 @@ def cleanup(TRACK_INFO, index, datatype, remove_cached=True):
                 SONG = SONG_NAME
 
         dest_filename = os.path.join(
-                            DIR, __replace_special_characters(SONG_NAME))
+            DIR, __replace_special_characters(SONG_NAME))
         shutil.move(SONG, dest_filename)
 
         if remove_cached:
@@ -90,7 +90,7 @@ def ret_proper_names(ordered_names):
                  'Genre': 'primary_genre_name',
                  'TrackNumber': 'track_number',
                  'ReleaseDate': 'release_date'
-                }
+                 }
 
     logger.debug(ordered_names)
     logger.debug(info_dict)
@@ -167,8 +167,7 @@ def make_custom_dir(DIR, TRACK_INFO):
         # issues since those strings are used to create directories.
         # Whenever there is a /, replace it with -
         # Sometimes strings also contains [\,?,",<>] which may cause error
-        dir_name = sub('[\?<>"]',"",dir_name)
-        dir_name = dir_name.replace("/", "-")
+        dir_name = sub('[\\\\?<>/"]', "-", dir_name)
 
         new_dir = os.path.join(base_DIR, dir_name)
 
@@ -202,7 +201,7 @@ def dry_cleanup(current_path, passed_name):
 
         # Create the destination file name
         dest_filename = os.path.join(
-                            DEST, __replace_special_characters(new_basename))
+            DEST, __replace_special_characters(new_basename))
 
         shutil.move(current_path, dest_filename)
 
