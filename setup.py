@@ -11,29 +11,30 @@ with open("README.md", "r") as fh:
 exec(open("ytmdl/__version__.py").read())
 
 req_pkgs = [
-            'youtube_dl',
-            'mutagen',
-            'itunespy',
-            'requests',
-            'colorama',
-            'bs4',
-            'downloader-cli',
-            'pyxdg',
-            'ffmpeg-python',
-            'pysocks',
-            'unidecode',
-            'youtube_search',
-            'pyDes',
-            'urllib3',
-            'simber',
-            'rich',
-            'musicbrainzngs'
-          ]
+    'youtube_dl',
+    'mutagen',
+    'itunespy',
+    'requests',
+    'colorama',
+    'bs4',
+    'downloader-cli',
+    'pyxdg',
+    'ffmpeg-python',
+    'pysocks',
+    'unidecode',
+    'youtube_search',
+    'pyDes',
+    'urllib3',
+    'simber',
+    'rich',
+    'musicbrainzngs',
+    'ytmusicapi'
+]
 
 
 extra_features = {
-            'noise-clean': ['inaSpeechSegmenter', 'tensorflow']
-        }
+    'noise-clean': ['inaSpeechSegmenter', 'tensorflow']
+}
 
 
 # Add the distributable files

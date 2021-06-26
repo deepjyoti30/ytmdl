@@ -150,12 +150,13 @@ You can manually install `ytmdl` by cloning this repository and running the `set
 ```console
 usage: ytmdl [-h] [-q] [--song SONG-METADATA] [--choice CHOICE]
              [--artist ARTIST] [--album ALBUM] [--disable-metaadd]
-             [--skip-meta] [-m] [--disable-sort] [--ask-meta-name]
-             [--on-meta-error ON_META_ERROR] [--proxy URL] [--url URL]
-             [--list PATH TO LIST] [--nolocal] [--format FORMAT] [--trim]
-             [--version] [--keep-chapter-name] [--pl-start NUMBER]
-             [--pl-end NUMBER] [--pl-items ITEM_SPEC] [--ignore-errors]
-             [--title-as-name] [--level LEVEL] [--disable-file] [--list-level]
+             [--skip-meta] [-m] [--itunes-id ITUNES_ID] [--disable-sort]
+             [--ask-meta-name] [--on-meta-error ON_META_ERROR] [--proxy URL]
+             [--url URL] [--list PATH TO LIST] [--nolocal] [--format FORMAT]
+             [--trim] [--version] [--keep-chapter-name]
+             [--download-archive FILE] [--pl-start NUMBER] [--pl-end NUMBER]
+             [--pl-items ITEM_SPEC] [--ignore-errors] [--title-as-name]
+             [--level LEVEL] [--disable-file] [--list-level]
              [SONG_NAME ...]
 
 positional arguments:
@@ -188,6 +189,11 @@ optional arguments:
                         search for the metadata. If not passed, the user will
                         be asked if they'd like to change the title with which
                         the metadata will be searched.
+  --download-archive FILE
+                        Skip downloading songs that are present in the passed
+                        file. The songs are matched by using the videoId. All
+                        downloaded song Id's are automatically added to the
+                        file.
 
 Metadata:
   --song SONG-METADATA  The song to search in Metadata. Particularly useful
@@ -206,7 +212,8 @@ Metadata:
                         song to the destination directory. '--manual-meta'
                         will override this option, pass only one of them.
   -m, --manual-meta     Manually enter song details.
-  --itunes-id           Direct lookup from iTunes by id.
+  --itunes-id ITUNES_ID
+                        Direct lookup from itunes.
   --disable-sort        Disable sorting of the metadata before asking for
                         input. Useful if the song is in some other language
                         and/or just a few providers are used.

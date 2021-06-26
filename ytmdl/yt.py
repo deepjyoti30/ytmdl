@@ -3,6 +3,7 @@
 
 import requests
 import os
+from urllib.parse import urlparse, parse_qs
 import youtube_dl
 from youtube_dl.utils import DownloadError
 from re import match
@@ -13,6 +14,7 @@ from sys import stdout
 from youtube_search import YoutubeSearch
 from simber import Logger
 from ytmdl.exceptions import ExtractError
+from ytmdl.utils.ytmusic import get_title_from_ytmusic
 
 
 logger = Logger("yt")
@@ -309,7 +311,7 @@ def get_playlist(
         return None, None
 
 
-def get_title(url):
+def __get_title_from_yt(url):
     """
     Return the title of the passed URL.
     """
@@ -331,6 +333,43 @@ def get_title(url):
     except KeyError:
         logger.error("Wasn't able to extract the name of the song.")
         return ""
+
+
+def extract_video_id(url: str) -> str:
+    """
+    Extract the video ID from the URL.
+    """
+    try:
+        return parse_qs(urlparse(url=url).query)["v"][0]
+    except KeyError:
+        raise ExtractError(url)
+
+
+def get_title(url) -> str:
+    """
+    Try to get the title of the song.
+
+    This is mostly used when URL is passed or playlist
+    links are passed since in those cases the title is
+    not explicitly passed.
+    """
+    # Primarily try to get the title by using Youtube
+    # Music.
+
+    # If to verify the title from the user
+    verify_title = False
+
+    try:
+        title = get_title_from_ytmusic(extract_video_id(url=url))
+        return title, verify_title
+    except ExtractError:
+        logger.debug(f"YtMusic wasn't able to find title for {url}")
+        pass
+
+    # Try Youtube as a fallback
+    verify_title = True
+    title = __get_title_from_yt(url)
+    return title, verify_title
 
 
 def get_chapters(url):

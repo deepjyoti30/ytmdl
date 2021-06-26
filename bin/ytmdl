@@ -20,12 +20,12 @@ from xdg.BaseDirectory import xdg_cache_home
 from os import path
 from simber import Logger
 from ytmdl import (
-            dir,
-            yt,
-            defaults,
-            setupConfig,
-            cache,
-            utility,
+    dir,
+    yt,
+    defaults,
+    setupConfig,
+    cache,
+    utility,
 )
 from ytmdl.exceptions import (
     DownloadError, ConvertError, NoMetaError, MetadataError,
@@ -33,6 +33,11 @@ from ytmdl.exceptions import (
 )
 from ytmdl.core import (
     search, download, convert, trim, meta
+)
+from ytmdl.utils.archive import (
+    open_archive_stream,
+    is_present_in_archive,
+    add_song_to_archive
 )
 from ytmdl.__version__ import __version__
 
@@ -42,11 +47,11 @@ init()
 LOGGER_OUTTEMPLATE = " %a{}==>{}%".format(Style.BRIGHT, Style.RESET_ALL)
 LOGGER_FILEFORMAT = "[{logger}]:[{time}]: "
 logger = Logger('ytmdl',
-                log_path=path.join(xdg_cache_home,'ytmdl/logs/log.cat'),
+                log_path=path.join(xdg_cache_home, 'ytmdl/logs/log.cat'),
                 format=LOGGER_OUTTEMPLATE,
                 file_format=LOGGER_FILEFORMAT,
                 update_all=True
-)
+                )
 
 
 def arguments():
@@ -64,33 +69,34 @@ def arguments():
                         action='store_true')
     metadata_group = parser.add_argument_group("Metadata")
     metadata_group.add_argument(
-                        '--song', help="The song to search in Metadata. \
+        '--song', help="The song to search in Metadata. \
                         Particularly useful for songs that have the names in a\
                         different language in YouTube. For Example, greek songs.",
-                        metavar='SONG-METADATA', default=None)
+        metavar='SONG-METADATA', default=None)
     metadata_group.add_argument(
-                        '--choice', help="The choice that the user wants\
+        '--choice', help="The choice that the user wants\
                         to go for. Usefull to pass along with --quiet.\
-                        Choices start at 1", choices=range(1,50),
-                        type=int, default=None, metavar="CHOICE")
+                        Choices start at 1", choices=range(1, 50),
+        type=int, default=None, metavar="CHOICE")
     metadata_group.add_argument(
-                        '--artist', help="The name of the song's artist.\
+        '--artist', help="The name of the song's artist.\
                         Pass it with a song name.")
     metadata_group.add_argument(
-                        '--album', help="The name of the song's album.\
+        '--album', help="The name of the song's album.\
                         Pass it with a song name.")
     metadata_group.add_argument('--disable-metaadd', help="Disable addition of\
                         passed artist and album keyword to the youtube search\
                         in order to get a more accurate result. (Default: false)",
-                        action="store_true")
+                                action="store_true")
     metadata_group.add_argument('--skip-meta', help="Skip setting the metadata and\
                         just copy the converted song to the destination directory.\
                         '--manual-meta' will override this option, pass only one\
                         of them.",
-                        action="store_true")
+                                action="store_true")
     metadata_group.add_argument('-m', '--manual-meta', help="Manually enter song\
                         details.", action="store_true")
-    metadata_group.add_argument('--itunes-id', help="Direct lookup from itunes.")
+    metadata_group.add_argument(
+        '--itunes-id', help="Direct lookup from itunes.")
     metadata_group.add_argument("--disable-sort", help="Disable sorting of the metadata \
                         before asking for input. Useful if the song is in some other language \
                         and/or just a few providers are used.", action="store_true")
@@ -99,7 +105,7 @@ def arguments():
     metadata_group.add_argument("--on-meta-error", help="What to do if adding the metadata fails \
                         for some reasong like lack of metadata or perhaps a network issue. \
                         Options are {}".format(defaults.DEFAULT.ON_ERROR_OPTIONS),
-                        type=str, default=None)
+                                type=str, default=None)
 
     parser.add_argument('--proxy', help='Use the specified HTTP/HTTPS/SOCKS proxy. To enable '
                         'SOCKS proxy, specify a proper scheme. For example '
@@ -117,7 +123,7 @@ def arguments():
     parser.add_argument('--format',
                         help="The format in which the song should be downloaded.\
                         Default is mp3, but can be set in config. Available options are\
-                         {}".format(defaults.DEFAULT.VALID_FORMATS), 
+                         {}".format(defaults.DEFAULT.VALID_FORMATS),
                         default=defaults.DEFAULT.DEFAULT_FORMAT,
                         type=str)
     parser.add_argument('--trim', '-t', help="Trim out the audio from the song. Use \
@@ -127,11 +133,16 @@ def arguments():
                         is false.", action='store_true')
     parser.add_argument('--version', action='version', version=__version__,
                         help='show the program version number and exit')
-    parser.add_argument('--get-opts', action="store_true", help=argparse.SUPPRESS)
+    parser.add_argument('--get-opts', action="store_true",
+                        help=argparse.SUPPRESS)
     parser.add_argument("--keep-chapter-name", action="store_true", help="Keep the title \
                         extracted from the chapter in order to search for the metadata. If \
                         not passed, the user will be asked if they'd like to change the title \
                         with which the metadata will be searched.")
+    parser.add_argument("--download-archive", help="Skip downloading songs that are present in \
+                        the passed file. The songs are matched by using the videoId. All downloaded \
+                        song Id's are automatically added to the file.", default=None,
+                        metavar="FILE")
 
     playlist_group = parser.add_argument_group("Playlist")
     playlist_group.add_argument(
@@ -175,7 +186,7 @@ def arguments():
             want to use a different name and continue accordingly.",
         action="store_true"
     )
-    
+
     logger_group = parser.add_argument_group("Logger")
     logger_group.add_argument(
         "--level",
@@ -206,6 +217,12 @@ def main(args):
 
     song_name = extract_song_name(args)
 
+    # Extract the archive file contents
+    is_download_archive = args.download_archive is not None
+
+    if is_download_archive:
+        archive_content, stream = open_archive_stream(args.download_archive)
+
     logger.debug(song_name)
     logger.hold()
 
@@ -232,12 +249,16 @@ def main(args):
     else:
         song_metadata = song_name
 
-
     link, yt_title = search(song_name=song_name, args=args)
 
     # Check if this song is supposed to be skipped.
     if not link:
         logger.warning("Skipping this song!")
+        return
+
+    # If download archive is passed then skip the song.
+    if is_download_archive and is_present_in_archive(archive_content, link):
+        logger.warning("videoId found in the archive file. Skipping the song!")
         return
 
     # Try to download the song
@@ -249,7 +270,8 @@ def main(args):
             logger.info("--ignore-errors passed. Skipping this song!")
             return
 
-        logger.critical("ERROR: {}".format(dw_error), ". Pass `--ignore-errors` to ignore this.")
+        logger.critical("ERROR: {}".format(dw_error),
+                        ". Pass `--ignore-errors` to ignore this.")
         return
 
     # Try to extract the chapters
@@ -259,7 +281,7 @@ def main(args):
     # If the chapters are present, we will have to iterate and extract each chapter
     if chapters:
         logger.info("The song has chapters in it.",
-            "Each part will be extracted and worked accordingly.")
+                    "Each part will be extracted and worked accordingly.")
 
         songs_to_download.clear()
         for chapter in chapters:
@@ -270,7 +292,6 @@ def main(args):
         song_title = song.get("title", yt_title)
         start_time = song.get("start_time", None)
         end_time = song.get("end_time", None)
-
 
         if "title" in song.keys():
             logger.debug("Has the attribute")
@@ -289,11 +310,14 @@ def main(args):
             post_processing(
                 song_title,
                 song_metadata,
-                passed_format, 
-                path, 
-                start_time, 
-                end_time, 
-                args
+                passed_format,
+                path,
+                start_time,
+                end_time,
+                args,
+                link,
+                stream,
+                is_download_archive
             )
         except Exception as e:
             if args.ignore_errors:
@@ -302,8 +326,8 @@ def main(args):
 
             # Else exit
             logger.critical("Error occurred: ", str(e),
-                ". Exiting. Pass `--ignore-errors` if you want errors"
-                "like this to be ignored")
+                            ". Exiting. Pass `--ignore-errors` if you want errors"
+                            "like this to be ignored")
 
     # Delete the cached songs
     dir._delete_cached_songs(passed_format)
@@ -316,10 +340,13 @@ def post_processing(
     path: str,
     start_time: float,
     end_time: float,
-    args: object
+    args: object,
+    link: str,
+    stream,
+    is_download_archive: bool
 ) -> None:
     """Handle all the activities post search of the song.
-    
+
     This function will handle the following:
     Convert, Trim, Metadata, Cleaning up.
     """
@@ -337,6 +364,10 @@ def post_processing(
     logger.debug("Skip Meta: {}".format(args.skip_meta))
 
     if args.skip_meta:
+        # Write to the archive file
+        add_song_to_archive(
+            stream=stream, youtube_link=link) if is_download_archive else None
+
         # Do a dry cleanup
         if dir.dry_cleanup(conv_name, song_name):
             logger.info("Done")
@@ -347,15 +378,25 @@ def post_processing(
         track_selected = meta(conv_name, song_name, song_metadata, args)
     except NoMetaError as no_meta_error:
         if args.on_meta_error == 'skip':
-            if dir.dry_cleanup(conv_name, song_name):
-                logger.info("Done")
+            # Write to the archive file
+            add_song_to_archive(
+                stream=stream, youtube_link=link) if is_download_archive else None
+
+        if dir.dry_cleanup(conv_name, song_name):
+            logger.info("Done")
         elif not args.ignore_errors or args.on_meta_error == 'exit':
-            logger.critical(str(no_meta_error), ". Pass `--ignore-errors` or `on-meta-error` to ignore this.")
+            logger.critical(
+                str(no_meta_error), ". Pass `--ignore-errors` or `on-meta-error` to ignore this.")
         return
     except MetadataError as metadata_error:
         if not args.ignore_errors:
-            logger.critical(str(metadata_error), ". Pass `--ignore-errors` or `on-meta-error` to ignore this.")
+            logger.critical(str(
+                metadata_error), ". Pass `--ignore-errors` or `on-meta-error` to ignore this.")
         return
+
+    # Write to the archive file
+    add_song_to_archive(
+        stream=stream, youtube_link=link) if is_download_archive else None
 
     if dir.cleanup([track_selected], 0, passed_format, remove_cached=False):
         logger.info("Done")
@@ -390,7 +431,8 @@ def pre_checks(args):
 
     # If options is asked for
     if args.get_opts:
-        print(" ".join(("--{}".format(opt.replace("_", "-")) for opt in vars(args))))
+        print(" ".join(("--{}".format(opt.replace("_", "-"))
+              for opt in vars(args))))
         exit(0)
 
     # Extract on-meta-error
@@ -405,7 +447,8 @@ def pre_checks(args):
     logger.debug("itunes_country:", defaults.DEFAULT.ITUNES_COUNTRY)
 
     if not args.SONG_NAME and not args.url and not args.list:
-        logger.critical("Song Name is required. Check 'ytmdl --help' for help.")
+        logger.critical(
+            "Song Name is required. Check 'ytmdl --help' for help.")
 
 
 def extract_song_name(args) -> str:
@@ -417,13 +460,14 @@ def extract_song_name(args) -> str:
 
     # If song name is not passed then try to extract
     # the title of the song using the URL.
+    verify_title = True
     try:
         # Fetch the title of the song
-        song_name = yt.get_title(args.url)
+        song_name, verify_title = yt.get_title(args.url)
     except ExtractError:
         if not args.ignore_errors:
             logger.critical("Wasn't able to extract song data.",
-                        "Use `--ignore-errors` to ignore this error")
+                            "Use `--ignore-errors` to ignore this error")
         return
 
     # Ask the user if they want to go with the extracted
@@ -432,7 +476,7 @@ def extract_song_name(args) -> str:
     # NOTE: We don't need the song name if the meta is to be
     # skipped. So we can skip the next step if --skip-meta is
     # passed.
-    if not args.title_as_name and not args.skip_meta:
+    if not args.title_as_name and not args.skip_meta and verify_title:
         song_name = utility.get_new_title(song_name)
 
     return song_name
@@ -457,12 +501,12 @@ def extract_data():
     elif args.SONG_NAME and yt.is_playlist(args.SONG_NAME[0]):
         logger.info("Youtube playlist passed...extracting!")
         songs, playlist_name = yt.get_playlist(
-                                    args.SONG_NAME[0],
-                                    args.proxy,
-                                    args.pl_start,
-                                    args.pl_end,
-                                    args.pl_items
-                                )
+            args.SONG_NAME[0],
+            args.proxy,
+            args.pl_start,
+            args.pl_end,
+            args.pl_items
+        )
 
         # Check if data is actually returned
         if songs is None:
