@@ -100,6 +100,14 @@ emerge -av --autounmask net-misc/ytmdl
 
 Available in **src_prepare-overlay** [here](https://gitlab.com/src_prepare/src_prepare-overlay)
 
+### NixOS
+
+`ytmdl` can be installed using Nix with the command
+
+```console
+nix-env -iA nixos.ytmdl
+```
+
 ### Windows
 
 You need to install `ffmpeg` in order for `ytmdl` to work properly. This can be done by downloading the `ffmpeg` binary from [here](https://ffmpeg.org/download.html). Once downloaded, extract the file and find the `ffmpeg.exe` file. Copy the directory's path and add it to PATH in the following way.
