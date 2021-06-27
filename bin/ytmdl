@@ -219,12 +219,14 @@ def main(args):
 
     # Extract the archive file contents
     is_download_archive = args.download_archive is not None
+    stream = None
 
     if is_download_archive:
         archive_content, stream = open_archive_stream(args.download_archive)
 
     logger.debug(song_name)
     logger.hold()
+    logger.debug(stream)
 
     if not args.nolocal:
         # Search for the song locally
@@ -351,6 +353,7 @@ def post_processing(
     Convert, Trim, Metadata, Cleaning up.
     """
     logger.debug("song_name: ", song_name, " song_meta: ", song_metadata)
+    logger.debug(stream)
     # Try to convert the song
     try:
         conv_name = convert(path, passed_format, start_time, end_time)
