@@ -68,6 +68,7 @@ If you like my work, consider buying me a coffee or donating. In case you want t
 - [PyPi](#pypi)
 - [Arch Linux](#arch-linux)
 - [Gentoo](#gentoo)
+- [NixOS](#nixos)
 - [Windows](#windows)
 - [Manual](#manual)
 
@@ -99,6 +100,14 @@ emerge -av --autounmask net-misc/ytmdl
 ```
 
 Available in **src_prepare-overlay** [here](https://gitlab.com/src_prepare/src_prepare-overlay)
+
+### NixOS
+
+`ytmdl` can be installed using Nix with the command
+
+```console
+nix-env -iA nixos.ytmdl
+```
 
 ### Windows
 
