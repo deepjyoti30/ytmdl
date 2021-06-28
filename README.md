@@ -68,6 +68,7 @@ If you like my work, consider buying me a coffee or donating. In case you want t
 - [PyPi](#pypi)
 - [Arch Linux](#arch-linux)
 - [Gentoo](#gentoo)
+- [NixOS](#nixos)
 - [Windows](#windows)
 - [Manual](#manual)
 
