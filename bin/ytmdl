@@ -93,6 +93,8 @@ def arguments():
                         '--manual-meta' will override this option, pass only one\
                         of them.",
                                 action="store_true")
+    metadata_group.add_argument('--ignore-chapters', help="Ignore chapters and download single file",
+                                action="store_true")
     metadata_group.add_argument('-m', '--manual-meta', help="Manually enter song\
                         details.", action="store_true")
     metadata_group.add_argument(
@@ -281,7 +283,7 @@ def main(args):
 
     songs_to_download = [{}]
     # If the chapters are present, we will have to iterate and extract each chapter
-    if chapters and False:
+    if chapters and not args.ignore_chapters:
         logger.info("The song has chapters in it.",
                     "Each part will be extracted and worked accordingly.")
 
