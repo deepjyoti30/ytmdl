@@ -10,6 +10,7 @@
 - [ ] [Searched](https://github.com/deepjyoti30/ytmdl/search?q=is%3Apr&type=Issues) the bugtracker for similar pull requests
 - [ ] Read [ytmdl coding conventions](https://github.com/deepjyoti30/ytmdl/blob/master/.github/CONTRIBUTING.md) and adjusted the code to meet them
 - [ ] Checked the code with [pylama](https://github.com/klen/pylama)
+- [ ] Made the pull request to the **unstable** branch
 
 ### What is the purpose of your *pull request*?
 - [ ] Bug fix
