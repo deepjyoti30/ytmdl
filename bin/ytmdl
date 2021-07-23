@@ -93,8 +93,6 @@ def arguments():
                         '--manual-meta' will override this option, pass only one\
                         of them.",
                                 action="store_true")
-    metadata_group.add_argument('--ignore-chapters', help="Ignore chapters and download single file",
-                                action="store_true")
     metadata_group.add_argument('-m', '--manual-meta', help="Manually enter song\
                         details.", action="store_true")
     metadata_group.add_argument(
@@ -145,6 +143,9 @@ def arguments():
                         the passed file. The songs are matched by using the videoId. All downloaded \
                         song Id's are automatically added to the file.", default=None,
                         metavar="FILE")
+    parser.add_argument('--ignore-chapters', help="Ignore chapters if available in the video and treat \
+                        it like one video",
+                        action="store_true")
 
     playlist_group = parser.add_argument_group("Playlist")
     playlist_group.add_argument(
