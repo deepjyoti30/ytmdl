@@ -10,7 +10,12 @@ from spotipy import Spotify
 
 from typing import Dict
 
-
+# Yeah I know, this is not a good idea but
+# asking the users for their own credentials is jus
+# not good enough.
+# NOTE: Raise an issue if you have a better idea
+# and NO, I don't wanna ask the user to enter these
+# creds.
 CLIENT_ID = "a166f23a5637429e8bd819df46fa034e"
 CLIENT_SECRET = "bbad17df3cde471ab969f081f2ea8bbb"
 
