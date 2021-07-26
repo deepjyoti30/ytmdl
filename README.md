@@ -4,7 +4,7 @@
 
 <div align="center">
 <h1>YouTube Music Downloader</h1>
-<h4>Download songs from YouTube by getting the audio from YouTube and the metadata from sources like Itunes and Gaana.</h4>
+<h4>Download songs from YouTube by getting the audio from YouTube and the metadata from sources like Itunes, Spotify, Gaana etc.</h4>
 </div>
 
 <div align="center" width="60%" height="auto">
@@ -38,7 +38,7 @@ Ytmdl also has an web app, you can try it out [here](https://ytmdl.deepjyoti30.d
 ## Why this?
 
 This app downloads a song by getting the audio from Youtube sources __using__ youtube-dl and then adds song information like
-artist name, album name, release date, thumbnail etc by fetching it from sources like Itunes, Gaana and other sources.
+artist name, album name, release date, thumbnail etc by fetching it from sources like Itunes, Spotify, Gaana and other sources.
 
 __NO__. YoutubeDL doesn't do that. All youtube-dl does is lets you download audio from a video that you specify.
 __This app is not yet another youtube-dl clone.__
@@ -163,9 +163,9 @@ usage: ytmdl [-h] [-q] [--song SONG-METADATA] [--choice CHOICE]
              [--ask-meta-name] [--on-meta-error ON_META_ERROR] [--proxy URL]
              [--url URL] [--list PATH TO LIST] [--nolocal] [--format FORMAT]
              [--trim] [--version] [--keep-chapter-name]
-             [--download-archive FILE] [--pl-start NUMBER] [--pl-end NUMBER]
-             [--pl-items ITEM_SPEC] [--ignore-errors] [--title-as-name]
-             [--level LEVEL] [--disable-file] [--list-level]
+             [--download-archive FILE] [--ignore-chapters] [--pl-start NUMBER]
+             [--pl-end NUMBER] [--pl-items ITEM_SPEC] [--ignore-errors]
+             [--title-as-name] [--level LEVEL] [--disable-file] [--list-level]
              [SONG_NAME ...]
 
 positional arguments:
@@ -203,6 +203,8 @@ optional arguments:
                         file. The songs are matched by using the videoId. All
                         downloaded song Id's are automatically added to the
                         file.
+  --ignore-chapters     Ignore chapters if available in the video and treat it
+                        like one video
 
 Metadata:
   --song SONG-METADATA  The song to search in Metadata. Particularly useful
