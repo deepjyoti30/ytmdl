@@ -31,7 +31,15 @@ class SpotifySong(object):
     """
 
     def __init__(self, song: Dict) -> None:
-        pass
+        self.track_name = song["name"]
+        self.release_date = song["album"]["release_date"]
+        self.artist_name = song["artists"][0]["name"]
+        self.provider = "spotify"
+        self.collection_name = song["album"]["name"]
+        self.primary_genre_name = ""  # Seems spotify doesn't provide genre
+        self.track_number = song["track_number"]
+        self.artwork_url_100 = song["album"]["images"][0]["url"]
+        self.track_time = song["duration_ms"]
 
 
 def search_song(query, limit: int = 25) -> List[SpotifySong]:
