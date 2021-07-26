@@ -54,7 +54,11 @@ config_text = '''#*****************************************#
 # The METADATA_PROVIDERS value is a comma separated
 # values that specifies wich API providers to use for getting
 # the song metadata. Available values right now are:
+#
+# ---------
 # "{{supported_providers}}".
+# ---------
+#
 # Please check the github page of ytmdl for more information.
 #
 #METADATA_PROVIDERS = "itunes, gaana"
@@ -62,7 +66,10 @@ config_text = '''#*****************************************#
 #*****************************************#
 # The DEFAULT_FORMAT denotes what to use as default for downloading.
 # Available values are:
+#
+# ---------
 # "{{supported_formats}}"
+# ---------
 #
 #DEFAULT_FORMAT = "mp3"
 #
@@ -70,7 +77,10 @@ config_text = '''#*****************************************#
 # What to do when something goes wrong while adding the metadata. This can
 # happen for various reasons like lack of metadata or network issues.
 # Available options are:
+#
+# ---------
 # "{{supported_on_error_options}}"
+# ---------
 #
 #ON_META_ERROR = "exit"
 #****************************************#
