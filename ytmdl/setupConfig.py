@@ -105,7 +105,7 @@ class DEFAULTS:
         self.CONFIG_PATH = os.path.join(xdg_config_home, 'ytmdl')
 
         # The default metadata providers
-        self.METADATA_PROVIDERS = ['itunes', 'gaana']
+        self.METADATA_PROVIDERS = ['itunes', 'spotify', 'gaana']
 
         # The available metadata providers
         self.AVAILABLE_METADATA_PROVIDERS = self.METADATA_PROVIDERS + \
@@ -121,7 +121,6 @@ class DEFAULTS:
 
         # Itunes related settings
         self.ITUNES_COUNTRY_DEFAULT = "US"
-    
 
     def _get_music_dir(self):
         """Get the dir the file will be saved to."""
@@ -248,7 +247,6 @@ def check_config_setup():
 
 
 def checkValidity(keyword, value):
-
     """Check if the user specified value in config is possible."""
     if keyword == 'SONG_DIR':
         # In this case check if $ and -> are present

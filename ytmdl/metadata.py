@@ -8,7 +8,7 @@ from ytmdl.stringutils import (
 )
 from ytmdl import defaults
 from simber import Logger
-from ytmdl.meta import gaana, deezer, saavn, lastfm, musicbrainz, preconfig
+from ytmdl.meta import gaana, deezer, saavn, lastfm, musicbrainz, spotify, preconfig
 from unidecode import unidecode
 
 logger = Logger('metadata')
@@ -83,6 +83,17 @@ def get_from_musicbrainz(SONG_NAME):
         return results
     except Exception as e:
         _logger_provider_error(e, "MusicBrainz")
+        return None
+
+
+def get_from_spotify(SONG_NAME):
+    """
+    Get the songs from Spotify
+    """
+    try:
+        return spotify.search_song(SONG_NAME)
+    except Exception as e:
+        _logger_provider_error(e, "Spotify")
         return None
 
 
@@ -189,7 +200,8 @@ def SEARCH_SONG(q="Tera Buzz", filters=[], disable_sort=False):
         'deezer': get_from_deezer,
         'saavn': get_from_saavn,
         'lastfm': get_from_lastfm,
-        'musicbrainz': get_from_musicbrainz
+        'musicbrainz': get_from_musicbrainz,
+        'spotify': get_from_spotify
     }
 
     broken_provider_counter = 0
