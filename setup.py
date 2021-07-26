@@ -28,7 +28,8 @@ req_pkgs = [
     'simber',
     'rich',
     'musicbrainzngs',
-    'ytmusicapi'
+    'ytmusicapi',
+    'spotipy'
 ]
 
 
