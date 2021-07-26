@@ -8,7 +8,7 @@ to the user to be used accordingly.
 from spotipy import SpotifyClientCredentials
 from spotipy import Spotify
 
-from typing import Dict
+from typing import Dict, List
 
 # Yeah I know, this is not a good idea but
 # asking the users for their own credentials is jus
@@ -32,3 +32,17 @@ class SpotifySong(object):
 
     def __init__(self, song: Dict) -> None:
         pass
+
+
+def search_song(query, limit: int = 25) -> List[SpotifySong]:
+    """
+    Search the song using the API through spotipy
+    and accordingly return the results.
+    """
+    spotify = Spotify(SpotifyClientCredentials(
+        client_id=CLIENT_ID, client_secret=CLIENT_SECRET))
+
+    response = spotify.search(f"track:{query}", limit=limit, type="track")
+    items = [SpotifySong(item) for item in response["tracks"]["items"]]
+
+    return items
