@@ -47,7 +47,7 @@ def search_song(query, limit: int = 25) -> List[SpotifySong]:
     Search the song using the API through spotipy
     and accordingly return the results.
     """
-    spotify = Spotify(SpotifyClientCredentials(
+    spotify = Spotify(auth_manager=SpotifyClientCredentials(
         client_id=CLIENT_ID, client_secret=CLIENT_SECRET))
 
     response = spotify.search(f"track:{query}", limit=limit, type="track")
