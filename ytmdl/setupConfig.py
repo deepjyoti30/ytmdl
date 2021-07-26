@@ -61,7 +61,7 @@ config_text = '''#*****************************************#
 #
 # Please check the github page of ytmdl for more information.
 #
-#METADATA_PROVIDERS = "itunes, gaana"
+#METADATA_PROVIDERS = "itunes, spotify, gaana"
 #
 #*****************************************#
 # The DEFAULT_FORMAT denotes what to use as default for downloading.
