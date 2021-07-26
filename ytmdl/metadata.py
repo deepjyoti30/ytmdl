@@ -208,7 +208,7 @@ def SEARCH_SONG(q="Tera Buzz", filters=[], disable_sort=False):
 
     for provider in metadata_providers:
         if provider in GET_METADATA_ACTIONS:
-            logger.debug(f"Seaching metadata with {provider}")
+            logger.debug(f"Searching metadata with {provider}")
             data_provider = GET_METADATA_ACTIONS.get(
                 provider, lambda _: None)(q)
             if data_provider:
