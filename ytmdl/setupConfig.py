@@ -87,8 +87,22 @@ config_text = '''#*****************************************#
 # ITUNES SETTINGS
 # Which region to use while searching from Itunes.
 #
+#
+# Country where the song is to be searched for in Itunes.
+# The country helps if you're looking for regional songs in
+# which case Itunes orders the results accordingly.
+#
 # By default, 'US' will be used.
+#
 #ITUNES_COUNTRY = "US"
+#
+# Country where the song is to be searched for in Spotify.
+# The country helps if you're looking for regional songs in
+# which case Spotify orders the results accordingly.
+#
+# By default, 'US' is used
+#
+#SPOTIFY_COUNTRY = "US"
 #'''
 
 
@@ -131,6 +145,9 @@ class DEFAULTS:
 
         # Itunes related settings
         self.ITUNES_COUNTRY_DEFAULT = "US"
+
+        # Spotify country
+        self.SPOTIFY_COUNTRY_DEFAULT = "US"
 
     def _get_music_dir(self):
         """Get the dir the file will be saved to."""
@@ -306,6 +323,15 @@ def checkValidity(keyword, value):
         # TODO: Perhaps check if valid country
         return True
 
+    elif keyword == "SPOTIFY_COUNTRY":
+        if not value:
+            logger.warning("Spotify Country value is empty. \
+                Default will be used")
+            return False
+
+        # TODO: Perhaps check if valid country
+        return True
+
 
 def retDefault(keyword):
     """Return the DEFAULT value of keyword."""
@@ -321,6 +347,8 @@ def retDefault(keyword):
         return DEFAULTS().ON_ERROR_DEFAULT
     elif keyword == "ITUNES_COUNTRY":
         return DEFAULTS().ITUNES_COUNTRY_DEFAULT
+    elif keyword == "SPOTIFY_COUNTRY":
+        return DEFAULTS().SPOTIFY_COUNTRY_DEFAULT
 
 
 def GIVE_DEFAULT(self, keyword):
