@@ -15,6 +15,7 @@ from youtube_search import YoutubeSearch
 from simber import Logger
 from ytmdl.exceptions import ExtractError
 from ytmdl.utils.ytmusic import get_title_from_ytmusic
+from youtubesearchpython import VideosSearch
 
 
 logger = Logger("yt")
@@ -204,25 +205,21 @@ def search(query, bettersearch, proxy, kw=[], lim=20):
     # Replace all the spaces with +
     query = query.replace(' ', '+')
 
-    results = YoutubeSearch(query).to_dict()
+    results = VideosSearch(query, limit=lim)
 
     if not results:
         logger.warning("No search results found!")
-
-    # Trim the data to the passed number
-    if len(results) > lim:
-        results = results[:lim]
 
     stripped_results = []
 
     for video in results:
         data = {}
         data['title'] = video['title']
-        data['href'] = video['url_suffix']
-        data['author_name'] = video['channel']
+        data['href'] = f"/watch?v={video['id']}"
+        data['author_name'] = video['channel']["name"]
         data['duration'] = video['duration']
-        data['verified_music'] = False if video['long_desc'] is None else \
-            _is_verified(video['long_desc'])
+        data['verified_music'] = False if video['descriptionSnippet']['text'] \
+            is None else _is_verified(video['descriptionSnippet']['text'])
 
         stripped_results.append(data)
 
