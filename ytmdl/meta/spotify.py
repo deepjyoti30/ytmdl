@@ -42,7 +42,11 @@ class SpotifySong(object):
         self.track_time = song["duration_ms"]
 
 
-def search_song(query, country: str = "US", limit: int = 25) -> List[SpotifySong]:
+def search_song(
+    query,
+    country: str = "US",
+    limit: int = 25
+) -> List[SpotifySong]:
     """
     Search the song using the API through spotipy
     and accordingly return the results.

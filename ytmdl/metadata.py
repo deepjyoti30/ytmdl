@@ -8,7 +8,10 @@ from ytmdl.stringutils import (
 )
 from ytmdl import defaults
 from simber import Logger
-from ytmdl.meta import gaana, deezer, saavn, lastfm, musicbrainz, spotify, preconfig
+from ytmdl.meta import (
+    gaana, deezer, saavn, lastfm, musicbrainz, spotify,
+    preconfig
+)
 from unidecode import unidecode
 
 logger = Logger('metadata')
