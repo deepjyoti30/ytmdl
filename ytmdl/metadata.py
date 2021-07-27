@@ -95,6 +95,8 @@ def get_from_spotify(SONG_NAME):
     """
     try:
         country = defaults.DEFAULT.SPOTIFY_COUNTRY
+        logger.debug(f"Using {country} for Spotify country")
+
         return spotify.search_song(SONG_NAME, country=country)
     except Exception as e:
         _logger_provider_error(e, "Spotify")
