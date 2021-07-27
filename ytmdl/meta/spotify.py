@@ -42,7 +42,7 @@ class SpotifySong(object):
         self.track_time = song["duration_ms"]
 
 
-def search_song(query, limit: int = 25) -> List[SpotifySong]:
+def search_song(query, country: str = "US", limit: int = 25) -> List[SpotifySong]:
     """
     Search the song using the API through spotipy
     and accordingly return the results.
@@ -50,7 +50,8 @@ def search_song(query, limit: int = 25) -> List[SpotifySong]:
     spotify = Spotify(auth_manager=SpotifyClientCredentials(
         client_id=CLIENT_ID, client_secret=CLIENT_SECRET))
 
-    response = spotify.search(f"track:{query}", limit=limit, type="track")
+    response = spotify.search(
+        f"track:{query}", limit=limit, type="track", country=country)
     items = [SpotifySong(item) for item in response["tracks"]["items"]]
 
     return items

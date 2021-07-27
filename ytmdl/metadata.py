@@ -91,7 +91,8 @@ def get_from_spotify(SONG_NAME):
     Get the songs from Spotify
     """
     try:
-        return spotify.search_song(SONG_NAME)
+        country = defaults.DEFAULT.SPOTIFY_COUNTRY
+        return spotify.search_song(SONG_NAME, country=country)
     except Exception as e:
         _logger_provider_error(e, "Spotify")
         return None
