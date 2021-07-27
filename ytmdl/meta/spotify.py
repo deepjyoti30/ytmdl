@@ -55,7 +55,7 @@ def search_song(
         client_id=CLIENT_ID, client_secret=CLIENT_SECRET))
 
     response = spotify.search(
-        f"track:{query}", limit=limit, type="track", country=country)
+        f"track:{query}", limit=limit, type="track", market=country)
     items = [SpotifySong(item) for item in response["tracks"]["items"]]
 
     return items
