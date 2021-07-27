@@ -87,8 +87,22 @@ config_text = '''#*****************************************#
 # ITUNES SETTINGS
 # Which region to use while searching from Itunes.
 #
+#
+# Country where the song is to be searched for in Itunes.
+# The country helps if you're looking for regional songs in
+# which case Itunes orders the results accordingly.
+#
 # By default, 'US' will be used.
+#
 #ITUNES_COUNTRY = "US"
+#
+# Country where the song is to be searched for in Spotify.
+# The country helps if you're looking for regional songs in
+# which case Spotify orders the results accordingly.
+#
+# By default, 'US' is used
+#
+#SPOTIFY_COUNTRY = "US"
 #'''
 
 
