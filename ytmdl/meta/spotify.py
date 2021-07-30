@@ -59,3 +59,14 @@ def search_song(
     items = [SpotifySong(item) for item in response["tracks"]["items"]]
 
     return items
+
+
+def get_track_from_spotify(id, country: str = "US"):
+    """
+    Lookup the metadata by using the ID on spotify
+    """
+    spotify = Spotify(auth_manager=SpotifyClientCredentials(
+        client_id=CLIENT_ID, client_secret=CLIENT_SECRET))
+
+    track = spotify.track(id, market=country)
+    return SpotifySong(track)
