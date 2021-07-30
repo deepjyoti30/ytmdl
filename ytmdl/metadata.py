@@ -119,6 +119,20 @@ def lookup_from_itunes(ID):
         return None
 
 
+def lookup_from_spotify(id):
+    """
+    Lookup the track using the ID on Spotify.
+    """
+    try:
+        country = defaults.DEFAULT.SPOTIFY_COUNTRY
+        SONG_INFO = spotify.get_track_from_spotify(id=id, country=country)
+
+        return SONG_INFO
+    except Exception as e:
+        _logger_provider_error(e, 'Spotify')
+        return None
+
+
 def _search_tokens(song_name, song_list):
     """Search song in the cache based on simple each word matching."""
     song_name = remove_punct(
