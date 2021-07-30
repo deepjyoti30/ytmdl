@@ -96,7 +96,9 @@ def arguments():
     metadata_group.add_argument('-m', '--manual-meta', help="Manually enter song\
                         details.", action="store_true")
     metadata_group.add_argument(
-        '--itunes-id', help="Direct lookup from itunes.")
+        '--itunes-id', help="Direct lookup from itunes. If passed, metadata will be automatically added.")
+    metadata_group.add_argument(
+        "--spotify-id", help="Direct lookup for Spotify tracks using the ID. If passed, metadata will be automatically added.")
     metadata_group.add_argument("--disable-sort", help="Disable sorting of the metadata \
                         before asking for input. Useful if the song is in some other language \
                         and/or just a few providers are used.", action="store_true")

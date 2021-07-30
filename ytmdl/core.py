@@ -43,9 +43,9 @@ def search(song_name, args) -> Union[str, str]:
             logger.info('Quiet is enabled')
 
         logger.info('Searching Youtube for {}{}{}'.format(
-                Fore.LIGHTYELLOW_EX,
-                song_name,
-                Style.RESET_ALL
+            Fore.LIGHTYELLOW_EX,
+            song_name,
+            Style.RESET_ALL
         ))
 
         data = yt.search(song_name, not args.disable_metaadd,
@@ -144,7 +144,7 @@ def convert(
     logger.debug("{}:{}".format(start, end))
     if start is not None and end is not None:
         conv_name = utility.extract_part_convert(
-                        path, passed_format, start, end)
+            path, passed_format, start, end)
 
         # We need to raise exception if something went wrong
         if type(conv_name) is not str:
@@ -218,6 +218,9 @@ def meta(conv_name: str, song_name: str, search_by: str, args):
     elif args.itunes_id:
         logger.info('Direct iTunes lookup for {}...'.format(args.itunes_id))
         TRACK_INFO = metadata.lookup_from_itunes(args.itunes_id)
+    elif args.spotify_id:
+        logger.info('Direct Spotify lookup for {}...'.format(args.spotify_id))
+        TRACK_INFO = metadata.lookup_from_spotify(args.spotify_id)
     else:
         # Else add metadata in ordinary way
         logger.info('Getting song data for {}...'.format(search_by))
