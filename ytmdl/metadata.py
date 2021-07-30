@@ -127,7 +127,7 @@ def lookup_from_spotify(id):
         country = defaults.DEFAULT.SPOTIFY_COUNTRY
         SONG_INFO = spotify.get_track_from_spotify(id=id, country=country)
 
-        return SONG_INFO
+        return [SONG_INFO]
     except Exception as e:
         _logger_provider_error(e, 'Spotify')
         return None
