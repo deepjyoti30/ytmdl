@@ -159,13 +159,14 @@ You can manually install `ytmdl` by cloning this repository and running the `set
 ```console
 usage: ytmdl [-h] [-q] [--song SONG-METADATA] [--choice CHOICE]
              [--artist ARTIST] [--album ALBUM] [--disable-metaadd]
-             [--skip-meta] [-m] [--itunes-id ITUNES_ID] [--disable-sort]
-             [--ask-meta-name] [--on-meta-error ON_META_ERROR] [--proxy URL]
-             [--url URL] [--list PATH TO LIST] [--nolocal] [--format FORMAT]
-             [--trim] [--version] [--keep-chapter-name]
-             [--download-archive FILE] [--ignore-chapters] [--pl-start NUMBER]
-             [--pl-end NUMBER] [--pl-items ITEM_SPEC] [--ignore-errors]
-             [--title-as-name] [--level LEVEL] [--disable-file] [--list-level]
+             [--skip-meta] [-m] [--itunes-id ITUNES_ID]
+             [--spotify-id SPOTIFY_ID] [--disable-sort] [--ask-meta-name]
+             [--on-meta-error ON_META_ERROR] [--proxy URL] [--url URL]
+             [--list PATH TO LIST] [--nolocal] [--format FORMAT] [--trim]
+             [--version] [--keep-chapter-name] [--download-archive FILE]
+             [--ignore-chapters] [--pl-start NUMBER] [--pl-end NUMBER]
+             [--pl-items ITEM_SPEC] [--ignore-errors] [--title-as-name]
+             [--level LEVEL] [--disable-file] [--list-level]
              [SONG_NAME ...]
 
 positional arguments:
@@ -224,7 +225,11 @@ Metadata:
                         will override this option, pass only one of them.
   -m, --manual-meta     Manually enter song details.
   --itunes-id ITUNES_ID
-                        Direct lookup from itunes.
+                        Direct lookup from itunes. If passed, metadata will be
+                        automatically added.
+  --spotify-id SPOTIFY_ID
+                        Direct lookup for Spotify tracks using the ID. If
+                        passed, metadata will be automatically added.
   --disable-sort        Disable sorting of the metadata before asking for
                         input. Useful if the song is in some other language
                         and/or just a few providers are used.
@@ -289,6 +294,7 @@ As of the latest development branch, the following options can be changed from t
 | `DEFAULT_FORMAT`     | Default format of the song                         | mp3                            |
 | `ON_META_ERROR`      | What to do if error occurs while writing meta      | exit                           |
 | `ITUNES_COUNTRY`     | Which region to use while searching from Itunes    | US                             |
+| `SPOTIFY_COUNTRY`    | Which market to use while searching from Spotify   | US                             |
 
 ### Advanced Configuration
 
