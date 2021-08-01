@@ -202,9 +202,10 @@ def dry_cleanup(current_path, passed_name):
         # instead.
         if "$" in DEST:
             logger.debug(DEST)
+
+            # pylama:ignore=E501
             logger.warning(
-                "Destination is a dynamic directory but this is a dry cleanup. \
-            Don't pass `--skip-meta` if you don't want this!")
+                "Destination is a dynamic directory but this is a dry cleanup. Don't pass `--skip-meta` if you don't want this!")
 
             # Use the base directory
             DEST = DEST[:DEST.find("$")]
