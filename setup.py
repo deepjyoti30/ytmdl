@@ -22,13 +22,14 @@ req_pkgs = [
     'ffmpeg-python',
     'pysocks',
     'unidecode',
-    'youtube_search',
+    'youtube-search-python',
     'pyDes',
     'urllib3',
     'simber',
     'rich',
     'musicbrainzngs',
-    'ytmusicapi'
+    'ytmusicapi',
+    'spotipy'
 ]
 
 

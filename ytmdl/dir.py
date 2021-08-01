@@ -197,6 +197,21 @@ def dry_cleanup(current_path, passed_name):
         new_basename = "{}.{}".format(passed_name, extension)
         DEST = defaults.DEFAULT.SONG_DIR
 
+        # NOTE: If the DEST is a dynamic directory, then we cannot
+        # do a dry cleanup. So we'll have to use the base directory
+        # instead.
+        if "$" in DEST:
+            logger.debug(DEST)
+
+            # pylama:ignore=E501
+            logger.warning(
+                "Destination is a dynamic directory but this is a dry cleanup. Don't pass `--skip-meta` if you don't want this!")
+
+            # Use the base directory
+            DEST = DEST[:DEST.find("$")]
+
+            logger.debug(f"Using {DEST} as destination instead")
+
         logger.debug("Moving to: {}".format(DEST))
 
         # Create the destination file name

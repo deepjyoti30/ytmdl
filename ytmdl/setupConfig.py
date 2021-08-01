@@ -54,15 +54,22 @@ config_text = '''#*****************************************#
 # The METADATA_PROVIDERS value is a comma separated
 # values that specifies wich API providers to use for getting
 # the song metadata. Available values right now are:
+#
+# ---------
 # "{{supported_providers}}".
+# ---------
+#
 # Please check the github page of ytmdl for more information.
 #
-#METADATA_PROVIDERS = "itunes, gaana"
+#METADATA_PROVIDERS = "itunes, spotify, gaana"
 #
 #*****************************************#
 # The DEFAULT_FORMAT denotes what to use as default for downloading.
 # Available values are:
+#
+# ---------
 # "{{supported_formats}}"
+# ---------
 #
 #DEFAULT_FORMAT = "mp3"
 #
@@ -70,15 +77,32 @@ config_text = '''#*****************************************#
 # What to do when something goes wrong while adding the metadata. This can
 # happen for various reasons like lack of metadata or network issues.
 # Available options are:
+#
+# ---------
 # "{{supported_on_error_options}}"
+# ---------
 #
 #ON_META_ERROR = "exit"
 #****************************************#
 # ITUNES SETTINGS
 # Which region to use while searching from Itunes.
 #
+#
+# Country where the song is to be searched for in Itunes.
+# The country helps if you're looking for regional songs in
+# which case Itunes orders the results accordingly.
+#
 # By default, 'US' will be used.
+#
 #ITUNES_COUNTRY = "US"
+#
+# Country where the song is to be searched for in Spotify.
+# The country helps if you're looking for regional songs in
+# which case Spotify orders the results accordingly.
+#
+# By default, 'US' is used
+#
+#SPOTIFY_COUNTRY = "US"
 #'''
 
 
@@ -105,7 +129,7 @@ class DEFAULTS:
         self.CONFIG_PATH = os.path.join(xdg_config_home, 'ytmdl')
 
         # The default metadata providers
-        self.METADATA_PROVIDERS = ['itunes', 'gaana']
+        self.METADATA_PROVIDERS = ['itunes', 'spotify', 'gaana']
 
         # The available metadata providers
         self.AVAILABLE_METADATA_PROVIDERS = self.METADATA_PROVIDERS + \
@@ -121,7 +145,9 @@ class DEFAULTS:
 
         # Itunes related settings
         self.ITUNES_COUNTRY_DEFAULT = "US"
-    
+
+        # Spotify country
+        self.SPOTIFY_COUNTRY_DEFAULT = "US"
 
     def _get_music_dir(self):
         """Get the dir the file will be saved to."""
@@ -248,7 +274,6 @@ def check_config_setup():
 
 
 def checkValidity(keyword, value):
-
     """Check if the user specified value in config is possible."""
     if keyword == 'SONG_DIR':
         # In this case check if $ and -> are present
@@ -298,6 +323,15 @@ def checkValidity(keyword, value):
         # TODO: Perhaps check if valid country
         return True
 
+    elif keyword == "SPOTIFY_COUNTRY":
+        if not value:
+            logger.warning("Spotify Country value is empty. \
+                Default will be used")
+            return False
+
+        # TODO: Perhaps check if valid country
+        return True
+
 
 def retDefault(keyword):
     """Return the DEFAULT value of keyword."""
@@ -313,6 +347,8 @@ def retDefault(keyword):
         return DEFAULTS().ON_ERROR_DEFAULT
     elif keyword == "ITUNES_COUNTRY":
         return DEFAULTS().ITUNES_COUNTRY_DEFAULT
+    elif keyword == "SPOTIFY_COUNTRY":
+        return DEFAULTS().SPOTIFY_COUNTRY_DEFAULT
 
 
 def GIVE_DEFAULT(self, keyword):

@@ -4,7 +4,7 @@
 
 <div align="center">
 <h1>YouTube Music Downloader</h1>
-<h4>Download songs from YouTube by getting the audio from YouTube and the metadata from sources like Itunes and Gaana.</h4>
+<h4>Download songs from YouTube by getting the audio from YouTube and the metadata from sources like Itunes, Spotify, Gaana etc.</h4>
 </div>
 
 <div align="center" width="60%" height="auto">
@@ -38,7 +38,7 @@ Ytmdl also has an web app, you can try it out [here](https://ytmdl.deepjyoti30.d
 ## Why this?
 
 This app downloads a song by getting the audio from Youtube sources __using__ youtube-dl and then adds song information like
-artist name, album name, release date, thumbnail etc by fetching it from sources like Itunes, Gaana and other sources.
+artist name, album name, release date, thumbnail etc by fetching it from sources like Itunes, Spotify, Gaana and other sources.
 
 __NO__. YoutubeDL doesn't do that. All youtube-dl does is lets you download audio from a video that you specify.
 __This app is not yet another youtube-dl clone.__
@@ -68,6 +68,7 @@ If you like my work, consider buying me a coffee or donating. In case you want t
 - [PyPi](#pypi)
 - [Arch Linux](#arch-linux)
 - [Gentoo](#gentoo)
+- [NixOS](#nixos)
 - [Windows](#windows)
 - [Manual](#manual)
 
@@ -99,6 +100,14 @@ emerge -av --autounmask net-misc/ytmdl
 ```
 
 Available in **src_prepare-overlay** [here](https://gitlab.com/src_prepare/src_prepare-overlay)
+
+### NixOS
+
+`ytmdl` can be installed using Nix with the command
+
+```console
+nix-env -iA nixos.ytmdl
+```
 
 ### Windows
 
@@ -150,11 +159,12 @@ You can manually install `ytmdl` by cloning this repository and running the `set
 ```console
 usage: ytmdl [-h] [-q] [--song SONG-METADATA] [--choice CHOICE]
              [--artist ARTIST] [--album ALBUM] [--disable-metaadd]
-             [--skip-meta] [-m] [--itunes-id ITUNES_ID] [--disable-sort]
-             [--ask-meta-name] [--on-meta-error ON_META_ERROR] [--proxy URL]
-             [--url URL] [--list PATH TO LIST] [--nolocal] [--format FORMAT]
-             [--trim] [--version] [--keep-chapter-name]
-             [--download-archive FILE] [--pl-start NUMBER] [--pl-end NUMBER]
+             [--skip-meta] [-m] [--itunes-id ITUNES_ID]
+             [--spotify-id SPOTIFY_ID] [--disable-sort] [--ask-meta-name]
+             [--on-meta-error ON_META_ERROR] [--proxy URL] [--url URL]
+             [--list PATH TO LIST] [--nolocal] [--format FORMAT] [--trim]
+             [--version] [--keep-chapter-name] [--download-archive FILE]
+             [--ignore-chapters] [--pl-start NUMBER] [--pl-end NUMBER]
              [--pl-items ITEM_SPEC] [--ignore-errors] [--title-as-name]
              [--level LEVEL] [--disable-file] [--list-level]
              [SONG_NAME ...]
@@ -194,6 +204,8 @@ optional arguments:
                         file. The songs are matched by using the videoId. All
                         downloaded song Id's are automatically added to the
                         file.
+  --ignore-chapters     Ignore chapters if available in the video and treat it
+                        like one video
 
 Metadata:
   --song SONG-METADATA  The song to search in Metadata. Particularly useful
@@ -213,7 +225,11 @@ Metadata:
                         will override this option, pass only one of them.
   -m, --manual-meta     Manually enter song details.
   --itunes-id ITUNES_ID
-                        Direct lookup from itunes.
+                        Direct lookup from itunes. If passed, metadata will be
+                        automatically added.
+  --spotify-id SPOTIFY_ID
+                        Direct lookup for Spotify tracks using the ID. If
+                        passed, metadata will be automatically added.
   --disable-sort        Disable sorting of the metadata before asking for
                         input. Useful if the song is in some other language
                         and/or just a few providers are used.
@@ -278,6 +294,7 @@ As of the latest development branch, the following options can be changed from t
 | `DEFAULT_FORMAT`     | Default format of the song                         | mp3                            |
 | `ON_META_ERROR`      | What to do if error occurs while writing meta      | exit                           |
 | `ITUNES_COUNTRY`     | Which region to use while searching from Itunes    | US                             |
+| `SPOTIFY_COUNTRY`    | Which market to use while searching from Spotify   | US                             |
 
 ### Advanced Configuration
 

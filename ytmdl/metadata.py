@@ -8,7 +8,10 @@ from ytmdl.stringutils import (
 )
 from ytmdl import defaults
 from simber import Logger
-from ytmdl.meta import gaana, deezer, saavn, lastfm, musicbrainz, preconfig
+from ytmdl.meta import (
+    gaana, deezer, saavn, lastfm, musicbrainz, spotify,
+    preconfig
+)
 from unidecode import unidecode
 
 logger = Logger('metadata')
@@ -86,6 +89,20 @@ def get_from_musicbrainz(SONG_NAME):
         return None
 
 
+def get_from_spotify(SONG_NAME):
+    """
+    Get the songs from Spotify
+    """
+    try:
+        country = defaults.DEFAULT.SPOTIFY_COUNTRY
+        logger.debug(f"Using {country} for Spotify country")
+
+        return spotify.search_song(SONG_NAME, country=country)
+    except Exception as e:
+        _logger_provider_error(e, "Spotify")
+        return None
+
+
 def lookup_from_itunes(ID):
     """Lookup metadata by id using itunespy."""
     # Try to get the song data from itunes
@@ -99,6 +116,20 @@ def lookup_from_itunes(ID):
         return SONG_INFO
     except Exception as e:
         _logger_provider_error(e, 'iTunes')
+        return None
+
+
+def lookup_from_spotify(id):
+    """
+    Lookup the track using the ID on Spotify.
+    """
+    try:
+        country = defaults.DEFAULT.SPOTIFY_COUNTRY
+        SONG_INFO = spotify.get_track_from_spotify(id=id, country=country)
+
+        return [SONG_INFO]
+    except Exception as e:
+        _logger_provider_error(e, 'Spotify')
         return None
 
 
@@ -189,13 +220,15 @@ def SEARCH_SONG(q="Tera Buzz", filters=[], disable_sort=False):
         'deezer': get_from_deezer,
         'saavn': get_from_saavn,
         'lastfm': get_from_lastfm,
-        'musicbrainz': get_from_musicbrainz
+        'musicbrainz': get_from_musicbrainz,
+        'spotify': get_from_spotify
     }
 
     broken_provider_counter = 0
 
     for provider in metadata_providers:
         if provider in GET_METADATA_ACTIONS:
+            logger.debug(f"Searching metadata with {provider}")
             data_provider = GET_METADATA_ACTIONS.get(
                 provider, lambda _: None)(q)
             if data_provider:
