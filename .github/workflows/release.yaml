@@ -1,9 +1,6 @@
 name: PyPI Release
 
 on:
-  push:
-    branches:
-      - "release_workflow"
   release:
     types: [published]
 
