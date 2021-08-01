@@ -1,0 +1,39 @@
+name: PyPI Release
+
+on:
+  push:
+    branches:
+      - "release_workflow"
+  release:
+    types: [published]
+
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout the latest release code
+        uses: actions/checkout@v2
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.9"
+      - name: Install dependencies
+        run:  |
+          python -m pip install --upgrade pip
+          pip install setuptools wheel twine
+      - name: Install ytmdl locally
+        run: python setup.py install
+      - name: Generate the completion files
+        run: python utils/completion.py
+      - name: List files in current directory
+        run: ls -al
+      - name: Build the dist
+        run: python setup.py sdist bdist_wheel
+      - name: Upload to PyPI
+        env:
+          TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
+          TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
+        run: twine upload dist/*
+          

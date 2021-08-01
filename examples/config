@@ -46,15 +46,22 @@
 # The METADATA_PROVIDERS value is a comma separated
 # values that specifies wich API providers to use for getting
 # the song metadata. Available values right now are:
-# itunes, gaana, deezer, lastfm, musicbrainz, saavn.
+#
+# ---------
+# itunes, spotify, gaana, deezer, lastfm, musicbrainz, saavn.
+# ---------
+#
 # Please check the github page of ytmdl for more information.
 #
-#METADATA_PROVIDERS = "itunes, gaana"
+#METADATA_PROVIDERS = "itunes, spotify, gaana"
 #
 #*****************************************#
 # The DEFAULT_FORMAT denotes what to use as default for downloading.
 # Available values are:
+#
+# ---------
 # mp3, m4a, opus
+# ---------
 #
 #DEFAULT_FORMAT = "mp3"
 #
@@ -62,13 +69,30 @@
 # What to do when something goes wrong while adding the metadata. This can
 # happen for various reasons like lack of metadata or network issues.
 # Available options are:
+#
+# ---------
 # exit, skip, manual
+# ---------
 #
 #ON_META_ERROR = "exit"
 #****************************************#
 # ITUNES SETTINGS
 # Which region to use while searching from Itunes.
 #
+#
+# Country where the song is to be searched for in Itunes.
+# The country helps if you're looking for regional songs in
+# which case Itunes orders the results accordingly.
+#
 # By default, 'US' will be used.
+#
 #ITUNES_COUNTRY = "US"
+#
+# Country where the song is to be searched for in Spotify.
+# The country helps if you're looking for regional songs in
+# which case Spotify orders the results accordingly.
+#
+# By default, 'US' is used
+#
+#SPOTIFY_COUNTRY = "US"
 #
