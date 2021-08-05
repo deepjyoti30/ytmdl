@@ -233,7 +233,7 @@ Metadata:
   --disable-sort        Disable sorting of the metadata before asking for
                         input. Useful if the song is in some other language
                         and/or just a few providers are used.
-  --ask-meta-name       Ask the user to enter a seperate name for searching
+  --ask-meta-name       Ask the user to enter a separate name for searching
                         the metadata (Default: false)
   --on-meta-error ON_META_ERROR
                         What to do if adding the metadata fails for some
@@ -244,7 +244,7 @@ Playlist:
   --pl-start NUMBER     Playlist video to start at (default is 1)
   --pl-end NUMBER       Playlist video to end at (default is last)
   --pl-items ITEM_SPEC  Playlist video items to download. Specify indices of
-                        the videos present in the playlist seperated by commas
+                        the videos present in the playlist separated by commas
                         like: '--playlist-items 1, 2, 4, 6' if you want to
                         download videos indexed 1, 2, 4 and 6. Range can also
                         be passed like: '--playlist-items 1-3, 5-7' to
@@ -288,7 +288,7 @@ As of the latest development branch, the following options can be changed from t
 
 | Name                 | Description                                        | Default                        |
 |:--------------------:|----------------------------------------------------|--------------------------------|
-| `SONG_DIR`           | Directory to save the songs in after editing       | Current direcotry              |
+| `SONG_DIR`           | Directory to save the songs in after editing       | Current directory              |
 | `SONG_QUALITY`       | Quality of the song                                | 320kbps                        |
 | `METADATA_PROVIDERS` | Which API providers to use for metadata            | all supported options are used |
 | `DEFAULT_FORMAT`     | Default format of the song                         | mp3                            |
@@ -302,7 +302,7 @@ As of the latest development branch, the following options can be changed from t
 
 `SONG_DIR` field also takes values that are extracted from the song being downloaded
 
-The `SONG_DIR` field needs to be passed some special values in order to achieve that. The string is scanned and when a `$` sign occurs, the special string will start and each directory can be seperated by using an `->` sign.
+The `SONG_DIR` field needs to be passed some special values in order to achieve that. The string is scanned and when a `$` sign occurs, the special string will start and each directory can be separated by using an `->` sign.
 
 To save the song in the `/dir/<album_name>/<artist_name>/<title>/<song_name>.mp3` format, the following needs to be added in the `SONG_DIR` field.
 

@@ -102,7 +102,7 @@ def arguments():
     metadata_group.add_argument("--disable-sort", help="Disable sorting of the metadata \
                         before asking for input. Useful if the song is in some other language \
                         and/or just a few providers are used.", action="store_true")
-    metadata_group.add_argument("--ask-meta-name", help="Ask the user to enter a seperate \
+    metadata_group.add_argument("--ask-meta-name", help="Ask the user to enter a separate \
                         name for searching the metadata (Default: false)", action="store_true")
     metadata_group.add_argument("--on-meta-error", help="What to do if adding the metadata fails \
                         for some reasong like lack of metadata or perhaps a network issue. \
@@ -168,7 +168,7 @@ def arguments():
         "--pl-items",
         help="Playlist video items to download. \
              Specify indices of the videos present in the\
-             playlist seperated by commas like: '--playlist-items\
+             playlist separated by commas like: '--playlist-items\
               1, 2, 4, 6' if you want to download videos indexed\
              1, 2, 4 and 6. Range can also be passed like:\
              '--playlist-items 1-3, 5-7' to download the videos\
