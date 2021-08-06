@@ -31,10 +31,10 @@ Use [pylama](https://github.com/klen/pylama) for linting.
 3.Modules
 
 - Module names should be all lowercase
-- If more than one word, the words should be seperated by an underscore
+- If more than one word, the words should be separated by an underscore
 - It is preferrable to stick to single word for the module name
 
 4.Constants
 
 - Constant variables should be capitalized
-- If more than one word, the words can be seperated by an underscore
+- If more than one word, the words can be separated by an underscore
