@@ -23,7 +23,7 @@ def __replace_special_characters(passed_name: str) -> str:
 
 
 def cleanup(TRACK_INFO, index, datatype, remove_cached=True):
-    """Move the song from temp to $HOME/Music dir."""
+    """Move the song from temp to song dir."""
     try:
         SONG = glob.glob(os.path.join(
             defaults.DEFAULT.SONG_TEMP_DIR,
