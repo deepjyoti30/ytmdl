@@ -144,7 +144,7 @@ You can manually install `ytmdl` by cloning this repository and running the `set
 1. Clone this repo:
 
     ```console
-    git clone https://github.com/deepjyoti30/ytmdl   
+    git clone https://github.com/deepjyoti30/ytmdl
     ```
 
 1. Move into the `ytmdl` directory and run the `setup.py` script:
@@ -157,7 +157,7 @@ You can manually install `ytmdl` by cloning this repository and running the `set
 ## Usage
 
 ```console
-usage: ytmdl [-h] [-q] [--song SONG-METADATA] [--choice CHOICE]
+usage: ytmdl [-h] [-q] [-o SONG-DIR] [--song SONG-METADATA] [--choice CHOICE]
              [--artist ARTIST] [--album ALBUM] [--disable-metaadd]
              [--skip-meta] [-m] [--itunes-id ITUNES_ID]
              [--spotify-id SPOTIFY_ID] [--disable-sort] [--ask-meta-name]
@@ -178,6 +178,9 @@ optional arguments:
   -q, --quiet           Don't ask the user to select songs if more than one
                         search result. The first result in each case will be
                         considered.
+  -o, --output          The location for the song to be downloaded
+                        to. When no argument is passed, the default locations
+                        of SONG_DIR or XDG_MUSIC_DIR are used.
   --proxy URL           Use the specified HTTP/HTTPS/SOCKS proxy. To enable
                         SOCKS proxy, specify a proper scheme. For example
                         socks5://127.0.0.1:1080/. Pass in an empty string
@@ -342,4 +345,3 @@ As of the latest source, the following options can be passed to the special stri
 | `Genre`       | Genre Of the Song             |
 | `TrackNumber` | TrackNumber Of the Song       |
 | `ReleaseDate` | ReleaseDate Of the Song       |
-
