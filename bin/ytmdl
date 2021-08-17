@@ -67,7 +67,7 @@ def arguments():
                         if more than one search result.\
                         The first result in each case will be considered.",
                         action='store_true')
-    parser.add_argument('-o', '--output',
+    parser.add_argument('-o', '--output-dir',
                         help="The location for the song to be downloaded\
                         to. When no argument is passed, the default locations\
                         of SONG_DIR or XDG_MUSIC_DIR are used.")
@@ -448,11 +448,12 @@ def pre_checks(args):
         exit(0)
 
     # Ensure the output directory is legitimate
-    if (args.output is not None):
-        if path.isdir(path.expanduser(args.output)):
-            defaults.DEFAULT.SONG_DIR = path.expanduser(args.output)
+    if (args.output_dir is not None):
+        if path.isdir(path.expanduser(args.output_dir)):
+            defaults.DEFAULT.SONG_DIR = path.expanduser(args.output_dir)
         else:
-            logger.warning("{}: is an invalid path. Continuing with default.".format(args.output))
+            logger.warning(
+                "{}: is an invalid path. Continuing with default.".format(args.output_dir))
 
     # Extract on-meta-error
     logger.debug("on_meta_error before: ", str(args.on_meta_error))
