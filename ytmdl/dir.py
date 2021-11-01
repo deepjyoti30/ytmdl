@@ -166,8 +166,8 @@ def make_custom_dir(DIR, TRACK_INFO):
         # Sometimes, certain strings have / in the name which creates
         # issues since those strings are used to create directories.
         # Whenever there is a /, replace it with -
-        # Sometimes strings also contains [\,?,",<>] which may cause error
-        dir_name = sub('[\\\\?<>/"]', "-", dir_name)
+        # Sometimes strings also contains [\,?,",<>, *] which may cause error
+        dir_name = sub('[\\\\?<>/"*]', "-", dir_name)
 
         new_dir = os.path.join(base_DIR, dir_name)
 
