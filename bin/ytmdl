@@ -39,6 +39,7 @@ from ytmdl.utils.archive import (
     is_present_in_archive,
     add_song_to_archive
 )
+from ytmdl.yt import is_yt_url
 from ytmdl.__version__ import __version__
 
 # init colorama for windows
@@ -514,7 +515,14 @@ def extract_data():
             logger.info("Downloading songs in {}".format(args.list))
             for song_name in songs:
                 logger.debug(song_name)
-                args.SONG_NAME = [song_name]
+
+                # Set the song name if an URL is not passed, else
+                # pass it as an URL
+                if is_yt_url(song_name):
+                    args.url = song_name
+                else:
+                    args.SONG_NAME = [song_name]
+
                 main(args)
         else:
             logger.info("{}: is empty".format(args.list))
