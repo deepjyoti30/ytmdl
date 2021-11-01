@@ -257,6 +257,14 @@ def is_playlist(url):
     return match(playlist_part, url)
 
 
+def is_yt_url(url):
+    """
+    Check if the passed URL is a valid youtube URL.
+    """
+    yt_url = r"https?://(www\.|music\.)?youtube\.com/watch\?v=.*?$"
+    return match(yt_url, url)
+
+
 def get_playlist(
     url,
     proxy,
