@@ -519,6 +519,7 @@ def extract_data():
                 # Set the song name if an URL is not passed, else
                 # pass it as an URL
                 if is_yt_url(song_name):
+                    logger.debug("Detected passed song as URL")
                     args.url = song_name
                 else:
                     args.SONG_NAME = [song_name]
