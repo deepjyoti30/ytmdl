@@ -39,6 +39,7 @@ from ytmdl.utils.archive import (
     is_present_in_archive,
     add_song_to_archive
 )
+from ytmdl.yt import is_yt_url
 from ytmdl.__version__ import __version__
 
 # init colorama for windows
@@ -67,6 +68,10 @@ def arguments():
                         if more than one search result.\
                         The first result in each case will be considered.",
                         action='store_true')
+    parser.add_argument('-o', '--output-dir',
+                        help="The location for the song to be downloaded\
+                        to. When no argument is passed, the default locations\
+                        of SONG_DIR or XDG_MUSIC_DIR are used.")
     metadata_group = parser.add_argument_group("Metadata")
     metadata_group.add_argument(
         '--song', help="The song to search in Metadata. \
@@ -102,7 +107,7 @@ def arguments():
     metadata_group.add_argument("--disable-sort", help="Disable sorting of the metadata \
                         before asking for input. Useful if the song is in some other language \
                         and/or just a few providers are used.", action="store_true")
-    metadata_group.add_argument("--ask-meta-name", help="Ask the user to enter a seperate \
+    metadata_group.add_argument("--ask-meta-name", help="Ask the user to enter a separate \
                         name for searching the metadata (Default: false)", action="store_true")
     metadata_group.add_argument("--on-meta-error", help="What to do if adding the metadata fails \
                         for some reasong like lack of metadata or perhaps a network issue. \
@@ -168,7 +173,7 @@ def arguments():
         "--pl-items",
         help="Playlist video items to download. \
              Specify indices of the videos present in the\
-             playlist seperated by commas like: '--playlist-items\
+             playlist separated by commas like: '--playlist-items\
               1, 2, 4, 6' if you want to download videos indexed\
              1, 2, 4 and 6. Range can also be passed like:\
              '--playlist-items 1-3, 5-7' to download the videos\
@@ -443,6 +448,14 @@ def pre_checks(args):
               for opt in vars(args))))
         exit(0)
 
+    # Ensure the output directory is legitimate
+    if (args.output_dir is not None):
+        if path.isdir(path.expanduser(args.output_dir)):
+            defaults.DEFAULT.SONG_DIR = path.expanduser(args.output_dir)
+        else:
+            logger.warning(
+                "{}: is an invalid path. Continuing with default.".format(args.output_dir))
+
     # Extract on-meta-error
     logger.debug("on_meta_error before: ", str(args.on_meta_error))
     on_meta_error = args.on_meta_error
@@ -502,7 +515,15 @@ def extract_data():
             logger.info("Downloading songs in {}".format(args.list))
             for song_name in songs:
                 logger.debug(song_name)
-                args.SONG_NAME = [song_name]
+
+                # Set the song name if an URL is not passed, else
+                # pass it as an URL
+                if is_yt_url(song_name):
+                    logger.debug("Detected passed song as URL")
+                    args.url = song_name
+                else:
+                    args.SONG_NAME = [song_name]
+
                 main(args)
         else:
             logger.info("{}: is empty".format(args.list))

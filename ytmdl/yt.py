@@ -95,6 +95,8 @@ def dw_using_yt(link, proxy, song_name, datatype, no_progress=False):
     }
 
     if not no_progress:
+        logger.debug("Enabling progress hook.")
+        logger.debug(f"Passed value for no_progress: {no_progress}")
         ydl_opts['progress_hooks'] = [progress_handler]
 
     if proxy is not None:
@@ -255,6 +257,14 @@ def is_playlist(url):
     """
     playlist_part = r"https?://(www\.|music\.)?youtube\.com/playlist\?list=.*?$"
     return match(playlist_part, url)
+
+
+def is_yt_url(url):
+    """
+    Check if the passed URL is a valid youtube URL.
+    """
+    yt_url = r"https?://(www\.|music\.)?youtube\.com/watch\?v=.*?$"
+    return match(yt_url, url)
 
 
 def get_playlist(
