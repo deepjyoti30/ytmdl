@@ -114,7 +114,8 @@ def download(link, yt_title, args) -> str:
         defaults.DEFAULT.SONG_QUALITY,
         Style.RESET_ALL
     ))
-    path = yt.dw(link, args.proxy, yt_title, args.format)
+    path = yt.dw(link, args.proxy, yt_title,
+                 args.format, no_progress=args.quiet)
 
     if type(path) is not str:
         # Probably an error occured

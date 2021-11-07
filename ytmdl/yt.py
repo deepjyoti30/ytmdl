@@ -95,6 +95,8 @@ def dw_using_yt(link, proxy, song_name, datatype, no_progress=False):
     }
 
     if not no_progress:
+        logger.debug("Enabling progress hook.")
+        logger.debug(f"Passed value for no_progress: {no_progress}")
         ydl_opts['progress_hooks'] = [progress_handler]
 
     if proxy is not None:
