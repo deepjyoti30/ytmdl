@@ -16,7 +16,7 @@ req_pkgs = [
     'itunespy',
     'requests',
     'colorama',
-    'bs4',
+    'beautifulsoup4',
     'downloader-cli',
     'pyxdg',
     'ffmpeg-python',
@@ -40,8 +40,8 @@ extra_features = {
 
 # Add the distributable files
 file_map = [
-    ('/etc/bash_completion.d', 'ytmdl.bash'),
-    ('/usr/share/zsh/functions/Completion/Unix', 'ytmdl.zsh')
+    ('etc/bash_completion.d', 'ytmdl.bash'),
+    ('usr/share/zsh/functions/Completion/Unix', 'ytmdl.zsh')
 ]
 
 data_files = []

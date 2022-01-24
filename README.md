@@ -66,6 +66,7 @@ If you like my work, consider buying me a coffee or donating. In case you want t
 ## Installation
 
 - [PyPi](#pypi)
+- [Conda-Forge](#conda-forge)
 - [Arch Linux](#arch-linux)
 - [Gentoo](#gentoo)
 - [NixOS](#nixos)
@@ -79,6 +80,27 @@ pip install ytmdl
 ```
 
 >NOTE: System wide installation requires `sudo`
+
+### Conda-Forge
+
+Installing `ytmdl` from the `conda-forge` channel can be achieved by adding `conda-forge` to your channels with:
+
+```
+conda config --add channels conda-forge
+conda config --set channel_priority strict
+```
+
+Once the `conda-forge` channel has been enabled, `ytmdl` can be installed with:
+
+```
+conda install ytmdl
+```
+
+It is possible to list all of the versions of `ytmdl` available on your platform with:
+
+```
+conda search ytmdl --channel conda-forge
+```
 
 ### Arch Linux
 
