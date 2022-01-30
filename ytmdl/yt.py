@@ -88,10 +88,12 @@ def dw_using_yt(link, proxy, song_name, datatype, no_progress=False):
 
     is_quiet: bool = utility.determine_logger_level(
     ) != logger.level_map["DEBUG"]
+    no_warnings: bool = utility.determine_logger_level(
+    ) > logger.level_map["WARNING"]
 
     ydl_opts = {
         'quiet': is_quiet,
-        'no_warnings': True,
+        'no_warnings': no_warnings,
         'outtmpl': song_name,
         'format': format_,
         'nocheckcertificate': True,
@@ -289,10 +291,12 @@ def get_playlist(
     """
     is_quiet: bool = utility.determine_logger_level(
     ) != logger.level_map["DEBUG"]
+    no_warnings: bool = utility.determine_logger_level(
+    ) > logger.level_map["WARNING"]
 
     ydl_opts = {
         'quiet': is_quiet,
-        'no_warnings': True,
+        'no_warnings': no_warnings,
         'format': 'bestaudio/best',
         'nocheckcertificate': True,
         'dump_single_json': True,
@@ -335,10 +339,12 @@ def __get_title_from_yt(url):
     """
     is_quiet: bool = utility.determine_logger_level(
     ) != logger.level_map["DEBUG"]
+    no_warnings: bool = utility.determine_logger_level(
+    ) > logger.level_map["WARNING"]
 
     ydl_opts = {
         "quiet": is_quiet,
-        'no_warnings': True,
+        'no_warnings': no_warnings,
         'nocheckcertificate': True,
         'source_address': '0.0.0.0'
     }
@@ -399,10 +405,12 @@ def get_chapters(url):
     """
     is_quiet: bool = utility.determine_logger_level(
     ) != logger.level_map["DEBUG"]
+    no_warnings: bool = utility.determine_logger_level(
+    ) > logger.level_map["WARNING"]
 
     ydl_opts = {
         "quiet": is_quiet,
-        'no_warnings': True,
+        'no_warnings': no_warnings,
         'nocheckcertificate': True,
         'source_address': '0.0.0.0'
     }
