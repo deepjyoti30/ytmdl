@@ -549,9 +549,10 @@ def extract_data():
         args.SONG_NAME = []
 
         # Iterate and work on the data.
-        url_base = "https://www.youtube.com/watch?v="
+        # NOTE: song["url"] will contain the URL all right, it won't be just
+        # the href.
         for song in songs:
-            args.url = url_base + song["url"]
+            args.url = song["url"]
             main(args)
     else:
         main(args)
