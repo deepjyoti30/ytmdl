@@ -88,6 +88,7 @@ def dw_using_yt(link, proxy, song_name, datatype, no_progress=False):
 
     ydl_opts = {
         'quiet': True,
+        'no_warnings': True,
         'outtmpl': song_name,
         'format': format_,
         'nocheckcertificate': True,
@@ -285,6 +286,7 @@ def get_playlist(
     """
     ydl_opts = {
         'quiet': True,
+        'no_warnings': True,
         'format': 'bestaudio/best',
         'nocheckcertificate': True,
         'dump_single_json': True,
@@ -327,6 +329,7 @@ def __get_title_from_yt(url):
     """
     ydl_opts = {
         "quiet": True,
+        'no_warnings': True,
         'nocheckcertificate': True,
         'source_address': '0.0.0.0'
     }
@@ -387,6 +390,7 @@ def get_chapters(url):
     """
     ydl_opts = {
         "quiet": True,
+        'no_warnings': True,
         'nocheckcertificate': True,
         'source_address': '0.0.0.0'
     }
