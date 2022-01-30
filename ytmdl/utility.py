@@ -7,6 +7,7 @@ from shutil import which
 import ffmpeg
 from simber import Logger
 from rich.prompt import Confirm, Prompt
+from sys import stdout
 
 logger = Logger("Utility")
 
@@ -39,7 +40,7 @@ def convert_to_mp3r(path):
         new_name = path + '_new.mp3'
 
         command = "ffmpeg -loglevel panic -i {} -vn -ar 44100 -ac 2 -ab {}k -f mp3 {}".format(path,
-                                                                                             defaults.DEFAULT.SONG_QUALITY,
+                                                                                              defaults.DEFAULT.SONG_QUALITY,
                                                                                               new_name)
         output, error = exe(command)
 
@@ -67,9 +68,9 @@ def convert_to_mp3(path, start=None, end=None, cleanup_after_done=True):
             params["to"] = end
 
         job = ffmpeg.input(path).output(
-                                new_name,
-                                **params
-                            )
+            new_name,
+            **params
+        )
         job.run()
 
         # Delete the temp file now
@@ -99,9 +100,9 @@ def convert_to_opus(path, start=None, end=None, cleanup_after_done=True):
             params["to"] = end
 
         job = ffmpeg.input(path).output(
-                            new_name,
-                            **params
-                        )
+            new_name,
+            **params
+        )
         job.run()
 
         # Delete the temp file now
@@ -130,7 +131,7 @@ def extract_m4a(path, start=None, end=None, cleanup_after_done=True):
     new_name = path + '_new.m4a'
     try:
         job = ffmpeg.input(path).output(
-                    new_name, ss=start, to=end, loglevel="panic")
+            new_name, ss=start, to=end, loglevel="panic")
         job.run()
 
         if cleanup_after_done:
@@ -195,11 +196,11 @@ def get_new_title(old_title):
     title and return that one.
     """
     logger.info(
-            "Current extracted title for the song is: `{}`".format(old_title)
-        )
+        "Current extracted title for the song is: `{}`".format(old_title)
+    )
     logger.info(
-            "Most extracted titles are not accurate and they affect the meta search"
-            )
+        "Most extracted titles are not accurate and they affect the meta search"
+    )
 
     is_change = Confirm.ask("Would you like to change", default=True)
 
@@ -227,6 +228,13 @@ def get_new_meta_search_by(old_search_by):
                     "`--ask-meta-name` flag.")
 
     return new_search_by
+
+
+def determine_logger_level() -> int:
+    """
+    Determine the logger level for stdout stream.
+    """
+    return [stream for stream in logger.streams if stream.stream_name == stdout.name][0].level
 
 
 if __name__ == "__main__":

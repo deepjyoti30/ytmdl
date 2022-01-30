@@ -26,7 +26,7 @@ def get_youtube_streams(url):
 
     PS: I don't know how youtube-dl does the magic
     """
-    cli = "youtube-dl -g {}".format(url)
+    cli = "yt-dlp -g {}".format(url)
     output, error = utility.exe(cli)
     stream_urls = output.split("\n")
 
@@ -86,9 +86,14 @@ def dw_using_yt(link, proxy, song_name, datatype, no_progress=False):
     elif datatype == 'm4a':
         format_ = 'bestaudio[ext=m4a]'
 
+    is_quiet: bool = utility.determine_logger_level(
+    ) != logger.level_map["DEBUG"]
+    no_warnings: bool = utility.determine_logger_level(
+    ) > logger.level_map["WARNING"]
+
     ydl_opts = {
-        'quiet': True,
-        'no_warnings': True,
+        'quiet': is_quiet,
+        'no_warnings': no_warnings,
         'outtmpl': song_name,
         'format': format_,
         'nocheckcertificate': True,
@@ -284,9 +289,14 @@ def get_playlist(
     url  : URL of the video
     title: Title of the video.
     """
+    is_quiet: bool = utility.determine_logger_level(
+    ) != logger.level_map["DEBUG"]
+    no_warnings: bool = utility.determine_logger_level(
+    ) > logger.level_map["WARNING"]
+
     ydl_opts = {
-        'quiet': True,
-        'no_warnings': True,
+        'quiet': is_quiet,
+        'no_warnings': no_warnings,
         'format': 'bestaudio/best',
         'nocheckcertificate': True,
         'dump_single_json': True,
@@ -327,9 +337,14 @@ def __get_title_from_yt(url):
     """
     Return the title of the passed URL.
     """
+    is_quiet: bool = utility.determine_logger_level(
+    ) != logger.level_map["DEBUG"]
+    no_warnings: bool = utility.determine_logger_level(
+    ) > logger.level_map["WARNING"]
+
     ydl_opts = {
-        "quiet": True,
-        'no_warnings': True,
+        "quiet": is_quiet,
+        'no_warnings': no_warnings,
         'nocheckcertificate': True,
         'source_address': '0.0.0.0'
     }
@@ -388,9 +403,14 @@ def get_title(url) -> str:
 def get_chapters(url):
     """Get the chapters of the passed URL.
     """
+    is_quiet: bool = utility.determine_logger_level(
+    ) != logger.level_map["DEBUG"]
+    no_warnings: bool = utility.determine_logger_level(
+    ) > logger.level_map["WARNING"]
+
     ydl_opts = {
-        "quiet": True,
-        'no_warnings': True,
+        "quiet": is_quiet,
+        'no_warnings': no_warnings,
         'nocheckcertificate': True,
         'source_address': '0.0.0.0'
     }
