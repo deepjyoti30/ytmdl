@@ -86,8 +86,11 @@ def dw_using_yt(link, proxy, song_name, datatype, no_progress=False):
     elif datatype == 'm4a':
         format_ = 'bestaudio[ext=m4a]'
 
+    is_quiet: bool = utility.determine_logger_level(
+    ) != logger.level_map["DEBUG"]
+
     ydl_opts = {
-        'quiet': True,
+        'quiet': is_quiet,
         'no_warnings': True,
         'outtmpl': song_name,
         'format': format_,
@@ -284,8 +287,11 @@ def get_playlist(
     url  : URL of the video
     title: Title of the video.
     """
+    is_quiet: bool = utility.determine_logger_level(
+    ) != logger.level_map["DEBUG"]
+
     ydl_opts = {
-        'quiet': True,
+        'quiet': is_quiet,
         'no_warnings': True,
         'format': 'bestaudio/best',
         'nocheckcertificate': True,
@@ -327,8 +333,11 @@ def __get_title_from_yt(url):
     """
     Return the title of the passed URL.
     """
+    is_quiet: bool = utility.determine_logger_level(
+    ) != logger.level_map["DEBUG"]
+
     ydl_opts = {
-        "quiet": True,
+        "quiet": is_quiet,
         'no_warnings': True,
         'nocheckcertificate': True,
         'source_address': '0.0.0.0'
@@ -388,8 +397,11 @@ def get_title(url) -> str:
 def get_chapters(url):
     """Get the chapters of the passed URL.
     """
+    is_quiet: bool = utility.determine_logger_level(
+    ) != logger.level_map["DEBUG"]
+
     ydl_opts = {
-        "quiet": True,
+        "quiet": is_quiet,
         'no_warnings': True,
         'nocheckcertificate': True,
         'source_address': '0.0.0.0'
