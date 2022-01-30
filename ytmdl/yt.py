@@ -26,7 +26,7 @@ def get_youtube_streams(url):
 
     PS: I don't know how youtube-dl does the magic
     """
-    cli = "youtube-dl -g {}".format(url)
+    cli = "yt-dlp -g {}".format(url)
     output, error = utility.exe(cli)
     stream_urls = output.split("\n")
 
