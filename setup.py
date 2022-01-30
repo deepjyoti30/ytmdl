@@ -11,7 +11,7 @@ with open("README.md", "r") as fh:
 exec(open("ytmdl/__version__.py").read())
 
 req_pkgs = [
-    'youtube_dl',
+    'yt-dlp',
     'mutagen',
     'itunespy',
     'requests',

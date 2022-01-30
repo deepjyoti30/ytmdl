@@ -4,8 +4,8 @@
 import requests
 import os
 from urllib.parse import urlparse, parse_qs
-import youtube_dl
-from youtube_dl.utils import DownloadError
+import yt_dlp
+from yt_dlp.utils import DownloadError
 from re import match
 from ytmdl import defaults, utility, stringutils
 from downloader_cli.download import Download
@@ -102,7 +102,7 @@ def dw_using_yt(link, proxy, song_name, datatype, no_progress=False):
     if proxy is not None:
         ydl_opts['proxy'] = proxy
 
-    ydl = youtube_dl.YoutubeDL(ydl_opts)
+    ydl = yt_dlp.YoutubeDL(ydl_opts)
 
     try:
         ydl.download([link])
@@ -301,7 +301,7 @@ def get_playlist(
         ydl_opts['playlist_items'] = playlist_items
 
     # Extract the info now
-    songs = youtube_dl.YoutubeDL(ydl_opts).extract_info(url, False)
+    songs = yt_dlp.YoutubeDL(ydl_opts).extract_info(url, False)
 
     # Put another check to see if the passed URL is a playlist
     try:
@@ -333,7 +333,7 @@ def __get_title_from_yt(url):
 
     logger.debug(url)
 
-    ydl = youtube_dl.YoutubeDL(ydl_opts)
+    ydl = yt_dlp.YoutubeDL(ydl_opts)
 
     try:
         data = ydl.extract_info(url, False)
@@ -391,7 +391,7 @@ def get_chapters(url):
         'source_address': '0.0.0.0'
     }
 
-    info = youtube_dl.YoutubeDL(ydl_opts).extract_info(url, False)
+    info = yt_dlp.YoutubeDL(ydl_opts).extract_info(url, False)
 
     return info.get("chapters", None)
 
