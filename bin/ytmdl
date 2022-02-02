@@ -553,6 +553,12 @@ def extract_data():
         # the href.
         for song in songs:
             args.url = song["url"]
+
+            # Keep compatibility in case the url value changes back to href
+            # in the future.
+            if '/' not in args.url:
+                args.url = f"https://www.youtube.com/watch?v={args.url}"
+
             main(args)
     else:
         main(args)
