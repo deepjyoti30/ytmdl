@@ -568,8 +568,12 @@ def extract_data():
         main(args)
 
 
-if __name__ == '__main__':
+def entry():
     try:
         extract_data()
     except KeyboardInterrupt:
         logger.info("\nExiting..!")
+
+
+if __name__ == '__main__':
+    entry()
