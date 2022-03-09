@@ -170,10 +170,12 @@ def dw(
 
 def get_href(url):
     """Get the watch? part of the url in case of urls."""
-    pos_watch = url.index('/watch?v=')
+    queries = parse_qs(urlparse(url=url).query)
 
-    part = url[pos_watch:]
+    if 'v' not in queries:
+        raise ExtractError(url)
 
+    part = f"/watch?v={queries['v'][0]}"
     return part
 
 
