@@ -55,12 +55,6 @@ params = {
     'data_files': data_files,
 }
 
-params["scripts"] = ['bin/ytmdl']
-
-# Install a bat script for Windows users
-if name == 'nt':
-    params["scripts"].append("bin/ytmdl.bat")
-
 
 if __name__ == '__main__':
     setuptools.setup(
@@ -85,5 +79,10 @@ if __name__ == '__main__':
         install_requires=req_pkgs,
         setup_requires=req_pkgs,
         extras_require=extra_features,
+        entry_points={
+            'console_scripts': [
+                "ytmdl = ytmdl:entry"
+            ]
+        },
         **params
     )
