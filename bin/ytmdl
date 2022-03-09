@@ -423,6 +423,16 @@ def pre_checks(args):
         logger.list_available_levels()
         exit(0)
 
+    # If options is asked for
+    #
+    # It is important not to run any possible verbose commands
+    # before this output because this one is used for automatic
+    # generation of the completion files.
+    if args.get_opts:
+        print(" ".join(("--{}".format(opt.replace("_", "-"))
+              for opt in vars(args))))
+        exit(0)
+
     # Update the logger flags, in case those are not the default ones.
     if args.level.lower != "info":
         logger.update_level(args.level.upper())
@@ -441,12 +451,6 @@ def pre_checks(args):
         setupConfig.make_config()
         logger.debug("Config created")
         logger.info("Created new config since none was present")
-
-    # If options is asked for
-    if args.get_opts:
-        print(" ".join(("--{}".format(opt.replace("_", "-"))
-              for opt in vars(args))))
-        exit(0)
 
     # Ensure the output directory is legitimate
     if (args.output_dir is not None):
