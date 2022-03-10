@@ -277,7 +277,8 @@ def get_playlist(
     proxy,
     playlist_start=None,
     playlist_end=None,
-    playlist_items=None
+    playlist_items=None,
+    ytdl_config: str = None
 ):
     """
     Extract the playlist data and return it accordingly.
@@ -288,19 +289,14 @@ def get_playlist(
     url  : URL of the video
     title: Title of the video.
     """
-    is_quiet: bool = utility.determine_logger_level(
-    ) != logger.level_map["DEBUG"]
-    no_warnings: bool = utility.determine_logger_level(
-    ) > logger.level_map["WARNING"]
+    ydl_opts = ydl_opts_with_config(ytdl_config=ytdl_config)
 
-    ydl_opts = {
-        'quiet': is_quiet,
-        'no_warnings': no_warnings,
+    extra_opts = {
         'format': 'bestaudio/best',
-        'nocheckcertificate': True,
         'dump_single_json': True,
         'extract_flat': True,
     }
+    ydl_opts.update(extra_opts)
 
     if proxy is not None:
         ydl_opts['proxy'] = proxy

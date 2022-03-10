@@ -546,7 +546,8 @@ def extract_data():
             args.proxy,
             args.pl_start,
             args.pl_end,
-            args.pl_items
+            args.pl_items,
+            args.ytdl_config
         )
 
         # Check if data is actually returned
