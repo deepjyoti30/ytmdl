@@ -422,26 +422,5 @@ def get_chapters(url):
     return info.get("chapters", None)
 
 
-def is_ytdl_config_present(path_passed: str) -> bool:
-    """
-    Check if the passed file is present or not.
-
-    If the passed path is a directory, check if there is a
-    `yt-dlp` file inside that directory.
-    """
-    path = os.path
-
-    # This can be changed to other name in case the package
-    # name changes or the config name
-    package_name = "yt-dlp"
-
-    if path.isdir(path_passed):
-        path_passed = path.join(path_passed, f"{package_name}.conf")
-
-    logger.debug("Checking if path exists: ", path_passed)
-
-    return path.exists(path_passed)
-
-
 if __name__ == '__main__':
     print(defaults.DEFAULT.SONG_QUALITY)

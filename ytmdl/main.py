@@ -39,6 +39,7 @@ from ytmdl.utils.archive import (
     is_present_in_archive,
     add_song_to_archive
 )
+from ytmdl.utils.ytdl import is_ytdl_config_present
 from ytmdl.yt import is_yt_url
 from ytmdl.__version__ import __version__
 
@@ -455,7 +456,7 @@ def pre_checks(args):
         logger.info("Created new config since none was present")
 
     # Check if ytdl config is present if it is passed
-    if args.ytdl_config and not yt.is_ytdl_config_present(args.ytdl_config):
+    if args.ytdl_config and not is_ytdl_config_present(args.ytdl_config):
         logger.critical(
             "YoutubeDL config passed is invalid or not present:", args.ytdl_config)
 
