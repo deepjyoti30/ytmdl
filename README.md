@@ -37,17 +37,18 @@ Ytmdl also has an web app, you can try it out [here](https://ytmdl.deepjyoti30.d
 
 ## Why this?
 
-This app downloads a song by getting the audio from Youtube sources __using__ youtube-dl and then adds song information like
+This app downloads a song by getting the audio from Youtube sources **using** youtube-dl and then adds song information like
 artist name, album name, release date, thumbnail etc by fetching it from sources like Itunes, Spotify, Gaana and other sources.
 
-__NO__. YoutubeDL doesn't do that. All youtube-dl does is lets you download audio from a video that you specify.
-__This app is not yet another youtube-dl clone.__
+**NO**. YoutubeDL doesn't do that. All youtube-dl does is lets you download audio from a video that you specify.
+**This app is not yet another youtube-dl clone.**
 
 ## Support the Project?
 
 Help the development of this project by becoming a backer or a sponsor.
 
 ### [Become a Backer](https://opencollective.com/ytmdl#backer)
+
 ### [Become a sponsor](https://opencollective.com/ytmdl#sponsor)
 
 If you like my work, consider buying me a coffee or donating. In case you want to become a patron, join my [Pateron](https://www.patreon.com/deepjyoti30)
@@ -78,13 +79,13 @@ If you like my work, consider buying me a coffee or donating. In case you want t
 pip install ytmdl
 ```
 
->NOTE: System wide installation requires `sudo`
+> NOTE: System wide installation requires `sudo`
 
 ### Arch Linux
 
 `ytmdl` is available in AUR as `ytmdl`. It can be found [here](https://aur.archlinux.org/packages/ytmdl/)
 
->NOTE: The git version is availble as `ytmdl-git` in AUR.
+> NOTE: The git version is availble as `ytmdl-git` in AUR.
 
 ### Gentoo
 
@@ -123,7 +124,7 @@ Once `ffmpeg` is installed, install `ytmdl` using the following command
 pip install ytmdl --upgrade
 ```
 
->NOTE: You'll need to have Python 3.6.1 or more installed.
+> NOTE: You'll need to have Python 3.6.1 or more installed.
 
 Optionally, also install the latest version of `downloader-cli` and `simber` using the following command:
 
@@ -137,22 +138,22 @@ You can manually install `ytmdl` by cloning this repository and running the `set
 
 1. Install `setuptools` if it isn't already:
 
-    ```console
-     pip install setuptools
-     ```
+   ```console
+    pip install setuptools
+   ```
 
 1. Clone this repo:
 
-    ```console
-    git clone https://github.com/deepjyoti30/ytmdl
-    ```
+   ```console
+   git clone https://github.com/deepjyoti30/ytmdl
+   ```
 
 1. Move into the `ytmdl` directory and run the `setup.py` script:
 
-    ```console
-    cd ytmdl
-    sudo python setup.py install
-    ```
+   ```console
+   cd ytmdl
+   sudo python setup.py install
+   ```
 
 ## Usage
 
@@ -164,16 +165,16 @@ usage: ytmdl [-h] [-q] [-o OUTPUT_DIR] [--song SONG-METADATA]
              [--on-meta-error ON_META_ERROR] [--proxy URL] [--url URL]
              [--list PATH TO LIST] [--nolocal] [--format FORMAT] [--trim]
              [--version] [--keep-chapter-name] [--download-archive FILE]
-             [--ignore-chapters] [--pl-start NUMBER] [--pl-end NUMBER]
-             [--pl-items ITEM_SPEC] [--ignore-errors] [--title-as-name]
-             [--level LEVEL] [--disable-file] [--list-level]
+             [--ignore-chapters] [--ytdl-config PATH] [--pl-start NUMBER]
+             [--pl-end NUMBER] [--pl-items ITEM_SPEC] [--ignore-errors]
+             [--title-as-name] [--level LEVEL] [--disable-file] [--list-level]
              [SONG_NAME ...]
 
 positional arguments:
   SONG_NAME             Name of the song to download. Can be an URL to a
                         playlist as well. It will be automatically recognized.
 
-optional arguments:
+options:
   -h, --help            show this help message and exit
   -q, --quiet           Don't ask the user to select songs if more than one
                         search result. The first result in each case will be
@@ -210,6 +211,8 @@ optional arguments:
                         file.
   --ignore-chapters     Ignore chapters if available in the video and treat it
                         like one video
+  --ytdl-config PATH    Path to the youtube-dl config location or the
+                        directory
 
 Metadata:
   --song SONG-METADATA  The song to search in Metadata. Particularly useful
@@ -290,15 +293,15 @@ Above command will download the config from the repo and save it in the `~/.conf
 
 As of the latest development branch, the following options can be changed from the config
 
-| Name                 | Description                                        | Default                        |
-|:--------------------:|----------------------------------------------------|--------------------------------|
-| `SONG_DIR`           | Directory to save the songs in after editing       | Current directory              |
-| `SONG_QUALITY`       | Quality of the song                                | 320kbps                        |
-| `METADATA_PROVIDERS` | Which API providers to use for metadata            | all supported options are used |
-| `DEFAULT_FORMAT`     | Default format of the song                         | mp3                            |
-| `ON_META_ERROR`      | What to do if error occurs while writing meta      | exit                           |
-| `ITUNES_COUNTRY`     | Which region to use while searching from Itunes    | US                             |
-| `SPOTIFY_COUNTRY`    | Which market to use while searching from Spotify   | US                             |
+|         Name         | Description                                      | Default                        |
+| :------------------: | ------------------------------------------------ | ------------------------------ |
+|      `SONG_DIR`      | Directory to save the songs in after editing     | Current directory              |
+|    `SONG_QUALITY`    | Quality of the song                              | 320kbps                        |
+| `METADATA_PROVIDERS` | Which API providers to use for metadata          | all supported options are used |
+|   `DEFAULT_FORMAT`   | Default format of the song                       | mp3                            |
+|   `ON_META_ERROR`    | What to do if error occurs while writing meta    | exit                           |
+|   `ITUNES_COUNTRY`   | Which region to use while searching from Itunes  | US                             |
+|  `SPOTIFY_COUNTRY`   | Which market to use while searching from Spotify | US                             |
 
 ### Advanced Configuration
 
@@ -338,11 +341,11 @@ If the `SONG_DIR` field is `/dir$Album->[Artist]` will extract to the following 
 
 As of the latest source, the following options can be passed to the special string in order to create dynamic directories
 
-| Name          |                               |
-|:-------------:|-------------------------------|
-| `Artist`      | Artist Of the Song            |
-| `Album`       | Album Of the Song             |
-| `Title`       | Title Of the Song             |
-| `Genre`       | Genre Of the Song             |
-| `TrackNumber` | TrackNumber Of the Song       |
-| `ReleaseDate` | ReleaseDate Of the Song       |
+|     Name      |                         |
+| :-----------: | ----------------------- |
+|   `Artist`    | Artist Of the Song      |
+|    `Album`    | Album Of the Song       |
+|    `Title`    | Title Of the Song       |
+|    `Genre`    | Genre Of the Song       |
+| `TrackNumber` | TrackNumber Of the Song |
+| `ReleaseDate` | ReleaseDate Of the Song |

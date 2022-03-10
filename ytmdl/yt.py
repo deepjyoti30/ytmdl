@@ -16,6 +16,7 @@ from ytmdl.exceptions import ExtractError
 from ytmdl.utils.ytmusic import get_title_from_ytmusic
 from youtubesearchpython import VideosSearch
 from typing import List
+from ytmdl.utils.ytdl import ydl_opts_with_config
 
 
 logger = Logger("yt")
@@ -74,7 +75,7 @@ def progress_handler(d):
         stdout.flush()
 
 
-def dw_using_yt(link, proxy, song_name, datatype, no_progress=False):
+def dw_using_yt(link, proxy, song_name, datatype, no_progress=False, ytdl_config: str = None):
     """
     Download the song using YTDL downloader and use downloader CLI's
     functions to be used to display a progressbar.
@@ -86,19 +87,13 @@ def dw_using_yt(link, proxy, song_name, datatype, no_progress=False):
     elif datatype == 'm4a':
         format_ = 'bestaudio[ext=m4a]'
 
-    is_quiet: bool = utility.determine_logger_level(
-    ) != logger.level_map["DEBUG"]
-    no_warnings: bool = utility.determine_logger_level(
-    ) > logger.level_map["WARNING"]
+    ydl_opts = ydl_opts_with_config(ytdl_config)
 
-    ydl_opts = {
-        'quiet': is_quiet,
-        'no_warnings': no_warnings,
+    extra_opts = {
         'outtmpl': song_name,
         'format': format_,
-        'nocheckcertificate': True,
-        'source_address': '0.0.0.0'
     }
+    ydl_opts.update(extra_opts)
 
     if not no_progress:
         logger.debug("Enabling progress hook.")
@@ -123,7 +118,8 @@ def dw(
         proxy=None,
         song_name='ytmdl_temp.mp3',
         datatype='mp3',
-        no_progress=False
+        no_progress=False,
+        ytdl_config: str = None
 ):
     """
     Download the song.
@@ -156,7 +152,8 @@ def dw(
         logger.debug(name)
 
         # Start downloading the song
-        status = dw_using_yt(value, proxy, name, datatype, no_progress)
+        status = dw_using_yt(value, proxy, name, datatype,
+                             no_progress, ytdl_config)
 
         if status == 0:
             return name
@@ -280,7 +277,8 @@ def get_playlist(
     proxy,
     playlist_start=None,
     playlist_end=None,
-    playlist_items=None
+    playlist_items=None,
+    ytdl_config: str = None
 ):
     """
     Extract the playlist data and return it accordingly.
@@ -291,19 +289,14 @@ def get_playlist(
     url  : URL of the video
     title: Title of the video.
     """
-    is_quiet: bool = utility.determine_logger_level(
-    ) != logger.level_map["DEBUG"]
-    no_warnings: bool = utility.determine_logger_level(
-    ) > logger.level_map["WARNING"]
+    ydl_opts = ydl_opts_with_config(ytdl_config=ytdl_config)
 
-    ydl_opts = {
-        'quiet': is_quiet,
-        'no_warnings': no_warnings,
+    extra_opts = {
         'format': 'bestaudio/best',
-        'nocheckcertificate': True,
         'dump_single_json': True,
         'extract_flat': True,
     }
+    ydl_opts.update(extra_opts)
 
     if proxy is not None:
         ydl_opts['proxy'] = proxy
@@ -335,21 +328,11 @@ def get_playlist(
         return None, None
 
 
-def __get_title_from_yt(url):
+def __get_title_from_yt(url, ytdl_config: str = None):
     """
     Return the title of the passed URL.
     """
-    is_quiet: bool = utility.determine_logger_level(
-    ) != logger.level_map["DEBUG"]
-    no_warnings: bool = utility.determine_logger_level(
-    ) > logger.level_map["WARNING"]
-
-    ydl_opts = {
-        "quiet": is_quiet,
-        'no_warnings': no_warnings,
-        'nocheckcertificate': True,
-        'source_address': '0.0.0.0'
-    }
+    ydl_opts = ydl_opts_with_config(ytdl_config=ytdl_config)
 
     logger.debug(url)
 
@@ -375,7 +358,7 @@ def extract_video_id(url: str) -> str:
         raise ExtractError(url)
 
 
-def get_title(url) -> str:
+def get_title(url, ytdl_config: str = None) -> str:
     """
     Try to get the title of the song.
 
@@ -398,24 +381,14 @@ def get_title(url) -> str:
 
     # Try Youtube as a fallback
     verify_title = True
-    title = __get_title_from_yt(url)
+    title = __get_title_from_yt(url, ytdl_config)
     return title, verify_title
 
 
-def get_chapters(url):
+def get_chapters(url, ytdl_config: str = None):
     """Get the chapters of the passed URL.
     """
-    is_quiet: bool = utility.determine_logger_level(
-    ) != logger.level_map["DEBUG"]
-    no_warnings: bool = utility.determine_logger_level(
-    ) > logger.level_map["WARNING"]
-
-    ydl_opts = {
-        "quiet": is_quiet,
-        'no_warnings': no_warnings,
-        'nocheckcertificate': True,
-        'source_address': '0.0.0.0'
-    }
+    ydl_opts = ydl_opts_with_config(ytdl_config=ytdl_config)
 
     info = yt_dlp.YoutubeDL(ydl_opts).extract_info(url, False)
 

@@ -2,7 +2,7 @@
 """Setup ytmdl."""
 
 import setuptools
-from os import path, name
+from os import path
 from warnings import warn
 
 with open("README.md", "r") as fh:
@@ -11,7 +11,7 @@ with open("README.md", "r") as fh:
 exec(open("ytmdl/__version__.py").read())
 
 req_pkgs = [
-    'yt-dlp',
+    'yt-dlp>=2022.03.08.1',
     'mutagen',
     'itunespy',
     'requests',
