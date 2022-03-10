@@ -2,7 +2,7 @@
 """Setup ytmdl."""
 
 import setuptools
-from os import path, name
+from os import path
 from warnings import warn
 
 with open("README.md", "r") as fh:
