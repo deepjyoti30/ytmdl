@@ -55,7 +55,7 @@ def ydl_opts_with_config(ytdl_config: str = None) -> Dict:
     # If config is passed, generated opts with config
     if ytdl_config is not None:
         _, _, _, parsed_opts = parse_options(
-            f"yt-dlp --config-locations {ytdl_config}")
-        ydl_opts.update(parse_options)
+            f"yt-dlp --config-locations {ytdl_config}".split())
+        ydl_opts.update(parsed_opts)
 
     return ydl_opts
