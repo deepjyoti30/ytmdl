@@ -16,6 +16,7 @@ from ytmdl.exceptions import ExtractError
 from ytmdl.utils.ytmusic import get_title_from_ytmusic
 from youtubesearchpython import VideosSearch
 from typing import List
+from ytmdl.utils.ytdl import ydl_opts_with_config
 
 
 logger = Logger("yt")
@@ -335,21 +336,11 @@ def get_playlist(
         return None, None
 
 
-def __get_title_from_yt(url):
+def __get_title_from_yt(url, ytdl_config: str = None):
     """
     Return the title of the passed URL.
     """
-    is_quiet: bool = utility.determine_logger_level(
-    ) != logger.level_map["DEBUG"]
-    no_warnings: bool = utility.determine_logger_level(
-    ) > logger.level_map["WARNING"]
-
-    ydl_opts = {
-        "quiet": is_quiet,
-        'no_warnings': no_warnings,
-        'nocheckcertificate': True,
-        'source_address': '0.0.0.0'
-    }
+    ydl_opts = ydl_opts_with_config(ytdl_config=ytdl_config)
 
     logger.debug(url)
 
@@ -375,7 +366,7 @@ def extract_video_id(url: str) -> str:
         raise ExtractError(url)
 
 
-def get_title(url) -> str:
+def get_title(url, ytdl_config: str = None) -> str:
     """
     Try to get the title of the song.
 
@@ -398,24 +389,14 @@ def get_title(url) -> str:
 
     # Try Youtube as a fallback
     verify_title = True
-    title = __get_title_from_yt(url)
+    title = __get_title_from_yt(url, ytdl_config)
     return title, verify_title
 
 
-def get_chapters(url):
+def get_chapters(url, ytdl_config: str = None):
     """Get the chapters of the passed URL.
     """
-    is_quiet: bool = utility.determine_logger_level(
-    ) != logger.level_map["DEBUG"]
-    no_warnings: bool = utility.determine_logger_level(
-    ) > logger.level_map["WARNING"]
-
-    ydl_opts = {
-        "quiet": is_quiet,
-        'no_warnings': no_warnings,
-        'nocheckcertificate': True,
-        'source_address': '0.0.0.0'
-    }
+    ydl_opts = ydl_opts_with_config(ytdl_config=ytdl_config)
 
     info = yt_dlp.YoutubeDL(ydl_opts).extract_info(url, False)
 

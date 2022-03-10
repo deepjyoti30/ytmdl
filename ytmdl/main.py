@@ -290,7 +290,7 @@ def main(args):
         return
 
     # Try to extract the chapters
-    chapters = yt.get_chapters(link)
+    chapters = yt.get_chapters(link, args.ytdl_config)
 
     songs_to_download = [{}]
     # If the chapters are present, we will have to iterate and extract each chapter
@@ -496,7 +496,7 @@ def extract_song_name(args) -> str:
     verify_title = True
     try:
         # Fetch the title of the song
-        song_name, verify_title = yt.get_title(args.url)
+        song_name, verify_title = yt.get_title(args.url, args.ytdl_config)
     except ExtractError:
         if not args.ignore_errors:
             logger.critical("Wasn't able to extract song data.",
