@@ -153,6 +153,8 @@ def arguments():
     parser.add_argument('--ignore-chapters', help="Ignore chapters if available in the video and treat \
                         it like one video",
                         action="store_true")
+    parser.add_argument('--ytdl-config', help="Path to the youtube-dl config location or the "
+                        "directory", default=None, metavar="PATH", type=str)
 
     playlist_group = parser.add_argument_group("Playlist")
     playlist_group.add_argument(
