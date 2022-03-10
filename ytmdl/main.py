@@ -454,6 +454,11 @@ def pre_checks(args):
         logger.debug("Config created")
         logger.info("Created new config since none was present")
 
+    # Check if ytdl config is present if it is passed
+    if args.ytdl_config and not yt.is_ytdl_config_present(args.ytdl_config):
+        logger.critical(
+            "YoutubeDL config passed is invalid or not present:", args.ytdl_config)
+
     # Ensure the output directory is legitimate
     if (args.output_dir is not None):
         if path.isdir(path.expanduser(args.output_dir)):
