@@ -75,7 +75,7 @@ def progress_handler(d):
         stdout.flush()
 
 
-def dw_using_yt(link, proxy, song_name, datatype, no_progress=False):
+def dw_using_yt(link, proxy, song_name, datatype, no_progress=False, ytdl_config: str = None):
     """
     Download the song using YTDL downloader and use downloader CLI's
     functions to be used to display a progressbar.
@@ -87,19 +87,13 @@ def dw_using_yt(link, proxy, song_name, datatype, no_progress=False):
     elif datatype == 'm4a':
         format_ = 'bestaudio[ext=m4a]'
 
-    is_quiet: bool = utility.determine_logger_level(
-    ) != logger.level_map["DEBUG"]
-    no_warnings: bool = utility.determine_logger_level(
-    ) > logger.level_map["WARNING"]
+    ydl_opts = ydl_opts_with_config(ytdl_config)
 
-    ydl_opts = {
-        'quiet': is_quiet,
-        'no_warnings': no_warnings,
+    extra_opts = {
         'outtmpl': song_name,
         'format': format_,
-        'nocheckcertificate': True,
-        'source_address': '0.0.0.0'
     }
+    ydl_opts.update(extra_opts)
 
     if not no_progress:
         logger.debug("Enabling progress hook.")
@@ -124,7 +118,8 @@ def dw(
         proxy=None,
         song_name='ytmdl_temp.mp3',
         datatype='mp3',
-        no_progress=False
+        no_progress=False,
+        ytdl_config: str = None
 ):
     """
     Download the song.
@@ -157,7 +152,8 @@ def dw(
         logger.debug(name)
 
         # Start downloading the song
-        status = dw_using_yt(value, proxy, name, datatype, no_progress)
+        status = dw_using_yt(value, proxy, name, datatype,
+                             no_progress, ytdl_config)
 
         if status == 0:
             return name
