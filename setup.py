@@ -2,7 +2,7 @@
 """Setup ytmdl."""
 
 import setuptools
-from os import path, name
+from os import path
 from warnings import warn
 
 with open("README.md", "r") as fh:
@@ -11,7 +11,7 @@ with open("README.md", "r") as fh:
 exec(open("ytmdl/__version__.py").read())
 
 req_pkgs = [
-    'youtube_dl',
+    'yt-dlp>=2022.03.08.1',
     'mutagen',
     'itunespy',
     'requests',
@@ -55,12 +55,6 @@ params = {
     'data_files': data_files,
 }
 
-params["scripts"] = ['bin/ytmdl']
-
-# Install a bat script for Windows users
-if name == 'nt':
-    params["scripts"].append("bin/ytmdl.bat")
-
 
 if __name__ == '__main__':
     setuptools.setup(
@@ -85,5 +79,10 @@ if __name__ == '__main__':
         install_requires=req_pkgs,
         setup_requires=req_pkgs,
         extras_require=extra_features,
+        entry_points={
+            'console_scripts': [
+                "ytmdl = ytmdl:entry"
+            ]
+        },
         **params
     )

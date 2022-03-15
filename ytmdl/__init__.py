@@ -1,4 +1,8 @@
+# Import entry to make it accessible
+from ytmdl.main import entry
+
 name = "ytmdl"
+
 
 __all__ = ['ytmdl',
            'defaults',
@@ -17,5 +21,5 @@ __all__ = ['ytmdl',
            'trim',
            'saavn',
            'exceptions',
-           'core'
+           'core',
            ]

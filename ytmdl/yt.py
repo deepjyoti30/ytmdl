@@ -4,8 +4,8 @@
 import requests
 import os
 from urllib.parse import urlparse, parse_qs
-import youtube_dl
-from youtube_dl.utils import DownloadError
+import yt_dlp
+from yt_dlp.utils import DownloadError
 from re import match
 from ytmdl import defaults, utility, stringutils
 from downloader_cli.download import Download
@@ -16,6 +16,7 @@ from ytmdl.exceptions import ExtractError
 from ytmdl.utils.ytmusic import get_title_from_ytmusic
 from youtubesearchpython import VideosSearch
 from typing import List
+from ytmdl.utils.ytdl import ydl_opts_with_config
 
 
 logger = Logger("yt")
@@ -26,7 +27,7 @@ def get_youtube_streams(url):
 
     PS: I don't know how youtube-dl does the magic
     """
-    cli = "youtube-dl -g {}".format(url)
+    cli = "yt-dlp -g {}".format(url)
     output, error = utility.exe(cli)
     stream_urls = output.split("\n")
 
@@ -74,7 +75,7 @@ def progress_handler(d):
         stdout.flush()
 
 
-def dw_using_yt(link, proxy, song_name, datatype, no_progress=False):
+def dw_using_yt(link, proxy, song_name, datatype, no_progress=False, ytdl_config: str = None):
     """
     Download the song using YTDL downloader and use downloader CLI's
     functions to be used to display a progressbar.
@@ -86,13 +87,13 @@ def dw_using_yt(link, proxy, song_name, datatype, no_progress=False):
     elif datatype == 'm4a':
         format_ = 'bestaudio[ext=m4a]'
 
-    ydl_opts = {
-        'quiet': True,
+    ydl_opts = ydl_opts_with_config(ytdl_config)
+
+    extra_opts = {
         'outtmpl': song_name,
         'format': format_,
-        'nocheckcertificate': True,
-        'source_address': '0.0.0.0'
     }
+    ydl_opts.update(extra_opts)
 
     if not no_progress:
         logger.debug("Enabling progress hook.")
@@ -102,7 +103,7 @@ def dw_using_yt(link, proxy, song_name, datatype, no_progress=False):
     if proxy is not None:
         ydl_opts['proxy'] = proxy
 
-    ydl = youtube_dl.YoutubeDL(ydl_opts)
+    ydl = yt_dlp.YoutubeDL(ydl_opts)
 
     try:
         ydl.download([link])
@@ -117,7 +118,8 @@ def dw(
         proxy=None,
         song_name='ytmdl_temp.mp3',
         datatype='mp3',
-        no_progress=False
+        no_progress=False,
+        ytdl_config: str = None
 ):
     """
     Download the song.
@@ -150,7 +152,8 @@ def dw(
         logger.debug(name)
 
         # Start downloading the song
-        status = dw_using_yt(value, proxy, name, datatype, no_progress)
+        status = dw_using_yt(value, proxy, name, datatype,
+                             no_progress, ytdl_config)
 
         if status == 0:
             return name
@@ -164,10 +167,12 @@ def dw(
 
 def get_href(url):
     """Get the watch? part of the url in case of urls."""
-    pos_watch = url.index('/watch?v=')
+    queries = parse_qs(urlparse(url=url).query)
 
-    part = url[pos_watch:]
+    if 'v' not in queries:
+        raise ExtractError(url)
 
+    part = f"/watch?v={queries['v'][0]}"
     return part
 
 
@@ -272,7 +277,8 @@ def get_playlist(
     proxy,
     playlist_start=None,
     playlist_end=None,
-    playlist_items=None
+    playlist_items=None,
+    ytdl_config: str = None
 ):
     """
     Extract the playlist data and return it accordingly.
@@ -283,13 +289,14 @@ def get_playlist(
     url  : URL of the video
     title: Title of the video.
     """
-    ydl_opts = {
-        'quiet': True,
+    ydl_opts = ydl_opts_with_config(ytdl_config=ytdl_config)
+
+    extra_opts = {
         'format': 'bestaudio/best',
-        'nocheckcertificate': True,
         'dump_single_json': True,
         'extract_flat': True,
     }
+    ydl_opts.update(extra_opts)
 
     if proxy is not None:
         ydl_opts['proxy'] = proxy
@@ -301,7 +308,7 @@ def get_playlist(
         ydl_opts['playlist_items'] = playlist_items
 
     # Extract the info now
-    songs = youtube_dl.YoutubeDL(ydl_opts).extract_info(url, False)
+    songs = yt_dlp.YoutubeDL(ydl_opts).extract_info(url, False)
 
     # Put another check to see if the passed URL is a playlist
     try:
@@ -321,19 +328,15 @@ def get_playlist(
         return None, None
 
 
-def __get_title_from_yt(url):
+def __get_title_from_yt(url, ytdl_config: str = None):
     """
     Return the title of the passed URL.
     """
-    ydl_opts = {
-        "quiet": True,
-        'nocheckcertificate': True,
-        'source_address': '0.0.0.0'
-    }
+    ydl_opts = ydl_opts_with_config(ytdl_config=ytdl_config)
 
     logger.debug(url)
 
-    ydl = youtube_dl.YoutubeDL(ydl_opts)
+    ydl = yt_dlp.YoutubeDL(ydl_opts)
 
     try:
         data = ydl.extract_info(url, False)
@@ -355,7 +358,7 @@ def extract_video_id(url: str) -> str:
         raise ExtractError(url)
 
 
-def get_title(url) -> str:
+def get_title(url, ytdl_config: str = None) -> str:
     """
     Try to get the title of the song.
 
@@ -378,20 +381,16 @@ def get_title(url) -> str:
 
     # Try Youtube as a fallback
     verify_title = True
-    title = __get_title_from_yt(url)
+    title = __get_title_from_yt(url, ytdl_config)
     return title, verify_title
 
 
-def get_chapters(url):
+def get_chapters(url, ytdl_config: str = None):
     """Get the chapters of the passed URL.
     """
-    ydl_opts = {
-        "quiet": True,
-        'nocheckcertificate': True,
-        'source_address': '0.0.0.0'
-    }
+    ydl_opts = ydl_opts_with_config(ytdl_config=ytdl_config)
 
-    info = youtube_dl.YoutubeDL(ydl_opts).extract_info(url, False)
+    info = yt_dlp.YoutubeDL(ydl_opts).extract_info(url, False)
 
     return info.get("chapters", None)
 

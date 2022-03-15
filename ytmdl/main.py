@@ -39,6 +39,7 @@ from ytmdl.utils.archive import (
     is_present_in_archive,
     add_song_to_archive
 )
+from ytmdl.utils.ytdl import is_ytdl_config_present
 from ytmdl.yt import is_yt_url
 from ytmdl.__version__ import __version__
 
@@ -153,6 +154,8 @@ def arguments():
     parser.add_argument('--ignore-chapters', help="Ignore chapters if available in the video and treat \
                         it like one video",
                         action="store_true")
+    parser.add_argument('--ytdl-config', help="Path to the youtube-dl config location or the "
+                        "directory", default=None, metavar="PATH", type=str)
 
     playlist_group = parser.add_argument_group("Playlist")
     playlist_group.add_argument(
@@ -287,7 +290,7 @@ def main(args):
         return
 
     # Try to extract the chapters
-    chapters = yt.get_chapters(link)
+    chapters = yt.get_chapters(link, args.ytdl_config)
 
     songs_to_download = [{}]
     # If the chapters are present, we will have to iterate and extract each chapter
@@ -423,6 +426,16 @@ def pre_checks(args):
         logger.list_available_levels()
         exit(0)
 
+    # If options is asked for
+    #
+    # It is important not to run any possible verbose commands
+    # before this output because this one is used for automatic
+    # generation of the completion files.
+    if args.get_opts:
+        print(" ".join(("--{}".format(opt.replace("_", "-"))
+              for opt in vars(args))))
+        exit(0)
+
     # Update the logger flags, in case those are not the default ones.
     if args.level.lower != "info":
         logger.update_level(args.level.upper())
@@ -442,11 +455,10 @@ def pre_checks(args):
         logger.debug("Config created")
         logger.info("Created new config since none was present")
 
-    # If options is asked for
-    if args.get_opts:
-        print(" ".join(("--{}".format(opt.replace("_", "-"))
-              for opt in vars(args))))
-        exit(0)
+    # Check if ytdl config is present if it is passed
+    if args.ytdl_config and not is_ytdl_config_present(args.ytdl_config):
+        logger.critical(
+            "YoutubeDL config passed is invalid or not present:", args.ytdl_config)
 
     # Ensure the output directory is legitimate
     if (args.output_dir is not None):
@@ -484,7 +496,7 @@ def extract_song_name(args) -> str:
     verify_title = True
     try:
         # Fetch the title of the song
-        song_name, verify_title = yt.get_title(args.url)
+        song_name, verify_title = yt.get_title(args.url, args.ytdl_config)
     except ExtractError:
         if not args.ignore_errors:
             logger.critical("Wasn't able to extract song data.",
@@ -534,7 +546,8 @@ def extract_data():
             args.proxy,
             args.pl_start,
             args.pl_end,
-            args.pl_items
+            args.pl_items,
+            args.ytdl_config
         )
 
         # Check if data is actually returned
@@ -549,16 +562,27 @@ def extract_data():
         args.SONG_NAME = []
 
         # Iterate and work on the data.
-        url_base = "https://www.youtube.com/watch?v="
+        # NOTE: song["url"] will contain the URL all right, it won't be just
+        # the href.
         for song in songs:
-            args.url = url_base + song["url"]
+            args.url = song["url"]
+
+            # Keep compatibility in case the url value changes back to href
+            # in the future.
+            if '/' not in args.url:
+                args.url = f"https://www.youtube.com/watch?v={args.url}"
+
             main(args)
     else:
         main(args)
 
 
-if __name__ == '__main__':
+def entry():
     try:
         extract_data()
     except KeyboardInterrupt:
         logger.info("\nExiting..!")
+
+
+if __name__ == '__main__':
+    entry()
