@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """Build the completion files
 
 The arguments can be fetched by using the ytmdl
@@ -20,7 +21,7 @@ def build_files():
     """Build the files"""
     environ["PYTHONPATH"] = "./ytmdl"
     process = Popen(
-        "python -m main --get-opts".split(), stdout=PIPE, stderr=PIPE)
+        "python3 -m main --get-opts".split(), stdout=PIPE, stderr=PIPE)
     out, err = process.communicate()
 
     opts = out.decode("utf-8").replace("\n", "")
