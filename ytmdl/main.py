@@ -42,6 +42,7 @@ from ytmdl.utils.archive import (
 from ytmdl.utils.ytdl import is_ytdl_config_present
 from ytmdl.yt import is_yt_url
 from ytmdl.__version__ import __version__
+from typing import Tuple
 
 # init colorama for windows
 init()
@@ -228,7 +229,8 @@ def arguments():
 def main(args):
     """Run on program call."""
 
-    song_name = extract_song_name(args)
+    song_name, verify_name = extract_song_name(args)
+    logger.debug("verify title: ", str(verify_name))
 
     # Extract the archive file contents
     is_download_archive = args.download_archive is not None
@@ -292,7 +294,15 @@ def main(args):
     # Try to extract the chapters
     chapters = yt.get_chapters(link, args.ytdl_config)
 
-    songs_to_download = [{}]
+    # Add the current passed song as the only entry here
+    # This dictionary will be cleared if the song is found to be containing
+    # chapters.
+    #
+    # Moreover, the `is_original` field is **not** present from the youtube
+    # response which would force the following code to verify the title
+    #  for chapters which is the behavior we want.
+    songs_to_download = [{'title': yt_title, 'is_original': not verify_name}]
+
     # If the chapters are present, we will have to iterate and extract each chapter
     if chapters and not args.ignore_chapters:
         logger.info("The song has chapters in it.",
@@ -302,11 +312,14 @@ def main(args):
         for chapter in chapters:
             songs_to_download.append(chapter)
 
-    logger.debug(songs_to_download)
+    logger.debug("songs to download: ", str(songs_to_download))
     for song in songs_to_download:
         song_title = song.get("title", yt_title)
         start_time = song.get("start_time", None)
         end_time = song.get("end_time", None)
+
+        is_original = song.get("is_original", False)
+        logger.debug("is original: ", str(is_original))
 
         if "title" in song.keys():
             logger.debug("Has the attribute")
@@ -318,7 +331,7 @@ def main(args):
             # NOTE: Check if skip meta is passed, we don't need to
             # extract the new title.
             song_metadata = utility.get_new_title(song_metadata) if \
-                not (args.keep_chapter_name and args.skip_meta) else song_metadata
+                (not args.keep_chapter_name and not args.skip_meta and not is_original) else song_metadata
 
         # Pass the song for post processing
         try:
@@ -484,12 +497,12 @@ def pre_checks(args):
             "Song Name is required. Check 'ytmdl --help' for help.")
 
 
-def extract_song_name(args) -> str:
+def extract_song_name(args) -> Tuple[str, bool]:
     """Extract the name of the song from the given args"""
     logger.debug(args.SONG_NAME)
 
     if args.SONG_NAME:
-        return " ".join(args.SONG_NAME)
+        return " ".join(args.SONG_NAME), False
 
     # If song name is not passed then try to extract
     # the title of the song using the URL.
@@ -501,7 +514,7 @@ def extract_song_name(args) -> str:
         if not args.ignore_errors:
             logger.critical("Wasn't able to extract song data.",
                             "Use `--ignore-errors` to ignore this error")
-        return
+        return None, False
 
     # Ask the user if they want to go with the extracted
     # title or if they would like to change it.
@@ -511,8 +524,9 @@ def extract_song_name(args) -> str:
     # passed.
     if not args.title_as_name and not args.skip_meta and verify_title:
         song_name = utility.get_new_title(song_name)
+        verify_title = False
 
-    return song_name
+    return song_name, verify_title
 
 
 def extract_data():
