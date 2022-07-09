@@ -147,7 +147,7 @@ def getChoice(SONG_INFO, type):
 
     logger.info('Choose One {}'.format(
         '(One with [M] is verified music)'
-        if type == 'mp3' else ''))
+        if type == 'mp3' else '(Enter -1 to skip metadata)'))
 
     results = len(SONG_INFO)
 
