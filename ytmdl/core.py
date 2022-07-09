@@ -90,7 +90,7 @@ def search(song_name, args) -> Union[str, str]:
     if type(temp_data) is str and temp_data.lower() == "Unauthorized".lower():
         if args.ignore_errors:
             logger.warning("{}: is unauthorized".format(URL))
-            return
+            return None, None
         else:
             logger.critical("{}: is unauthorized".format(URL))
 
