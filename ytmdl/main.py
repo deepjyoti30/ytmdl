@@ -427,6 +427,16 @@ def post_processing(
     add_song_to_archive(
         stream=stream, youtube_link=link) if is_download_archive else None
 
+    # If no metadata was selected, just do a dry cleanup and skip the
+    # song
+    if track_selected is None:
+        if dir.dry_cleanup(conv_name, song_name):
+            logger.info("Done")
+        elif not args.ignore_errors or args.on_meta_error == 'exit':
+            logger.critical(
+                ". Pass `--ignore-errors` or `on-meta-error` to ignore this.")
+        return
+
     if dir.cleanup([track_selected], 0, passed_format, remove_cached=False):
         logger.info("Done")
 

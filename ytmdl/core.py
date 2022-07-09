@@ -246,4 +246,10 @@ def meta(conv_name: str, song_name: str, search_by: str, args):
     if type(option) is not int:
         raise MetadataError(search_by)
 
+    # If meta was skipped, indicate that
+    if option == -1:
+        logger.warning(
+            "Metadata was skipped because -1 was entered as the option")
+        return None
+
     return TRACK_INFO[option]

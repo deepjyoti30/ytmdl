@@ -173,7 +173,7 @@ def getChoice(SONG_INFO, type):
         # The choice is valid if it is in the range and it is greater than 0
         # We also need to break when the user enters -1 which means the exec
         # will skip the current song
-        if (choice <= len(SONG_INFO) and choice > 0) or choice == -1:
+        if choice == -1 or (choice <= len(SONG_INFO) and choice > 0):
             break
         elif choice == 0 and results < len(SONG_INFO):
             PRINT_WHOLE = True
@@ -182,7 +182,7 @@ def getChoice(SONG_INFO, type):
         else:
             PRINT_WHOLE = False
 
-    return choice - 1
+    return choice - 1 if choice != -1 else -1
 
 
 def set_MP3_data(song, song_path):
@@ -385,6 +385,10 @@ def setData(SONG_INFO, is_quiet, song_path, datatype='mp3', choice=None):
     logger.debug(choice)
     option = _get_option(SONG_INFO, is_quiet, choice)
     logger.debug(option)
+
+    # If -1 then skip setting the metadata
+    if option == -1:
+        return option
 
     song = SONG_INFO[option]
 
