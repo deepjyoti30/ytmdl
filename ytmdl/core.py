@@ -69,7 +69,7 @@ def search(song_name, args) -> Union[str, str]:
 
         # Check if choice if -2. If it is that, then we need to stop executing
         # of the current song and gracefully exit.
-        if choice == -2:
+        if choice == -2 or choice == -1:
             return False, False
 
         return (
