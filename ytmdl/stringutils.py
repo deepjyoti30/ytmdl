@@ -60,8 +60,10 @@ def remove_unwanted_chars(string):
     return re.sub(r"[\\/:*?\"<>| ]", "#", string)
 
 def fix_name(string):
-    return re.sub(r"[\\/:*?\"<>|]", "-", string)
-
+   return remove_multiple_spaces(
+      re.sub(r"-+","-",re.sub(
+         r"[\\/:*?\"<>|]", "-", string)))
+         
 def urlencode(text):
     """
         Url encode the text
