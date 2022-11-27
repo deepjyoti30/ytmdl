@@ -75,7 +75,7 @@ def progress_handler(d):
         stdout.flush()
 
 
-def dw_using_yt(link, proxy, song_name, datatype, no_progress=False, ytdl_config: str = None):
+def dw_using_yt(link, proxy, song_name, datatype, no_progress=False, ytdl_config: str = None, dont_convert: bool = False):
     """
     Download the song using YTDL downloader and use downloader CLI's
     functions to be used to display a progressbar.
@@ -87,12 +87,20 @@ def dw_using_yt(link, proxy, song_name, datatype, no_progress=False, ytdl_config
     elif datatype == 'm4a':
         format_ = 'bestaudio[ext=m4a]'
 
-    ydl_opts = ydl_opts_with_config(ytdl_config)
-
     extra_opts = {
         'outtmpl': song_name,
         'format': format_,
     }
+
+    # If dont_convert is specified then we want to make sure that
+    # format is passed as 251 and -x is specified in the arguments.
+    #
+    # This flag is only considered if the datatype is `opus`
+    if datatype == "opus" and dont_convert:
+        extra_opts["format"] = "251"
+        extra_opts["-x"] = ""
+
+    ydl_opts = ydl_opts_with_config(ytdl_config)
     ydl_opts.update(extra_opts)
 
     if not no_progress:
