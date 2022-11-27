@@ -116,7 +116,7 @@ def download(link, yt_title, args) -> str:
     ))
     path = yt.dw(link, args.proxy, yt_title,
                  args.format, no_progress=args.quiet,
-                 ytdl_config=args.ytdl_config)
+                 ytdl_config=args.ytdl_config, dont_convert=args.dont_convert)
 
     if type(path) is not str:
         # Probably an error occured

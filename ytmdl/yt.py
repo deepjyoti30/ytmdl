@@ -127,7 +127,8 @@ def dw(
         song_name='ytmdl_temp.mp3',
         datatype='mp3',
         no_progress=False,
-        ytdl_config: str = None
+        ytdl_config: str = None,
+        dont_convert: bool = False
 ):
     """
     Download the song.
@@ -161,7 +162,7 @@ def dw(
 
         # Start downloading the song
         status = dw_using_yt(value, proxy, name, datatype,
-                             no_progress, ytdl_config)
+                             no_progress, ytdl_config, dont_convert)
 
         if status == 0:
             return name
