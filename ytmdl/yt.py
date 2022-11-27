@@ -92,13 +92,22 @@ def dw_using_yt(link, proxy, song_name, datatype, no_progress=False, ytdl_config
         'format': format_,
     }
 
-    # If dont_convert is specified then we want to make sure that
-    # format is passed as 251 and -x is specified in the arguments.
+    # Add a postprocessor to convert the audio into
+    # opus if dont_convert is passed.
     #
-    # This flag is only considered if the datatype is `opus`
+    # Idea is to convert the audio through yt-dlp instead
+    # of using ffmpeg which is the format ytmdl uses.
+    #
+    # Replace `.opus` with `.webm` from the file since otherwise
+    # yt-dlp thinks that the file is converted.
     if datatype == "opus" and dont_convert:
-        extra_opts["format"] = "251"
-        extra_opts["-x"] = ""
+        extra_opts["postprocessors"] = [{
+            'key': 'FFmpegExtractAudio',
+            'preferredcodec': "best",
+            'preferredquality': '5',
+            'nopostoverwrites': True,
+        }]
+        extra_opts["outtmpl"] = song_name.replace(".opus", ".webm")
 
     ydl_opts = ydl_opts_with_config(ytdl_config)
     ydl_opts.update(extra_opts)
@@ -111,6 +120,7 @@ def dw_using_yt(link, proxy, song_name, datatype, no_progress=False, ytdl_config
     if proxy is not None:
         ydl_opts['proxy'] = proxy
 
+    logger.debug("args passed: ", str(ydl_opts))
     ydl = yt_dlp.YoutubeDL(ydl_opts)
 
     try:
@@ -140,7 +150,7 @@ def dw(
     added.
     """
     # If song_name doesn't have mp3 extension, add it
-    if datatype == "mp3" and not song_name.endswith(datatype):
+    if (datatype == "mp3" or datatype == "opus") and not song_name.endswith(datatype):
         song_name += '.' + datatype
     elif datatype == "m4a" and not song_name.endswith(datatype):
         song_name += '.' + datatype
