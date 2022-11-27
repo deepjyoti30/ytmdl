@@ -75,7 +75,7 @@ if __name__ == '__main__':
             "Environment :: Console",
             "Topic :: Multimedia :: Sound/Audio",
         ),
-        python_requires=">=3.*",
+        python_requires=">=3.6.2",
         install_requires=req_pkgs,
         setup_requires=req_pkgs,
         extras_require=extra_features,
