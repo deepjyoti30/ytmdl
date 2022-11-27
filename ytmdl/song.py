@@ -420,7 +420,10 @@ def setData(SONG_INFO, is_quiet, song_path, datatype='mp3', choice=None):
             song_path
         )
 
-    # TODO: Handle exception while adding the metadata
+    # Handle exception while adding the metadata
+    if type(img_added) == Exception:
+        logger.error(
+            "Failed to add metadata due to exception: {}".format(img_added))
 
     # Show the written stuff in a better format
     prepend.PREPEND(1)
