@@ -112,7 +112,7 @@ def arguments():
     metadata_group.add_argument("--ask-meta-name", help="Ask the user to enter a separate \
                         name for searching the metadata (Default: false)", action="store_true")
     metadata_group.add_argument("--on-meta-error", help="What to do if adding the metadata fails \
-                        for some reasong like lack of metadata or perhaps a network issue. \
+                        for some reason like lack of metadata or perhaps a network issue. \
                         Options are {}".format(defaults.DEFAULT.ON_ERROR_OPTIONS),
                                 type=str, default=None)
 
@@ -157,6 +157,9 @@ def arguments():
                         action="store_true")
     parser.add_argument('--ytdl-config', help="Path to the youtube-dl config location or the "
                         "directory", default=None, metavar="PATH", type=str)
+    parser.add_argument("--dont-transcode", help="Don't transcode the audio after \
+                        downloading. Applicable for OPUS format only. (Default: false)",
+                        action="store_true")
 
     playlist_group = parser.add_argument_group("Playlist")
     playlist_group.add_argument(
@@ -382,7 +385,8 @@ def post_processing(
     logger.debug(stream)
     # Try to convert the song
     try:
-        conv_name = convert(path, passed_format, start_time, end_time)
+        conv_name = convert(path, passed_format, start_time,
+                            end_time, args.dont_transcode)
     except ConvertError as convert_error:
         logger.critical('ERROR: {}'.format(convert_error))
         return

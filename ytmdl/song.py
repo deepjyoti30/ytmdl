@@ -314,13 +314,16 @@ def set_OPUS_data(song, song_path):
     try:
         SONG_PATH = os.path.join(defaults.DEFAULT.SONG_TEMP_DIR,
                                  song_path)
+        logger.debug("Opening file at {} to add metadata".format(SONG_PATH))
         mutagen_file = File(SONG_PATH)
 
         # Try adding the tags container
         try:
             mutagen_file.add_tags()
-        except Exception:
+        except Exception as e:
             # If exception is thrown, the tags already exist
+            logger.debug(
+                "Got exception while adding tags to the passed file: ", str(e))
             pass
 
         # Clear out the tags from the file
@@ -416,6 +419,8 @@ def setData(SONG_INFO, is_quiet, song_path, datatype='mp3', choice=None):
             song,
             song_path
         )
+
+    # TODO: Handle exception while adding the metadata
 
     # Show the written stuff in a better format
     prepend.PREPEND(1)
