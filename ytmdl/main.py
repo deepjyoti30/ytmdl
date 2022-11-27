@@ -300,8 +300,8 @@ def main(args):
     #
     # Moreover, the `is_original` field is **not** present from the youtube
     # response which would force the following code to verify the title
-    #  for chapters which is the behavior we want.
-    songs_to_download = [{'title': yt_title, 'is_original': not verify_name}]
+    # for chapters which is the behavior we want.
+    songs_to_download = [{'title': song_name, 'is_original': not verify_name}]
 
     # If the chapters are present, we will have to iterate and extract each chapter
     if chapters and not args.ignore_chapters:
