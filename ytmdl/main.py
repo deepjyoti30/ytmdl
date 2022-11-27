@@ -115,6 +115,9 @@ def arguments():
                         for some reasong like lack of metadata or perhaps a network issue. \
                         Options are {}".format(defaults.DEFAULT.ON_ERROR_OPTIONS),
                                 type=str, default=None)
+    metadata_group.add_argument("--dont-transcode", help="Don't transcode the audio after \
+                        downloading. Applicable for OPUS type only. (Default: false)",
+                                action="store_true")
 
     parser.add_argument('--proxy', help='Use the specified HTTP/HTTPS/SOCKS proxy. To enable '
                         'SOCKS proxy, specify a proper scheme. For example '
@@ -382,7 +385,8 @@ def post_processing(
     logger.debug(stream)
     # Try to convert the song
     try:
-        conv_name = convert(path, passed_format, start_time, end_time)
+        conv_name = convert(path, passed_format, start_time,
+                            end_time, args.dont_transcode)
     except ConvertError as convert_error:
         logger.critical('ERROR: {}'.format(convert_error))
         return
