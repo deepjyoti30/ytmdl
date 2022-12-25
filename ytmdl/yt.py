@@ -75,7 +75,7 @@ def progress_handler(d):
         stdout.flush()
 
 
-def dw_using_yt(link, proxy, song_name, datatype, no_progress=False, ytdl_config: str = None):
+def dw_using_yt(link, proxy, song_name, datatype, no_progress=False, ytdl_config: str = None, dont_convert: bool = False):
     """
     Download the song using YTDL downloader and use downloader CLI's
     functions to be used to display a progressbar.
@@ -87,12 +87,29 @@ def dw_using_yt(link, proxy, song_name, datatype, no_progress=False, ytdl_config
     elif datatype == 'm4a':
         format_ = 'bestaudio[ext=m4a]'
 
-    ydl_opts = ydl_opts_with_config(ytdl_config)
-
     extra_opts = {
         'outtmpl': song_name,
         'format': format_,
     }
+
+    # Add a postprocessor to convert the audio into
+    # opus if dont_convert is passed.
+    #
+    # Idea is to convert the audio through yt-dlp instead
+    # of using ffmpeg which is the format ytmdl uses.
+    #
+    # Replace `.opus` with `.webm` from the file since otherwise
+    # yt-dlp thinks that the file is converted.
+    if datatype == "opus" and dont_convert:
+        extra_opts["postprocessors"] = [{
+            'key': 'FFmpegExtractAudio',
+            'preferredcodec': "best",
+            'preferredquality': '5',
+            'nopostoverwrites': True,
+        }]
+        extra_opts["outtmpl"] = song_name.replace(".opus", ".webm")
+
+    ydl_opts = ydl_opts_with_config(ytdl_config)
     ydl_opts.update(extra_opts)
 
     if not no_progress:
@@ -103,6 +120,7 @@ def dw_using_yt(link, proxy, song_name, datatype, no_progress=False, ytdl_config
     if proxy is not None:
         ydl_opts['proxy'] = proxy
 
+    logger.debug("args passed: ", str(ydl_opts))
     ydl = yt_dlp.YoutubeDL(ydl_opts)
 
     try:
@@ -119,7 +137,8 @@ def dw(
         song_name='ytmdl_temp.mp3',
         datatype='mp3',
         no_progress=False,
-        ytdl_config: str = None
+        ytdl_config: str = None,
+        dont_convert: bool = False
 ):
     """
     Download the song.
@@ -131,7 +150,7 @@ def dw(
     added.
     """
     # If song_name doesn't have mp3 extension, add it
-    if datatype == "mp3" and not song_name.endswith(datatype):
+    if (datatype == "mp3" or datatype == "opus") and not song_name.endswith(datatype):
         song_name += '.' + datatype
     elif datatype == "m4a" and not song_name.endswith(datatype):
         song_name += '.' + datatype
@@ -153,7 +172,7 @@ def dw(
 
         # Start downloading the song
         status = dw_using_yt(value, proxy, name, datatype,
-                             no_progress, ytdl_config)
+                             no_progress, ytdl_config, dont_convert)
 
         if status == 0:
             return name

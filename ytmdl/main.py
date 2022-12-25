@@ -42,6 +42,7 @@ from ytmdl.utils.archive import (
 from ytmdl.utils.ytdl import is_ytdl_config_present
 from ytmdl.yt import is_yt_url
 from ytmdl.__version__ import __version__
+from typing import Tuple
 
 # init colorama for windows
 init()
@@ -111,7 +112,7 @@ def arguments():
     metadata_group.add_argument("--ask-meta-name", help="Ask the user to enter a separate \
                         name for searching the metadata (Default: false)", action="store_true")
     metadata_group.add_argument("--on-meta-error", help="What to do if adding the metadata fails \
-                        for some reasong like lack of metadata or perhaps a network issue. \
+                        for some reason like lack of metadata or perhaps a network issue. \
                         Options are {}".format(defaults.DEFAULT.ON_ERROR_OPTIONS),
                                 type=str, default=None)
 
@@ -156,6 +157,9 @@ def arguments():
                         action="store_true")
     parser.add_argument('--ytdl-config', help="Path to the youtube-dl config location or the "
                         "directory", default=None, metavar="PATH", type=str)
+    parser.add_argument("--dont-transcode", help="Don't transcode the audio after \
+                        downloading. Applicable for OPUS format only. (Default: false)",
+                        action="store_true")
 
     playlist_group = parser.add_argument_group("Playlist")
     playlist_group.add_argument(
@@ -228,7 +232,8 @@ def arguments():
 def main(args):
     """Run on program call."""
 
-    song_name = extract_song_name(args)
+    song_name, verify_name = extract_song_name(args)
+    logger.debug("verify title: ", str(verify_name))
 
     # Extract the archive file contents
     is_download_archive = args.download_archive is not None
@@ -292,7 +297,15 @@ def main(args):
     # Try to extract the chapters
     chapters = yt.get_chapters(link, args.ytdl_config)
 
-    songs_to_download = [{}]
+    # Add the current passed song as the only entry here
+    # This dictionary will be cleared if the song is found to be containing
+    # chapters.
+    #
+    # Moreover, the `is_original` field is **not** present from the youtube
+    # response which would force the following code to verify the title
+    # for chapters which is the behavior we want.
+    songs_to_download = [{'title': song_name, 'is_original': not verify_name}]
+
     # If the chapters are present, we will have to iterate and extract each chapter
     if chapters and not args.ignore_chapters:
         logger.info("The song has chapters in it.",
@@ -302,11 +315,14 @@ def main(args):
         for chapter in chapters:
             songs_to_download.append(chapter)
 
-    logger.debug(songs_to_download)
+    logger.debug("songs to download: ", str(songs_to_download))
     for song in songs_to_download:
         song_title = song.get("title", yt_title)
         start_time = song.get("start_time", None)
         end_time = song.get("end_time", None)
+
+        is_original = song.get("is_original", False)
+        logger.debug("is original: ", str(is_original))
 
         if "title" in song.keys():
             logger.debug("Has the attribute")
@@ -318,7 +334,7 @@ def main(args):
             # NOTE: Check if skip meta is passed, we don't need to
             # extract the new title.
             song_metadata = utility.get_new_title(song_metadata) if \
-                not (args.keep_chapter_name and args.skip_meta) else song_metadata
+                (not args.keep_chapter_name and not args.skip_meta and not is_original) else song_metadata
 
         # Pass the song for post processing
         try:
@@ -369,7 +385,8 @@ def post_processing(
     logger.debug(stream)
     # Try to convert the song
     try:
-        conv_name = convert(path, passed_format, start_time, end_time)
+        conv_name = convert(path, passed_format, start_time,
+                            end_time, args.dont_transcode)
     except ConvertError as convert_error:
         logger.critical('ERROR: {}'.format(convert_error))
         return
@@ -413,6 +430,16 @@ def post_processing(
     # Write to the archive file
     add_song_to_archive(
         stream=stream, youtube_link=link) if is_download_archive else None
+
+    # If no metadata was selected, just do a dry cleanup and skip the
+    # song
+    if track_selected is None:
+        if dir.dry_cleanup(conv_name, song_name):
+            logger.info("Done")
+        elif not args.ignore_errors or args.on_meta_error == 'exit':
+            logger.critical(
+                ". Pass `--ignore-errors` or `on-meta-error` to ignore this.")
+        return
 
     if dir.cleanup([track_selected], 0, passed_format, remove_cached=False):
         logger.info("Done")
@@ -484,12 +511,12 @@ def pre_checks(args):
             "Song Name is required. Check 'ytmdl --help' for help.")
 
 
-def extract_song_name(args) -> str:
+def extract_song_name(args) -> Tuple[str, bool]:
     """Extract the name of the song from the given args"""
     logger.debug(args.SONG_NAME)
 
     if args.SONG_NAME:
-        return " ".join(args.SONG_NAME)
+        return " ".join(args.SONG_NAME), False
 
     # If song name is not passed then try to extract
     # the title of the song using the URL.
@@ -501,7 +528,7 @@ def extract_song_name(args) -> str:
         if not args.ignore_errors:
             logger.critical("Wasn't able to extract song data.",
                             "Use `--ignore-errors` to ignore this error")
-        return
+        return None, False
 
     # Ask the user if they want to go with the extracted
     # title or if they would like to change it.
@@ -511,8 +538,9 @@ def extract_song_name(args) -> str:
     # passed.
     if not args.title_as_name and not args.skip_meta and verify_title:
         song_name = utility.get_new_title(song_name)
+        verify_title = False
 
-    return song_name
+    return song_name, verify_title
 
 
 def extract_data():

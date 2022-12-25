@@ -69,7 +69,7 @@ def search(song_name, args) -> Union[str, str]:
 
         # Check if choice if -2. If it is that, then we need to stop executing
         # of the current song and gracefully exit.
-        if choice == -2:
+        if choice == -2 or choice == -1:
             return False, False
 
         return (
@@ -90,7 +90,7 @@ def search(song_name, args) -> Union[str, str]:
     if type(temp_data) is str and temp_data.lower() == "Unauthorized".lower():
         if args.ignore_errors:
             logger.warning("{}: is unauthorized".format(URL))
-            return
+            return None, None
         else:
             logger.critical("{}: is unauthorized".format(URL))
 
@@ -116,7 +116,7 @@ def download(link, yt_title, args) -> str:
     ))
     path = yt.dw(link, args.proxy, yt_title,
                  args.format, no_progress=args.quiet,
-                 ytdl_config=args.ytdl_config)
+                 ytdl_config=args.ytdl_config, dont_convert=args.dont_transcode)
 
     if type(path) is not str:
         # Probably an error occured
@@ -130,7 +130,8 @@ def convert(
     path: str,
     passed_format: str,
     start: float = None,
-    end: float = None
+    end: float = None,
+    dont_convert: bool = False
 ) -> str:
     """Convert the song into the proper format as asked by
     the user.
@@ -155,7 +156,10 @@ def convert(
         return conv_name
 
     # If it is m4a, don't convert
-    if passed_format == "m4a":
+    #
+    # If dont_convert is passed, we can skip the conversion since
+    # the user wants to keep the original audio
+    if passed_format == "m4a" or dont_convert:
         return path
 
     # Else the format needs to be in the list
@@ -245,5 +249,11 @@ def meta(conv_name: str, song_name: str, search_by: str, args):
 
     if type(option) is not int:
         raise MetadataError(search_by)
+
+    # If meta was skipped, indicate that
+    if option == -1:
+        logger.warning(
+            "Metadata was skipped because -1 was entered as the option")
+        return None
 
     return TRACK_INFO[option]

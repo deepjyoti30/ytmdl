@@ -147,7 +147,7 @@ def getChoice(SONG_INFO, type):
 
     logger.info('Choose One {}'.format(
         '(One with [M] is verified music)'
-        if type == 'mp3' else ''))
+        if type == 'mp3' else '(Enter -1 to skip metadata)'))
 
     results = len(SONG_INFO)
 
@@ -173,7 +173,7 @@ def getChoice(SONG_INFO, type):
         # The choice is valid if it is in the range and it is greater than 0
         # We also need to break when the user enters -1 which means the exec
         # will skip the current song
-        if (choice <= len(SONG_INFO) and choice > 0) or choice == -1:
+        if choice == -1 or (choice <= len(SONG_INFO) and choice > 0):
             break
         elif choice == 0 and results < len(SONG_INFO):
             PRINT_WHOLE = True
@@ -182,7 +182,7 @@ def getChoice(SONG_INFO, type):
         else:
             PRINT_WHOLE = False
 
-    return choice - 1
+    return choice - 1 if choice != -1 else -1
 
 
 def set_MP3_data(song, song_path):
@@ -314,13 +314,16 @@ def set_OPUS_data(song, song_path):
     try:
         SONG_PATH = os.path.join(defaults.DEFAULT.SONG_TEMP_DIR,
                                  song_path)
+        logger.debug("Opening file at {} to add metadata".format(SONG_PATH))
         mutagen_file = File(SONG_PATH)
 
         # Try adding the tags container
         try:
             mutagen_file.add_tags()
-        except Exception:
+        except Exception as e:
             # If exception is thrown, the tags already exist
+            logger.debug(
+                "Got exception while adding tags to the passed file: ", str(e))
             pass
 
         # Clear out the tags from the file
@@ -386,6 +389,10 @@ def setData(SONG_INFO, is_quiet, song_path, datatype='mp3', choice=None):
     option = _get_option(SONG_INFO, is_quiet, choice)
     logger.debug(option)
 
+    # If -1 then skip setting the metadata
+    if option == -1:
+        return option
+
     song = SONG_INFO[option]
 
     get_more_data_dict = preconfig.CONFIG().GET_EXTRA_DATA
@@ -412,6 +419,11 @@ def setData(SONG_INFO, is_quiet, song_path, datatype='mp3', choice=None):
             song,
             song_path
         )
+
+    # Handle exception while adding the metadata
+    if type(img_added) == Exception:
+        logger.error(
+            "Failed to add metadata due to exception: {}".format(img_added))
 
     # Show the written stuff in a better format
     prepend.PREPEND(1)
