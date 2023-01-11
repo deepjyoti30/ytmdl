@@ -147,7 +147,7 @@ def getChoice(SONG_INFO, type):
 
     logger.info('Choose One {}'.format(
         '(One with [M] is verified music)'
-        if type == 'mp3' else '(Enter -1 to skip metadata)'))
+        if type == 'mp3' else '(Enter -1 to skip metadata or -2 to amend search)'))
 
     results = len(SONG_INFO)
 
@@ -172,8 +172,9 @@ def getChoice(SONG_INFO, type):
         # If the choice is 0 then try to print more results
         # The choice is valid if it is in the range and it is greater than 0
         # We also need to break when the user enters -1 which means the exec
-        # will skip the current song
-        if choice == -1 or (choice <= len(SONG_INFO) and choice > 0):
+        # will skip the current song or -2 which means the exec will amend the
+        # search and retry
+        if choice == -1 or choice == -2 or (choice <= len(SONG_INFO) and choice > 0):
             break
         elif choice == 0 and results < len(SONG_INFO):
             PRINT_WHOLE = True
@@ -182,7 +183,7 @@ def getChoice(SONG_INFO, type):
         else:
             PRINT_WHOLE = False
 
-    return choice - 1 if choice != -1 else -1
+    return choice - 1 if (choice != -1 and choice != -2) else choice
 
 
 def set_MP3_data(song, song_path):
@@ -389,8 +390,8 @@ def setData(SONG_INFO, is_quiet, song_path, datatype='mp3', choice=None):
     option = _get_option(SONG_INFO, is_quiet, choice)
     logger.debug(option)
 
-    # If -1 then skip setting the metadata
-    if option == -1:
+    # If -1 or -2 then skip setting the metadata
+    if option == -1 or option == -2:
         return option
 
     song = SONG_INFO[option]
