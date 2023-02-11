@@ -230,7 +230,7 @@ def meta(conv_name: str, song_name: str, search_by: str, args):
     else:
         # Else add metadata in ordinary way
         logger.info('Getting song data for {}...'.format(search_by))
-        TRACK_INFO = metadata.SEARCH_SONG(search_by, filters=[
+        TRACK_INFO = metadata.SEARCH_SONG(search_by, song_name, filters=[
                                           args.artist, args.album],
                                           disable_sort=args.disable_sort)
 
@@ -255,5 +255,11 @@ def meta(conv_name: str, song_name: str, search_by: str, args):
         logger.warning(
             "Metadata was skipped because -1 was entered as the option")
         return None
+    # If amending the search, get the new search and retry
+    elif option == -2:
+        logger.info(
+            "Amending the search because -2 was entered as the option")
+        search_by = utility.get_new_meta_search_by(search_by)
+        return meta(conv_name, song_name, search_by, args)
 
     return TRACK_INFO[option]
