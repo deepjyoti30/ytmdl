@@ -207,7 +207,7 @@ def _extend_to_be_sorted_and_rest(provider_data, to_be_sorted, rest, filters):
         rest.extend(provider_data[10:])
 
 
-def SEARCH_SONG(q="Tera Buzz", filters=[], disable_sort=False):
+def SEARCH_SONG(search_by="Tera Buzz", song_name="Tera Buzz", filters=[], disable_sort=False):
     """Do the task by calling other functions."""
     to_be_sorted = []
     rest = []
@@ -230,7 +230,7 @@ def SEARCH_SONG(q="Tera Buzz", filters=[], disable_sort=False):
         if provider in GET_METADATA_ACTIONS:
             logger.debug(f"Searching metadata with {provider}")
             data_provider = GET_METADATA_ACTIONS.get(
-                provider, lambda _: None)(q)
+                provider, lambda _: None)(search_by)
             if data_provider:
                 _extend_to_be_sorted_and_rest(
                     data_provider, to_be_sorted, rest, filters)
@@ -256,7 +256,7 @@ def SEARCH_SONG(q="Tera Buzz", filters=[], disable_sort=False):
         return to_be_sorted
 
     # Send the data to get sorted
-    sorted_data = _search_tokens(q, to_be_sorted)
+    sorted_data = _search_tokens(song_name, to_be_sorted)
 
     # Add the unsorted data
     sorted_data += rest
@@ -265,7 +265,7 @@ def SEARCH_SONG(q="Tera Buzz", filters=[], disable_sort=False):
 
 
 if __name__ == '__main__':
-    n = SEARCH_SONG("Cradles", ["Sub Urban", None])
+    n = SEARCH_SONG("Cradles", "Cradles", ["Sub Urban", None])
 
     for i in n:
         print(i.track_name + ' by ' + i.artist_name + ' of ' + i.collection_name)
