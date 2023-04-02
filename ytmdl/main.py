@@ -246,7 +246,7 @@ def main(args):
 
     if is_download_archive:
         archive_content, stream = open_archive_stream(args.download_archive)
-    
+
     logger.debug(song_name)
     logger.hold()
     logger.debug(stream)
