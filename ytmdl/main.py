@@ -419,7 +419,11 @@ def post_processing(
             # Write to the archive file
             add_song_to_archive(
                 stream=stream, youtube_link=link) if is_download_archive else None
-
+                
+        if not args.on_meta_error == 'skip' and args.archive_all_downloads:
+            add_song_to_archive(
+                stream=stream, youtube_link=link) if is_download_archive else None
+                
         if dir.dry_cleanup(conv_name, song_name):
             logger.info("Done")
         elif not args.ignore_errors or args.on_meta_error == 'exit':
