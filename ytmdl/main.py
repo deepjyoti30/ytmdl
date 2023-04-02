@@ -207,7 +207,7 @@ def arguments():
         "--archive-all-downloads",
         help="ignored if download archive not specified,\
             adds any song downloaded to archive, whether or not metadata was added",
-            action="store_true"
+        action="store_true"
             )
     logger_group = parser.add_argument_group("Logger")
     logger_group.add_argument(
