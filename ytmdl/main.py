@@ -439,6 +439,8 @@ def post_processing(
     # If no metadata was selected, just do a dry cleanup and skip the
     # song
     if track_selected is None:
+        logger.debug(stream)
+        logger.debug("should have added to archive")
         add_song_to_archive(
             stream=stream, youtube_link=link) if args.archive_all_downloads else False
         
