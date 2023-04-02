@@ -208,7 +208,7 @@ def arguments():
         help="ignored if download archive not specified,\
             adds any song downloaded to archive, whether or not metadata was added",
         action="store_true"
-            )
+    )
     logger_group = parser.add_argument_group("Logger")
     logger_group.add_argument(
         "--level",
@@ -439,9 +439,8 @@ def post_processing(
     # If no metadata was selected, just do a dry cleanup and skip the
     # song
     if track_selected is None:
-        if args.archive_all_downloads:
-            add_song_to_archive(
-                stream=stream, youtube_link=link) if is_download_archive else None
+        add_song_to_archive(
+            stream=stream, youtube_link=link) if args.archive_all_downloads else False
         
         if dir.dry_cleanup(conv_name, song_name):
             logger.info("Done")
