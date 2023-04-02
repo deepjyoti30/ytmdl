@@ -148,7 +148,6 @@ def _search_tokens(song_name, song_list):
         name = song.track_name.lower()
         # If there is a part like (featuring ..) or any extra data
         # we should remove it as it doesn't aid the search
-        name = re.sub('\'', '', name)
         name = re.sub('"', '', name)   #remove double quote mark w/o regex because it messes with remove_punct regex
         name = remove_punct(name)       #remove single quote mark before regexs because titles have apostrophes sometimes
         name = re.sub(r'\(\[\^\]\*\)', '', name) #Removed orpan parentesis, escape everything
