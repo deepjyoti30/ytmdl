@@ -57,6 +57,8 @@ def cleanup(TRACK_INFO, index, datatype, remove_cached=True, filename_passed=Non
 
         dest_filename = os.path.join(
             DIR, __replace_special_characters(SONG_NAME))
+
+        logger.debug("Final name: ", dest_filename)
         shutil.move(SONG, dest_filename)
 
         if remove_cached:
