@@ -11,7 +11,7 @@ with open("README.md", "r") as fh:
 exec(open("ytmdl/__version__.py").read())
 
 req_pkgs = [
-    'yt-dlp>=2022.03.08.1',
+    'yt-dlp>=2022.7.6',
     'mutagen',
     'itunespy',
     'requests',
