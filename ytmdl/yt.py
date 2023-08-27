@@ -6,7 +6,7 @@ import os
 from urllib.parse import urlparse, parse_qs
 import yt_dlp
 from yt_dlp.utils import DownloadError
-from re import match
+from re import match, sub
 from ytmdl import defaults, utility, stringutils
 from downloader_cli.download import Download
 import traceback
@@ -221,6 +221,11 @@ def search(query, bettersearch, proxy, kw=[], lim=20):
     Search the passed query using the `youtube_search` module
     and extract the results accordingly and return.
     """
+    # Remove any `plus` in the query
+    if '+' in query:
+        query = sub(r'\+\s?', '', query)
+    logger.debug('Query used: ', query)
+
     # Add keywords if better search is enabled
     kw = [kw_ for kw_ in kw if kw_ is not None]
 
