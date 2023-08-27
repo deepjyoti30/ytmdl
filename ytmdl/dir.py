@@ -39,7 +39,7 @@ def cleanup(TRACK_INFO, index, datatype, remove_cached=True, filename_passed=Non
         # special characters like `$` though the config then that will
         # overwrite the filename_passed.
         if filename_passed is not None:
-            SONG_NAME = filename_passed
+            SONG_NAME = filename_passed + ".{}".format(datatype)
 
         DIR = defaults.DEFAULT.SONG_DIR
         logger.debug(DIR)
