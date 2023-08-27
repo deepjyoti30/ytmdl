@@ -149,6 +149,7 @@ def _search_tokens(song_name, song_list):
         # If there is a part like (featuring ..) or any extra data
         # we should remove it as it doesn't aid the search
         name = re.sub(r'\([^)]*\)', '', name)
+        name = re.sub(r'&', 'and', name)
         name = remove_stopwords(name)
         name = remove_punct(name)
         name = remove_multiple_spaces(name)
