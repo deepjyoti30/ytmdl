@@ -22,7 +22,7 @@ def __replace_special_characters(passed_name: str) -> str:
     return sub(r'/', '-', passed_name)
 
 
-def cleanup(TRACK_INFO, index, datatype, remove_cached=True):
+def cleanup(TRACK_INFO, index, datatype, remove_cached=True, filename_passed=None):
     """Move the song from temp to the song dir."""
     try:
         SONG = glob.glob(os.path.join(
@@ -32,6 +32,14 @@ def cleanup(TRACK_INFO, index, datatype, remove_cached=True):
         SONG = SONG[0]
 
         SONG_NAME = os.path.basename(SONG)
+
+        # If the filename is passed, use that instead of the song
+        #
+        # NOTE that is the path is set to be a dynamic value by using
+        # special characters like `$` though the config then that will
+        # overwrite the filename_passed.
+        if filename_passed is not None:
+            SONG_NAME = filename_passed + ".{}".format(datatype)
 
         DIR = defaults.DEFAULT.SONG_DIR
         logger.debug(DIR)
@@ -49,6 +57,8 @@ def cleanup(TRACK_INFO, index, datatype, remove_cached=True):
 
         dest_filename = os.path.join(
             DIR, __replace_special_characters(SONG_NAME))
+
+        logger.debug("Final name: ", dest_filename)
         shutil.move(SONG, dest_filename)
 
         if remove_cached:
@@ -181,7 +191,7 @@ def make_custom_dir(DIR, TRACK_INFO):
     return (base_DIR, last_element)
 
 
-def dry_cleanup(current_path, passed_name):
+def dry_cleanup(current_path, passed_name, filename_passed=None):
     """
     Move the song from the current path to the
     song dir and change the name to the passed_name.
@@ -193,6 +203,11 @@ def dry_cleanup(current_path, passed_name):
     try:
         extension = os.path.basename(current_path).split(".")[-1]
         logger.debug("ext: {}".format(extension))
+
+        # If the filename is passed from the CLI, we will use that
+        # instead of the passed name.
+        if filename_passed is not None:
+            passed_name = filename_passed
 
         new_basename = "{}.{}".format(passed_name, extension)
         DEST = defaults.DEFAULT.SONG_DIR

@@ -27,6 +27,7 @@ from rich.prompt import IntPrompt
 from ytmdl import prepend, defaults
 from simber import Logger
 from ytmdl.meta import preconfig
+from ytmdl.dir import __replace_special_characters
 # import traceback
 
 logger = Logger("song")
@@ -227,13 +228,17 @@ def set_MP3_data(song, song_path):
 
         data.save()
 
-        defaults.DEFAULT.SONG_NAME_TO_SAVE = song.track_name + '.mp3'
+        defaults.DEFAULT.SONG_NAME_TO_SAVE = __replace_special_characters(
+            song.track_name) + '.mp3'
 
         # Rename the downloaded file
-        os.rename(SONG_PATH, os.path.join(
+        to_save_as = os.path.join(
             defaults.DEFAULT.SONG_TEMP_DIR,
             defaults.DEFAULT.SONG_NAME_TO_SAVE
-        ))
+        )
+        logger.debug("Renaming file from: `{}` to `{}`".format(
+            SONG_PATH, to_save_as))
+        os.rename(SONG_PATH, to_save_as)
 
         return IS_IMG_ADDED
 

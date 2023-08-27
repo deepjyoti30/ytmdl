@@ -160,6 +160,9 @@ def arguments():
     parser.add_argument("--dont-transcode", help="Don't transcode the audio after \
                         downloading. Applicable for OPUS format only. (Default: false)",
                         action="store_true")
+    parser.add_argument("--filename", help="Final filename after the song is ready to be used. \
+                        This will be given priority over automatic detection unless dynamic filename \
+                        path is set through config", default=None, metavar="NAME", type=str)
 
     playlist_group = parser.add_argument_group("Playlist")
     playlist_group.add_argument(
@@ -402,7 +405,7 @@ def post_processing(
             stream=stream, youtube_link=link) if is_download_archive else None
 
         # Do a dry cleanup
-        if dir.dry_cleanup(conv_name, song_name):
+        if dir.dry_cleanup(conv_name, song_name, args.filename):
             logger.info("Done")
             return
 
@@ -415,7 +418,7 @@ def post_processing(
             add_song_to_archive(
                 stream=stream, youtube_link=link) if is_download_archive else None
 
-        if dir.dry_cleanup(conv_name, song_name):
+        if dir.dry_cleanup(conv_name, song_name, args.filename):
             logger.info("Done")
         elif not args.ignore_errors or args.on_meta_error == 'exit':
             logger.critical(
@@ -434,14 +437,15 @@ def post_processing(
     # If no metadata was selected, just do a dry cleanup and skip the
     # song
     if track_selected is None:
-        if dir.dry_cleanup(conv_name, song_name):
+        if dir.dry_cleanup(conv_name, song_name, args.filename):
             logger.info("Done")
         elif not args.ignore_errors or args.on_meta_error == 'exit':
             logger.critical(
                 ". Pass `--ignore-errors` or `on-meta-error` to ignore this.")
         return
 
-    if dir.cleanup([track_selected], 0, passed_format, remove_cached=False):
+    if dir.cleanup([track_selected], 0, passed_format, remove_cached=False,
+                   filename_passed=args.filename):
         logger.info("Done")
 
 
