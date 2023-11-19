@@ -57,7 +57,7 @@ def compute_jaccard(tokens1, tokens2):
     return len(intersect)/len(union)
 
 def remove_unwanted_chars(string):
-    return re.sub(r" |/", "#", string)
+    return re.sub(r"\s|\||/", "#", string)
 
 
 def urlencode(text):
