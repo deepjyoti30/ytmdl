@@ -14,6 +14,15 @@ from ytmdl import utility
 logger = Logger("yt")
 
 
+def get_ytdl_opts() -> Dict:
+    return {
+        "quiet": is_quiet,
+        'no_warnings': no_warnings,
+        'nocheckcertificate': True,
+        'source_address': '0.0.0.0'
+    }
+
+
 def is_ytdl_config_present(path_passed: str) -> bool:
     """
     Check if the passed file is present or not.
@@ -45,12 +54,7 @@ def ydl_opts_with_config(ytdl_config: str = None) -> Dict:
     no_warnings: bool = utility.determine_logger_level(
     ) > logger.level_map["WARNING"]
 
-    ydl_opts = {
-        "quiet": is_quiet,
-        'no_warnings': no_warnings,
-        'nocheckcertificate': True,
-        'source_address': '0.0.0.0'
-    }
+    ydl_opts = get_ytdl_opts()
 
     # If config is passed, generated opts with config
     if ytdl_config is not None:
