@@ -166,9 +166,9 @@ usage: ytmdl [-h] [-q] [-o OUTPUT_DIR] [--song SONG-METADATA]
              [--list PATH TO LIST] [--nolocal] [--format FORMAT] [--trim]
              [--version] [--keep-chapter-name] [--download-archive FILE]
              [--ignore-chapters] [--ytdl-config PATH] [--dont-transcode]
-             [--pl-start NUMBER] [--pl-end NUMBER] [--pl-items ITEM_SPEC]
-             [--ignore-errors] [--title-as-name] [--level LEVEL]
-             [--disable-file] [--list-level]
+             [--filename NAME] [--pl-start NUMBER] [--pl-end NUMBER]
+             [--pl-items ITEM_SPEC] [--ignore-errors] [--title-as-name]
+             [--level LEVEL] [--disable-file] [--list-level]
              [SONG_NAME ...]
 
 positional arguments:
@@ -216,6 +216,9 @@ options:
                         directory
   --dont-transcode      Don't transcode the audio after downloading.
                         Applicable for OPUS format only. (Default: false)
+  --filename NAME       Final filename after the song is ready to be used.
+                        This will be given priority over automatic detection
+                        unless dynamic filename path is set through config
 
 Metadata:
   --song SONG-METADATA  The song to search in Metadata. Particularly useful
@@ -248,7 +251,8 @@ Metadata:
   --on-meta-error ON_META_ERROR
                         What to do if adding the metadata fails for some
                         reason like lack of metadata or perhaps a network
-                        issue. Options are ['exit', 'skip', 'manual']
+                        issue. Options are ['exit', 'skip', 'manual',
+                        'youtube']
 
 Playlist:
   --pl-start NUMBER     Playlist video to start at (default is 1)
