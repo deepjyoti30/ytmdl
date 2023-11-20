@@ -15,6 +15,11 @@ logger = Logger("yt")
 
 
 def get_ytdl_opts() -> Dict:
+    is_quiet: bool = utility.determine_logger_level(
+        ) != logger.level_map["DEBUG"]
+    no_warnings: bool = utility.determine_logger_level(
+        ) > logger.level_map["WARNING"]
+    
     return {
         "quiet": is_quiet,
         'no_warnings': no_warnings,
@@ -49,11 +54,6 @@ def ydl_opts_with_config(ytdl_config: str = None) -> Dict:
 
     If the config is not present, return an empty dictionary
     """
-    is_quiet: bool = utility.determine_logger_level(
-    ) != logger.level_map["DEBUG"]
-    no_warnings: bool = utility.determine_logger_level(
-    ) > logger.level_map["WARNING"]
-
     ydl_opts = get_ytdl_opts()
 
     # If config is passed, generated opts with config

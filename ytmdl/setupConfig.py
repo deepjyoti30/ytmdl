@@ -139,7 +139,7 @@ class DEFAULTS:
 
         self.DEFAULT_FORMAT = 'mp3'
 
-        self.ON_ERROR_OPTIONS = ['exit', 'skip', 'manual']
+        self.ON_ERROR_OPTIONS = ['exit', 'skip', 'manual', 'youtube']
 
         self.ON_ERROR_DEFAULT = 'exit'
 
