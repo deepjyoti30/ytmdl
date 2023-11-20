@@ -16,6 +16,7 @@ from ytmdl import (
 from ytmdl.exceptions import (
     DownloadError, ConvertError, NoMetaError, MetadataError
 )
+from ytmdl.meta.yt import extract_meta_from_yt
 
 
 logger = Logger("core")
@@ -200,7 +201,7 @@ def trim(name: str, args) -> None:
     trim.Trim(name)
 
 
-def meta(conv_name: str, song_name: str, search_by: str, args):
+def meta(conv_name: str, song_name: str, search_by: str, link: str, args):
     """Handle adding the metadata for the passed song.
 
     We will use the passed name to search for metadata, ask
@@ -241,7 +242,9 @@ def meta(conv_name: str, song_name: str, search_by: str, args):
             TRACK_INFO = manual.get_data(song_name)
             return TRACK_INFO
         elif args.on_meta_error == 'youtube':
-            # TODO: Extract meta from youtube
+            # Extract meta from youtube
+            track_info = extract_meta_from_yt(link)
+            return [track_info]
             pass
         
         raise NoMetaError(search_by)
@@ -263,6 +266,6 @@ def meta(conv_name: str, song_name: str, search_by: str, args):
         logger.info(
             "Amending the search because -2 was entered as the option")
         search_by = utility.get_new_meta_search_by(search_by)
-        return meta(conv_name, song_name, search_by, args)
+        return meta(conv_name, song_name, search_by, link, args)
 
     return TRACK_INFO[option]

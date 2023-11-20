@@ -411,7 +411,7 @@ def post_processing(
 
     # Else fill the meta by searching
     try:
-        track_selected = meta(conv_name, song_name, song_metadata, args)
+        track_selected = meta(conv_name, song_name, song_metadata, link, args)
     except NoMetaError as no_meta_error:
         if args.on_meta_error == 'skip':
             # Write to the archive file
