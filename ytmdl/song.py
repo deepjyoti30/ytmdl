@@ -384,7 +384,7 @@ def _get_option(SONG_INFO, is_quiet, choice):
     return int(option)
 
 
-def setData(SONG_INFO, is_quiet, song_path, datatype='mp3', choice=None):
+def setData(SONG_INFO, is_quiet, song_path, datatype='mp3', choice=None, skip_showing_choice: bool = False):
     """Add the metadata to the song."""
 
     # Some providers need extra daa from other endpoints,
@@ -392,7 +392,11 @@ def setData(SONG_INFO, is_quiet, song_path, datatype='mp3', choice=None):
     # it from
 
     logger.debug(choice)
-    option = _get_option(SONG_INFO, is_quiet, choice)
+    option = choice
+    
+    if not skip_showing_choice:
+        option = _get_option(SONG_INFO, is_quiet, choice)
+
     logger.debug(option)
 
     # If -1 or -2 then skip setting the metadata

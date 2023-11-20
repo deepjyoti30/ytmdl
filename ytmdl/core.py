@@ -237,19 +237,26 @@ def meta(conv_name: str, song_name: str, search_by: str, link: str, args):
 
     # If no meta was found raise error
     if not TRACK_INFO:
-        # Check if we are supposed to add manual meta
+        # Check if we are supposed to add manual meta or from youtube
+        if args.on_meta_error not in ["manual", "youtube"]:
+            raise NoMetaError(search_by)
+        
         if args.on_meta_error == "manual":
             TRACK_INFO = manual.get_data(song_name)
-            return TRACK_INFO
         elif args.on_meta_error == 'youtube':
             # Extract meta from youtube
             track_info = extract_meta_from_yt(link)
-            return [track_info]
-            pass
+            TRACK_INFO = [track_info]
         
-        raise NoMetaError(search_by)
+        option = song.setData(TRACK_INFO, IS_QUIET, conv_name, PASSED_FORMAT, 0, skip_showing_choice=True)
+        if not isinstance(option, int):
+            raise MetadataError(search_by)
+        
+        return TRACK_INFO[option]
 
     logger.info('Setting data...')
+    
+    
     option = song.setData(TRACK_INFO, IS_QUIET, conv_name, PASSED_FORMAT,
                           args.choice)
 
