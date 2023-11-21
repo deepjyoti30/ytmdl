@@ -37,7 +37,8 @@ def get_youtube_streams(url):
 
 # Function to be called by ytdl progress hook.
 def progress_handler(d):
-    d_obj = Download('', '')
+    d_obj = Download('', '', icon_done="━", icon_left="━",
+                     icon_current=" ", color_done="green", color_left="black", icon_border=" ")
 
     if d['status'] == 'downloading':
         length = d_obj._get_terminal_length()
