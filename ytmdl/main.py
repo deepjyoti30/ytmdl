@@ -493,7 +493,7 @@ def pre_checks(args):
 
     # Ensure the output directory is legitimate
     if (args.output_dir is not None):
-        if path.isdir(path.expanduser(args.output_dir)):
+        if path.isdir(path.expanduser(dir.get_abs_path(args.output_dir))):
             defaults.DEFAULT.SONG_DIR = path.expanduser(args.output_dir)
         else:
             logger.warning(

@@ -22,6 +22,17 @@ def __replace_special_characters(passed_name: str) -> str:
     return sub(r'/', '-', passed_name)
 
 
+def get_abs_path(path_passed: str) -> str:
+    """
+    Get the absolute path by removing special path directives
+    that `ytmdl` supports.
+    """
+    if "$" not in path_passed:
+        return path_passed
+
+    return path_passed.split("$")[0]
+
+
 def cleanup(TRACK_INFO, index, datatype, remove_cached=True, filename_passed=None):
     """Move the song from temp to the song dir."""
     try:
@@ -42,7 +53,7 @@ def cleanup(TRACK_INFO, index, datatype, remove_cached=True, filename_passed=Non
             SONG_NAME = filename_passed + ".{}".format(datatype)
 
         DIR = defaults.DEFAULT.SONG_DIR
-        logger.debug(DIR)
+        logger.debug("directory being used: ", DIR)
 
         # Check if DIR has $ in its path
         # If it does then make those folders accordingly
