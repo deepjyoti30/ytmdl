@@ -26,7 +26,7 @@ jobs:
       - name: List files in current directory
         run: ls -al
       - name: Build the dist
-        run: python setup.py sdist bdist_wheel
+        run: python setup.py sdist
       - name: Upload to PyPI
         env:
           TWINE_USERNAME: "__token__"
