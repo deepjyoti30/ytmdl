@@ -26,14 +26,24 @@ class Meta:
     track_number        : Number of the track in the album
     artwork_url_100     : URL of the album cover
     """
-    def __init__(self):
-        self.release_date = "{}T00:00:00Z".format(datetime.now().date())
-        self.track_name = "N/A"
-        self.artist_name = "N/A"
-        self.collection_name = "N/A"
-        self.primary_genre_name = "N/A"
-        self.track_number = "1"
-        self.artwork_url_100 = ""
+    def __init__(
+        self,
+        release_date: str = None,
+        track_name: str = "N/A",
+        artist_name: str = "N/A",
+        collection_name: str = "N/A",
+        primary_genre_name: str = "N/A",
+        track_number: str = "1",
+        artwork_url_100: str = ""
+    ):
+        self.release_date = "{}T00:00:00Z".format(datetime.now().date()) if \
+            release_date is None else release_date
+        self.track_name = track_name
+        self.artist_name = artist_name
+        self.collection_name = collection_name
+        self.primary_genre_name = primary_genre_name
+        self.track_number = track_number
+        self.artwork_url_100 = artwork_url_100
 
     def _read_individual(self, default_value):
         """

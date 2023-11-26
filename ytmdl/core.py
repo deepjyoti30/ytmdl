@@ -16,6 +16,7 @@ from ytmdl import (
 from ytmdl.exceptions import (
     DownloadError, ConvertError, NoMetaError, MetadataError
 )
+from ytmdl.meta.yt import extract_meta_from_yt
 
 
 logger = Logger("core")
@@ -200,7 +201,7 @@ def trim(name: str, args) -> None:
     trim.Trim(name)
 
 
-def meta(conv_name: str, song_name: str, search_by: str, args):
+def meta(conv_name: str, song_name: str, search_by: str, link: str, args):
     """Handle adding the metadata for the passed song.
 
     We will use the passed name to search for metadata, ask
@@ -236,14 +237,26 @@ def meta(conv_name: str, song_name: str, search_by: str, args):
 
     # If no meta was found raise error
     if not TRACK_INFO:
-        # Check if we are supposed to add manual meta
-        if args.on_meta_error != "manual":
+        # Check if we are supposed to add manual meta or from youtube
+        if args.on_meta_error not in ["manual", "youtube"]:
             raise NoMetaError(search_by)
-
-        TRACK_INFO = manual.get_data(song_name)
-        return TRACK_INFO
+        
+        if args.on_meta_error == "manual":
+            TRACK_INFO = manual.get_data(song_name)
+        elif args.on_meta_error == 'youtube':
+            # Extract meta from youtube
+            track_info = extract_meta_from_yt(link)
+            TRACK_INFO = [track_info]
+        
+        option = song.setData(TRACK_INFO, IS_QUIET, conv_name, PASSED_FORMAT, 0, skip_showing_choice=True)
+        if not isinstance(option, int):
+            raise MetadataError(search_by)
+        
+        return TRACK_INFO[option]
 
     logger.info('Setting data...')
+    
+    
     option = song.setData(TRACK_INFO, IS_QUIET, conv_name, PASSED_FORMAT,
                           args.choice)
 
@@ -260,6 +273,6 @@ def meta(conv_name: str, song_name: str, search_by: str, args):
         logger.info(
             "Amending the search because -2 was entered as the option")
         search_by = utility.get_new_meta_search_by(search_by)
-        return meta(conv_name, song_name, search_by, args)
+        return meta(conv_name, song_name, search_by, link, args)
 
     return TRACK_INFO[option]

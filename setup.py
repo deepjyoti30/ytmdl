@@ -17,7 +17,7 @@ req_pkgs = [
     'requests',
     'colorama',
     'beautifulsoup4',
-    'downloader-cli',
+    'downloader-cli>=0.3.4',
     'pyxdg',
     'ffmpeg-python',
     'pysocks',

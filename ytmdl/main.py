@@ -411,7 +411,7 @@ def post_processing(
 
     # Else fill the meta by searching
     try:
-        track_selected = meta(conv_name, song_name, song_metadata, args)
+        track_selected = meta(conv_name, song_name, song_metadata, link, args)
     except NoMetaError as no_meta_error:
         if args.on_meta_error == 'skip':
             # Write to the archive file
@@ -493,7 +493,7 @@ def pre_checks(args):
 
     # Ensure the output directory is legitimate
     if (args.output_dir is not None):
-        if path.isdir(path.expanduser(args.output_dir)):
+        if path.isdir(path.expanduser(dir.get_abs_path(args.output_dir))):
             defaults.DEFAULT.SONG_DIR = path.expanduser(args.output_dir)
         else:
             logger.warning(

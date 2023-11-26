@@ -169,7 +169,7 @@ usage: ytmdl [-h] [-q] [-o OUTPUT_DIR] [--song SONG-METADATA]
              [--filename NAME] [--pl-start NUMBER] [--pl-end NUMBER]
              [--pl-items ITEM_SPEC] [--ignore-errors] [--title-as-name]
              [--level LEVEL] [--disable-file] [--list-level]
-             [SONG_NAME [SONG_NAME ...]]
+             [SONG_NAME ...]
 
 positional arguments:
   SONG_NAME             Name of the song to download. Can be an URL to a
@@ -251,7 +251,8 @@ Metadata:
   --on-meta-error ON_META_ERROR
                         What to do if adding the metadata fails for some
                         reason like lack of metadata or perhaps a network
-                        issue. Options are ['exit', 'skip', 'manual']
+                        issue. Options are ['exit', 'skip', 'manual',
+                        'youtube']
 
 Playlist:
   --pl-start NUMBER     Playlist video to start at (default is 1)
