@@ -27,6 +27,8 @@ jobs:
         run: ls -al
       - name: Build the dist
         run: python setup.py sdist
+      - name: Remove egg file
+        run: rm dist/*.egg
       - name: Upload to PyPI
         env:
           TWINE_USERNAME: "__token__"
