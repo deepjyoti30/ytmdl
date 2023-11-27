@@ -26,7 +26,7 @@ jobs:
       - name: List files in current directory
         run: ls -al
       - name: Build the dist
-        run: python setup.py sdist
+        run: python setup.py sdist bdist_wheel
       - name: Remove egg file
         run: rm dist/*.egg
       - name: Upload to PyPI
