@@ -89,14 +89,9 @@ pip install ytmdl
 
 ### Gentoo
 
-`ytmdl` can be installed in Gentoo by the following commands
+`ytmdl` can be installed in Gentoo with the command
 
 ```console
-# First set up src_prepare-overlay (as root)
-emerge -av --noreplace app-eselect/eselect-repository
-eselect repository enable src_prepare-overlay
-emaint sync -r src_prepare-overlay
-# Finally emerge ytmdl (as root)
 emerge -av --autounmask net-misc/ytmdl
 ```
 
