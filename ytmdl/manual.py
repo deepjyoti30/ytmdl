@@ -48,7 +48,7 @@ class Meta:
     def _read_individual(self, default_value):
         """
         Prompt the user for input to overwrite the default value (if they want).
-        
+
         If the user inputs something, remove excess spaces from it.
         """
         temp_value = input("")
