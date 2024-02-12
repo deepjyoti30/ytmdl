@@ -215,7 +215,7 @@ options:
   --format FORMAT       The format in which the song should be downloaded.
                         Default is mp3, but can be set in config. Available
                         options are ['mp3', 'm4a', 'opus'].
-  --trim, -t            Trim out the audio from the song. Use underlying
+  --trim, -t            Trim off the non-music audio from the song. Use underlying
                         speech and music segmentation engine to determine and
                         keep only the music in the file. Useful in songs where
                         there are speeches, noise etc before/after the start
