@@ -5,7 +5,7 @@ from xdg.BaseDirectory import xdg_cache_home
 
 
 def _providers_string_to_list(val):
-    """Convert string to list if not already"""
+    """Convert string to list if not already."""
     # Use a set to remove duplicates
     if type(val) == str:
         return list(set(val.replace(' ', '').split(',')))
@@ -32,7 +32,7 @@ class DEFAULT:
     # The directory where songs will be saved
     SONG_DIR = __parse_dir_path(setupConfig.GIVE_DEFAULT(1, 'SONG_DIR'))
 
-    # The temp directory where songs will be modded
+    # The temp directory where songs will be modified
     SONG_TEMP_DIR = os.path.join(xdg_cache_home, 'ytmdl')
 
     # The path to keep cover image

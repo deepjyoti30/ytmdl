@@ -27,7 +27,7 @@ class Trim:
 
     We will run the speech segmenter on it and get
     the music timestamps. Once we have the stamps, we can just
-    trim the music part from the song and keep the name same.
+    trim the music part from the song and keep the same name.
     """
     def __init__(self, filename):
         self.filename = filename
@@ -47,7 +47,7 @@ class Trim:
         segmentation = self.segmenter(self.filename)
         logger.debug("Segmentation tuple: {}".format(segmentation))
 
-        # Only keep all the music stamps
+        # Only keep the music timestamps
         segmentation = [stamp for stamp in segmentation if stamp[0] == "music"]
 
         if not len(segmentation):
@@ -55,9 +55,9 @@ class Trim:
                 "Could not find music in the file. Try disabling trimming!"
             )
 
-        # We want to consider just the last time stamp tuple,
+        # We want to consider just the last timestamp tuple.
         # Mostly there are just one time stamp with music, but sometimes
-        # it can be more than one.
+        # it can be more than one
         segmentation = segmentation[-1]
         self.start_time = segmentation[1]
         self.end_time = segmentation[2]
@@ -68,11 +68,11 @@ class Trim:
         """
         Use ffmpeg to trim the song to the time stamps calculated.
 
-        Make the changes to a temp file.
-        Once the work is done remove the original file and rename
-        the temporary to original one.
+        Make the changes to a temporary file.
+        Once the work is done, remove the original file and rename
+        the temporary file to the original one.
         """
-        logger.info("Trimming the song to the found time stamps")
+        logger.info("Trimming the song to the found timestamps")
 
         # Create the temp file name
         temp_name = "{}_temp.{}".format(
@@ -89,6 +89,6 @@ class Trim:
 
         # Once that's done, remove the original file
         remove(self.filename)
-        # Now rename the file.
+        # Now rename the file
         rename(temp_name, self.filename)
         logger.info("Trimmed the file succesfully!")

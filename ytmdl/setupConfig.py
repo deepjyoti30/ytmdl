@@ -18,10 +18,10 @@ config_text = '''#*****************************************#
 #
 #*****************************************
 # The SONG_DIR is the directory where all the songs will be saved.
-# In order to change it, simply remove the hash from beginning
-# And change the path to your desired one.
-# In case the path has spaces in in, include it in a " "
-# Following is a simple folder path example
+# In order to change it, remove the hash from beginning
+# and change the path to your desired one.
+# In case the path has spaces in in, include it in double quotes " "
+# The line below is an example of a file path to the folder
 #
 #SONG_DIR = "path/to/your/desired/folder"
 #

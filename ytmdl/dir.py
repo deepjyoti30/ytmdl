@@ -15,8 +15,8 @@ logger = Logger("Dir")
 def __replace_special_characters(passed_name: str) -> str:
     """
     In the passed name, replace the special characters like
-    / with a `-` so that it does not raise any errors
-    related to the OS while moving the file
+    `/` with a `-` so that it does not raise any errors
+    related to the OS while moving the file.
     """
     # TODO: Also add support for removing backslash
     return sub(r'/', '-', passed_name)
@@ -34,7 +34,7 @@ def get_abs_path(path_passed: str) -> str:
 
 
 def cleanup(TRACK_INFO, index, datatype, remove_cached=True, filename_passed=None):
-    """Move the song from temp to the song dir."""
+    """Move the song from temp to the song directory."""
     try:
         SONG = glob.glob(os.path.join(
             defaults.DEFAULT.SONG_TEMP_DIR,
@@ -44,18 +44,18 @@ def cleanup(TRACK_INFO, index, datatype, remove_cached=True, filename_passed=Non
 
         SONG_NAME = os.path.basename(SONG)
 
-        # If the filename is passed, use that instead of the song
+        # If the filename is passed, use that instead of the song.
         #
         # NOTE that is the path is set to be a dynamic value by using
         # special characters like `$` though the config then that will
-        # overwrite the filename_passed.
+        # overwrite the filename_passed
         if filename_passed is not None:
             SONG_NAME = filename_passed + ".{}".format(datatype)
 
         DIR = defaults.DEFAULT.SONG_DIR
         logger.debug("directory being used: ", DIR)
 
-        # Check if DIR has $ in its path
+        # Check if DIR has `$` in its path.
         # If it does then make those folders accordingly
 
         if '$' in DIR:
@@ -83,10 +83,10 @@ def cleanup(TRACK_INFO, index, datatype, remove_cached=True, filename_passed=Non
 
 
 def _delete_cached_songs(ext='mp3'):
-    """Delete cached songs"""
+    """Delete cached songs."""
     # We need to call this after song is moved
     # because otherwise if there is an error along the way
-    # next time a wrong song may be copied.
+    # next time the wrong song may be copied
     SONGS_PATH = os.path.join(
         defaults.DEFAULT.SONG_TEMP_DIR,
         '*{}'.format(ext)
@@ -103,7 +103,7 @@ def _delete_cached_songs(ext='mp3'):
 def ret_proper_names(ordered_names):
     """Return a list with the names changed to itunespy supported ones.
 
-    For eg: Artist to artist_name
+    E.G. Artist to artist_name
     """
     info_dict = {'Artist': 'artist_name',
                  'Title': 'track_name',
@@ -141,10 +141,10 @@ def seperate_kw(uns_kw):
 
 
 def make_custom_dir(DIR, TRACK_INFO):
-    """If the dirname has $ in it then we need to make them.
+    """If the dirname has `$` in it then we need to make them.
 
     The DIR is probably in the format of
-    keyword->keyword->keyword
+    keyword->keyword->keyword.
     """
     pos = DIR.index('$')
 
@@ -184,10 +184,10 @@ def make_custom_dir(DIR, TRACK_INFO):
     for kw_name in order_dir:
         dir_name = unescape(getattr(TRACK_INFO, kw_name))
 
-        # Sometimes, certain strings have / in the name which creates
+        # Sometimes, certain strings have `/` in the name which creates
         # issues since those strings are used to create directories.
-        # Whenever there is a /, replace it with -
-        # Sometimes strings also contains [\,?,",<>, *] which may cause error
+        # Whenever there is a `/`, replace it with `-`.
+        # Sometimes strings also contains [\,?,",<>,*] which may cause errors
         dir_name = sub('[\\\\?<>/"*]', "-", dir_name)
 
         new_dir = os.path.join(base_DIR, dir_name)
@@ -216,7 +216,7 @@ def dry_cleanup(current_path, passed_name, filename_passed=None):
         logger.debug("ext: {}".format(extension))
 
         # If the filename is passed from the CLI, we will use that
-        # instead of the passed name.
+        # instead of the passed name
         if filename_passed is not None:
             passed_name = filename_passed
 
@@ -225,7 +225,7 @@ def dry_cleanup(current_path, passed_name, filename_passed=None):
 
         # NOTE: If the DEST is a dynamic directory, then we cannot
         # do a dry cleanup. So we'll have to use the base directory
-        # instead.
+        # instead
         if "$" in DEST:
             logger.debug(DEST)
 

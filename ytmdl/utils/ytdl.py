@@ -15,11 +15,9 @@ logger = Logger("yt")
 
 
 def get_ytdl_opts() -> Dict:
-    is_quiet: bool = utility.determine_logger_level(
-        ) != logger.level_map["DEBUG"]
-    no_warnings: bool = utility.determine_logger_level(
-        ) > logger.level_map["WARNING"]
-    
+    is_quiet: bool = utility.determine_logger_level() != logger.level_map["DEBUG"]
+    no_warnings: bool = utility.determine_logger_level() > logger.level_map["WARNING"]
+
     return {
         "quiet": is_quiet,
         'no_warnings': no_warnings,

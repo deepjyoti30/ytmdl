@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""Module for caching songs.
+"""
+    Module for caching songs.
 
     Nishan Pantha(c) 2017-18
     NISH1001@github.com

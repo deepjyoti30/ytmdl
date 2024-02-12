@@ -1,4 +1,4 @@
-"""Contain all the core functions for ytmdl"""
+"""Contain all the core functions for ytmdl."""
 
 from typing import Union
 from simber import Logger
@@ -53,7 +53,7 @@ def search(song_name, args) -> Union[str, str]:
                          args.proxy,
                          kw=[args.artist, args.album])
 
-        # Handle the exception if urls has len 0
+        # Handle the edge case if the URLs has length 0
         if len(data) == 0:
             logger.critical(
                 "No song found. Please try again with a different keyword.")
@@ -68,8 +68,8 @@ def search(song_name, args) -> Union[str, str]:
             # Extract the verified music result if valid
             choice = song.get_default(data) - 1
 
-        # Check if choice if -2. If it is that, then we need to stop executing
-        # of the current song and gracefully exit.
+        # Check if choice is -2. If so, then we need to stop executing
+        # the current song and gracefully exit
         if choice == -2 or choice == -1:
             return False, False
 
@@ -78,13 +78,13 @@ def search(song_name, args) -> Union[str, str]:
             data[choice]["title"]
         )
 
-    # If the url is passed then get the data
+    # If the URL is passed then get the data
     data = []
 
     # Strip unwanted stuff from the URL
     URL = stringutils.srtip_unwanted_words_from_url(URL)
 
-    # Get video data from youtube
+    # Get video data from Youtube
     temp_data = yt.scan_video(yt.get_href(URL), args.proxy)
 
     # Sometimes the temp_data may be returned as unauthorized, skip that
@@ -97,7 +97,7 @@ def search(song_name, args) -> Union[str, str]:
 
     data.append(temp_data)
 
-    # In this case choice will be 0
+    # In this case, the choice will be 0
     return URL, data[0]["title"]
 
 
@@ -120,7 +120,7 @@ def download(link, yt_title, args) -> str:
                  ytdl_config=args.ytdl_config, dont_convert=args.dont_transcode)
 
     if type(path) is not str:
-        # Probably an error occured
+        # An error probably occured
         raise DownloadError(link, path)
 
     logger.info('Downloaded!')
@@ -134,7 +134,7 @@ def convert(
     end: float = None,
     dont_convert: bool = False
 ) -> str:
-    """Convert the song into the proper format as asked by
+    """Convert the song into the proper format requested by
     the user.
     """
     FORMAT_CONVERSION_MAP = {
@@ -144,7 +144,7 @@ def convert(
 
     # We need to check if start and end are passed.
     # If those are passed it means only a part of the song is
-    # to be extracted.
+    # to be extracted
     logger.debug("{}:{}".format(start, end))
     if start is not None and end is not None:
         conv_name = utility.extract_part_convert(
@@ -156,14 +156,14 @@ def convert(
 
         return conv_name
 
-    # If it is m4a, don't convert
+    # If it is m4a, don't convert.
     #
     # If dont_convert is passed, we can skip the conversion since
     # the user wants to keep the original audio
     if passed_format == "m4a" or dont_convert:
         return path
 
-    # Else the format needs to be in the list
+    # Else the format needs to be in the list.
     # It should probably in the list since the check
     # is done once before by the main function
     if passed_format not in FORMAT_CONVERSION_MAP.keys():
@@ -196,7 +196,7 @@ def trim(name: str, args) -> None:
                      "without trimming.")
         return
 
-    # Trim the song if the trim option is passed.
+    # Trim the song if the trim option is passed
     logger.info("Passing the song to get trimmed.")
     trim.Trim(name)
 
@@ -216,7 +216,7 @@ def meta(conv_name: str, song_name: str, search_by: str, link: str, args):
         search_by = utility.get_new_meta_search_by(search_by)
 
     if args.manual_meta:
-        # Read the values from the user.
+        # Read the values from the user
         TRACK_INFO = manual.get_data(song_name)
 
         # Since above code will return a list with just
@@ -229,7 +229,7 @@ def meta(conv_name: str, song_name: str, search_by: str, link: str, args):
         logger.info('Direct Spotify lookup for {}...'.format(args.spotify_id))
         TRACK_INFO = metadata.lookup_from_spotify(args.spotify_id)
     else:
-        # Else add metadata in ordinary way
+        # Else add metadata in the ordinary way
         logger.info('Getting song data for {}...'.format(search_by))
         TRACK_INFO = metadata.SEARCH_SONG(search_by, song_name, filters=[
                                           args.artist, args.album],
@@ -237,14 +237,14 @@ def meta(conv_name: str, song_name: str, search_by: str, link: str, args):
 
     # If no meta was found raise error
     if not TRACK_INFO:
-        # Check if we are supposed to add manual meta or from youtube
+        # Check if we are supposed to add manual meta or from Youtube
         if args.on_meta_error not in ["manual", "youtube"]:
             raise NoMetaError(search_by)
         
         if args.on_meta_error == "manual":
             TRACK_INFO = manual.get_data(song_name)
         elif args.on_meta_error == 'youtube':
-            # Extract meta from youtube
+            # Extract meta from Youtube
             track_info = extract_meta_from_yt(link)
             TRACK_INFO = [track_info]
         
