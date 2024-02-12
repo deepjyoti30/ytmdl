@@ -46,7 +46,7 @@ def progress_handler(d):
         f_size_disp, dw_unit = d_obj._format_size(d['downloaded_bytes'])
 
         # Total bytes might not be always passed, sometimes
-        # total_bytes_estimate is passed
+        # total_bytes_estimate is passed instead
         try:
             total_bytes = d['total_bytes']
         except KeyError:
@@ -79,7 +79,7 @@ def progress_handler(d):
 def dw_using_yt(link, proxy, song_name, datatype, no_progress=False, ytdl_config: str = None, dont_convert: bool = False):
     """
     Download the song using YTDL downloader and use downloader CLI's
-    functions to be used to display a progressbar.
+    functions to be used to display a progress bar.
 
     The function will be called by using hooks.
     """
@@ -96,11 +96,11 @@ def dw_using_yt(link, proxy, song_name, datatype, no_progress=False, ytdl_config
     # Add a postprocessor to convert the audio into
     # opus if dont_convert is passed.
     #
-    # Idea is to convert the audio through yt-dlp instead
+    # The idea is to convert the audio through yt-dlp instead
     # of using ffmpeg which is the format ytmdl uses.
     #
     # Replace `.opus` with `.webm` from the file since otherwise
-    # yt-dlp thinks that the file is converted.
+    # yt-dlp thinks that the file is converted
     if datatype == "opus" and dont_convert:
         extra_opts["postprocessors"] = [{
             'key': 'FFmpegExtractAudio',
@@ -185,7 +185,7 @@ def dw(
 
 
 def get_href(url):
-    """Get the 'watch?' part of the url in case of urls."""
+    """Get the 'watch?' part of the URL in case of URLs."""
     queries = parse_qs(urlparse(url=url).query)
 
     if 'v' not in queries:
