@@ -18,11 +18,11 @@ logger = Logger('metadata')
 
 
 def _logger_provider_error(exception, name):
-    """Show error if providers throw an error"""
+    """Show error if providers throw an error."""
     logger.debug('{}'.format(exception))
     logger.error(
-        "Something went wrong with {}. The program will continue with"
-        "the other providers. Please check '{}' for more details.\
+        "Something went wrong with {}. The program will continue with \
+        the other providers. Please check '{}' for more details.\
             ".format(name, logger.get_log_file()))
 
 
@@ -59,7 +59,7 @@ def get_from_deezer(SONG_NAME):
 
 
 def get_from_lastfm(SONG_NAME):
-    """Get metadata from Last FM"""
+    """Get metadata from Last FM."""
     try:
         songs = lastfm.searchSong(SONG_NAME)
         return songs
@@ -69,7 +69,7 @@ def get_from_lastfm(SONG_NAME):
 
 def get_from_saavn(SONG_NAME):
     """
-    Get the songs from JioSaavn
+    Get the songs from JioSaavn.
     """
     try:
         results = saavn.search_query(SONG_NAME)
@@ -80,7 +80,7 @@ def get_from_saavn(SONG_NAME):
 
 
 def get_from_musicbrainz(SONG_NAME):
-    """Get the songs from musicbrainz"""
+    """Get the songs from musicbrainz."""
     try:
         results = musicbrainz.search_song(SONG_NAME)
         return results
@@ -90,9 +90,7 @@ def get_from_musicbrainz(SONG_NAME):
 
 
 def get_from_spotify(SONG_NAME):
-    """
-    Get the songs from Spotify
-    """
+    """Get the songs from Spotify."""
     try:
         country = defaults.DEFAULT.SPOTIFY_COUNTRY
         logger.debug(f"Using {country} for Spotify country")
@@ -105,7 +103,7 @@ def get_from_spotify(SONG_NAME):
 
 def lookup_from_itunes(ID):
     """Lookup metadata by id using itunespy."""
-    # Try to get the song data from itunes
+    # Try to get the song data from iTunes
     try:
         # Get the country from the config
         country = defaults.DEFAULT.ITUNES_COUNTRY
@@ -171,8 +169,8 @@ def _search_tokens(song_name, song_list):
 def filterSongs(data, filters=[]):
     """Filter the songs according to the passed filters.
 
-    In the passed filters the first element is artist.
-    The second element is album."""
+    In the passed filters, the first element is the artist,
+    the second element is the album."""
 
     # In some cases the data can be None, then just return
     if data is None:
@@ -198,7 +196,7 @@ def filterSongs(data, filters=[]):
 
 
 def _extend_to_be_sorted_and_rest(provider_data, to_be_sorted, rest, filters):
-    """Create the to be sorted and rest lists"""
+    """Create the to be sorted and rest lists."""
     # Before passing for sorting filter the songs
     # with the passed args
     if filters:
@@ -252,7 +250,7 @@ def SEARCH_SONG(search_by="Tera Buzz", song_name="Tera Buzz", filters=[], disabl
     if not to_be_sorted:
         return None
 
-    # If sorting is disabled, return as is
+    # If sorting is disabled, return as-is
     if disable_sort:
         return to_be_sorted
 

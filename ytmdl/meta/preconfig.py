@@ -1,5 +1,5 @@
 """
-Handle all the preconfigurations related to metadata
+Handle all the preconfigurations related to metadata.
 """
 
 from ytmdl.meta import deezer
@@ -10,7 +10,7 @@ from ytmdl.meta import musicbrainz
 class CONFIG:
     """
     Class to handle all the preconfigurations
-    related to the metadata sources
+    related to the metadata sources.
     """
 
     # Some sources require fetching extra data

@@ -1,5 +1,5 @@
 """Store all the exceptions related to ytmdl that might
-arise during the runtime of the app
+arise during the runtime of the app.
 """
 
 
@@ -25,7 +25,7 @@ class DownloadError(Exception):
 
 
 class ConvertError(Exception):
-    """Exception for conversion erros.
+    """Exception for conversion errors.
 
     This exception is raised whenever the conversion goes wrong,
     mostly while using ffmpeg or something similar.
@@ -36,7 +36,7 @@ class ConvertError(Exception):
         self.__message = self.__build_message(error)
 
     def __build_message(self, error) -> str:
-        """Build the error message"""
+        """Build the error message."""
         return "Conversion failed with error: {}".format(error)
 
     def __str__(self) -> str:
@@ -51,7 +51,7 @@ class NoMetaError(Exception):
         self.__message = self.__build_message(song)
 
     def __build_message(self, song) -> str:
-        """Build the error message"""
+        """Build the error message."""
         return "No metadata found for `{}`".format(song)
 
     def __str__(self) -> str:
@@ -59,7 +59,7 @@ class NoMetaError(Exception):
 
 
 class MetadataError(Exception):
-    """Exception for metadata related errors while setting metadata
+    """Exception for metadata related errors while setting metadata.
 
     This is only to be raised when something goes wrong while setting
     the metadata for the song.
@@ -70,7 +70,7 @@ class MetadataError(Exception):
         self.__message = self.__build_message(song)
 
     def __build_message(self, song) -> str:
-        """Build the error message"""
+        """Build the error message."""
         return "Something went wrong while setting metadata for `{}`".format(
             song
         )

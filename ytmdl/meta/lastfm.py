@@ -1,4 +1,4 @@
-"""Handle data extraction from the Last.FM API
+"""Handle data extraction from the Last.FM API.
 
 This module will handle everything related to extracting
 the required data from the Last.FM source.
@@ -40,7 +40,7 @@ def get_more_data(song):
     """song is a LastFMSong object.
 
     We can easily fetch the artist and track name and
-    according get the extra required data from the API.
+    get the extra required data from the API accordingly.
     """
     headers = {
         "User-Agent": "ytmdl"
@@ -76,8 +76,7 @@ def get_more_data(song):
 
 
 def searchSong(query, lim=40):
-    """Search the song using the last.fm API
-    """
+    """Search the song using the last.fm API."""
     headers = {
         "User-Agent": "ytmdl"
     }

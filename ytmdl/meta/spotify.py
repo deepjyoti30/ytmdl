@@ -1,5 +1,5 @@
 """
-Handle extracting metadata from Spotify
+Handle extracting metadata from Spotify.
 
 We will use Spotify's API to search for tracks and show them
 to the user to be used accordingly.
@@ -11,11 +11,11 @@ from spotipy import Spotify
 from typing import Dict, List
 
 # Yeah I know, this is not a good idea but
-# asking the users for their own credentials is jus
+# asking the users for their own credentials is just
 # not good enough.
 # NOTE: Raise an issue if you have a better idea
-# and NO, I don't wanna ask the user to enter these
-# creds.
+# and NO, I do not want to ask the user to enter these
+# credentials.
 CLIENT_ID = "a166f23a5637429e8bd819df46fa034e"
 CLIENT_SECRET = "bbad17df3cde471ab969f081f2ea8bbb"
 
@@ -26,7 +26,7 @@ class SpotifySong(object):
     Spotify.
 
     We need to clean the data into an object that can
-    be utilized if the user choses to add this song as
+    be utilized if the user chooses to add this song as
     metadata.
     """
 
@@ -48,8 +48,7 @@ def search_song(
     limit: int = 25
 ) -> List[SpotifySong]:
     """
-    Search the song using the API through spotipy
-    and accordingly return the results.
+    Search the song using the Spotify API and return the results.
     """
     spotify = Spotify(auth_manager=SpotifyClientCredentials(
         client_id=CLIENT_ID, client_secret=CLIENT_SECRET))
@@ -63,7 +62,7 @@ def search_song(
 
 def get_track_from_spotify(id, country: str = "US"):
     """
-    Lookup the metadata by using the ID on spotify
+    Lookup the metadata by using the ID on Spotify.
     """
     spotify = Spotify(auth_manager=SpotifyClientCredentials(
         client_id=CLIENT_ID, client_secret=CLIENT_SECRET))

@@ -55,7 +55,7 @@ def get_more_data(song):
 
 
 def searchSong(query, lim=40):
-    """Deezer"""
+    """Deezer."""
     url = search_url.format(DEEZER_URL, query)
     r = requests.get(url)
     data = r.json()

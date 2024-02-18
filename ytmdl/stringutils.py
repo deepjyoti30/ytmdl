@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
-"""
-    A magic module for various string operations
-"""
+"""A magic module for various string operations."""
 
 import difflib
 import json
@@ -18,13 +16,13 @@ def get_closest_match_ignorecase(string_list, string):
     """
         Find the closest match of a string
         from the list of the string.
-        This will ignore the cases
+        This will ignore the cases.
     """
     string_lower = string.lower().strip()
     if not string_list:
         return None
 
-    # create a tuple of lowercased string and corresponding index
+    # Create a tuple of lowercased string and corresponding index
     # in the original list
     strings = [ (s.lower(), i) for i, s in enumerate(string_list) ]
     string_matched = get_closest_match( list(zip(*strings))[0], string_lower)
@@ -61,9 +59,7 @@ def remove_unwanted_chars(string):
 
 
 def urlencode(text):
-    """
-        Url encode the text
-    """
+    """Url encode the text."""
     q = {}
     encoded = ""
     if(text):
@@ -90,11 +86,11 @@ def check_keywords(tokens1, tokens2):
 
 def remove_yt_words(title):
     """
-    Remove words like Official video etc from the name of the song
+    Remove words like Official video etc from the name of the song.
     """
-    # Remove stopwords like official, video etc
-    # Remove square as well as circle brackets
-    # Remove dashes (-) and trademark icons like ®
+    # Remove stopwords like official, video etc.
+    # Remove square as well as circle brackets.
+    # Remove dashes (-) and trademark icons like ®.
     # Remove spaces in the beginning or at the end
     title = re.sub(
                 r'\]|\[|official|video|music|audio|full|lyrics?|-|\)|\(|®|^[ ]*|[ ]*$',
@@ -111,9 +107,9 @@ def srtip_unwanted_words_from_url(url):
     If more than just the video ID is passed, extract the
     URL and operate on that only.
 
-    The URL will be of the type https://yotuube.com/watch?v=<id>&other_args
+    The URL will be of the type https://yotuube.com/watch?v=<id>&other_args.
 
-    We just need to keep the v arg and remove all the other args
+    We just need to keep the v arg and remove all the other args.
     """
     return url.split("&")[0]
 

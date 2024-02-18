@@ -66,9 +66,9 @@ def arguments():
                          automatically recognized.",
                         type=str, nargs="*")
     parser.add_argument('-q', '--quiet',
-                        help="Don't ask the user to select songs\
-                        if more than one search result.\
-                        The first result in each case will be considered.",
+                        help="Don't prompt the user to select songs\
+                        if there is more than one search result,\
+                        the first result in each case will be considered.",
                         action='store_true')
     parser.add_argument('-o', '--output-dir',
                         help="The location for the song to be downloaded\
@@ -78,12 +78,12 @@ def arguments():
     metadata_group.add_argument(
         '--song', help="The song to search in Metadata. \
                         Particularly useful for songs that have the names in a\
-                        different language in YouTube. For Example, greek songs.",
+                        different language in YouTube (E.G. greek songs).",
         metavar='SONG-METADATA', default=None)
     metadata_group.add_argument(
         '--choice', help="The choice that the user wants\
-                        to go for. Usefull to pass along with --quiet.\
-                        Choices start at 1", choices=range(1, 50),
+                        to go for. Useful to pass along with --quiet.\
+                        Choices start at 1.", choices=range(1, 50),
         type=int, default=None, metavar="CHOICE")
     metadata_group.add_argument(
         '--artist', help="The name of the song's artist.\
@@ -92,8 +92,8 @@ def arguments():
         '--album', help="The name of the song's album.\
                         Pass it with a song name.")
     metadata_group.add_argument('--disable-metaadd', help="Disable addition of\
-                        passed artist and album keyword to the youtube search\
-                        in order to get a more accurate result. (Default: false)",
+                        passed artist and album keyword to the Youtube search\
+                        in order to get a more accurate result (Default: false).",
                                 action="store_true")
     metadata_group.add_argument('--skip-meta', help="Skip setting the metadata and\
                         just copy the converted song to the destination directory.\
@@ -103,23 +103,23 @@ def arguments():
     metadata_group.add_argument('-m', '--manual-meta', help="Manually enter song\
                         details.", action="store_true")
     metadata_group.add_argument(
-        '--itunes-id', help="Direct lookup from itunes. If passed, metadata will be automatically added.")
+        '--itunes-id', help="Direct lookup from iTunes. If passed, metadata will be automatically added.")
     metadata_group.add_argument(
         "--spotify-id", help="Direct lookup for Spotify tracks using the ID. If passed, metadata will be automatically added.")
     metadata_group.add_argument("--disable-sort", help="Disable sorting of the metadata \
                         before asking for input. Useful if the song is in some other language \
                         and/or just a few providers are used.", action="store_true")
     metadata_group.add_argument("--ask-meta-name", help="Ask the user to enter a separate \
-                        name for searching the metadata (Default: false)", action="store_true")
+                        name for searching the metadata (Default: false).", action="store_true")
     metadata_group.add_argument("--on-meta-error", help="What to do if adding the metadata fails \
                         for some reason like lack of metadata or perhaps a network issue. \
-                        Options are {}".format(defaults.DEFAULT.ON_ERROR_OPTIONS),
+                        Options are {}.".format(defaults.DEFAULT.ON_ERROR_OPTIONS),
                                 type=str, default=None)
 
     parser.add_argument('--proxy', help='Use the specified HTTP/HTTPS/SOCKS proxy. To enable '
-                        'SOCKS proxy, specify a proper scheme. For example '
+                        'SOCKS proxy, specify a proper scheme. For example, '
                         'socks5://127.0.0.1:1080/. Pass in an empty string (--proxy "") '
-                        'for direct connection', default=None, metavar='URL')
+                        'for direct connection.', default=None, metavar='URL')
     parser.add_argument('--url',
                         help="Youtube song link.")
     parser.add_argument('--list', help="Download list of songs.\
@@ -132,16 +132,16 @@ def arguments():
     parser.add_argument('--format',
                         help="The format in which the song should be downloaded.\
                         Default is mp3, but can be set in config. Available options are\
-                         {}".format(defaults.DEFAULT.VALID_FORMATS),
+                         {}.".format(defaults.DEFAULT.VALID_FORMATS),
                         default=defaults.DEFAULT.DEFAULT_FORMAT,
                         type=str)
-    parser.add_argument('--trim', '-t', help="Trim out the audio from the song. Use \
+    parser.add_argument('--trim', '-t', help="Trim off the non-music audio from the song. Use \
                         underlying speech and music segmentation engine to determine \
                         and keep only the music in the file. Useful in songs where there \
-                        are speeches, noise etc before/after the start of the song. Default \
-                        is false.", action='store_true')
+                        are speeches, noise, etc. before/after the start of the song (Default: \
+                        false).", action='store_true')
     parser.add_argument('--version', action='version', version=__version__,
-                        help='show the program version number and exit')
+                        help='show the program version number and exit.')
     parser.add_argument('--get-opts', action="store_true",
                         help=argparse.SUPPRESS)
     parser.add_argument("--keep-chapter-name", action="store_true", help="Keep the title \
@@ -153,28 +153,28 @@ def arguments():
                         song Id's are automatically added to the file.", default=None,
                         metavar="FILE")
     parser.add_argument('--ignore-chapters', help="Ignore chapters if available in the video and treat \
-                        it like one video",
+                        it like one video.",
                         action="store_true")
     parser.add_argument('--ytdl-config', help="Path to the youtube-dl config location or the "
-                        "directory", default=None, metavar="PATH", type=str)
+                        "directory.", default=None, metavar="PATH", type=str)
     parser.add_argument("--dont-transcode", help="Don't transcode the audio after \
-                        downloading. Applicable for OPUS format only. (Default: false)",
+                        downloading. Applicable for OPUS format only (Default: false).",
                         action="store_true")
     parser.add_argument("--filename", help="Final filename after the song is ready to be used. \
                         This will be given priority over automatic detection unless dynamic filename \
-                        path is set through config", default=None, metavar="NAME", type=str)
+                        path is set through config.", default=None, metavar="NAME", type=str)
 
     playlist_group = parser.add_argument_group("Playlist")
     playlist_group.add_argument(
         "--pl-start",
-        help="Playlist video to start at (default is 1)",
+        help="Playlist video to start at (Default: 1).",
         default=None,
         metavar="NUMBER",
         type=int
     )
     playlist_group.add_argument(
         "--pl-end",
-        help="Playlist video to end at (default is last)",
+        help="Playlist video to end at (Default: last).",
         default=None,
         metavar="NUMBER",
         type=int
@@ -187,14 +187,14 @@ def arguments():
               1, 2, 4, 6' if you want to download videos indexed\
              1, 2, 4 and 6. Range can also be passed like:\
              '--playlist-items 1-3, 5-7' to download the videos\
-             indexed at 1, 2, 3, 5, 6, 7.",
+             indexed at 1, 2, 3, 5, 6 and 7.",
         type=str,
         metavar="item_spec".upper(),
         default=None
     )
     playlist_group.add_argument(
         "--ignore-errors",
-        help="Ignore if downloading any video fails in a playlist.\
+        help="If any video in a playlist fails to download, ignore it.\
              If passed, the execution will move to the next video in the\
              passed playlist.",
         action="store_true"
@@ -217,7 +217,7 @@ def arguments():
     )
     logger_group.add_argument(
         "--disable-file",
-        help="Disable logging to files",
+        help="Disable logging to files.",
         default=False,
         action="store_true",
     )
@@ -304,9 +304,9 @@ def main(args):
     # This dictionary will be cleared if the song is found to be containing
     # chapters.
     #
-    # Moreover, the `is_original` field is **not** present from the youtube
+    # Moreover, the `is_original` field is **not** present from the Youtube
     # response which would force the following code to verify the title
-    # for chapters which is the behavior we want.
+    # for chapters (which is the behaviour we want).
     songs_to_download = [{'title': song_name, 'is_original': not verify_name}]
 
     # If the chapters are present, we will have to iterate and extract each chapter
@@ -332,10 +332,10 @@ def main(args):
             # Update the song_metadata with the name of the chapter
             song_metadata = song.get("title")
 
-            # Ask the user if they would like to change the name
+            # Ask the user if they would like to change the name.
             #
             # NOTE: Check if skip meta is passed, we don't need to
-            # extract the new title.
+            # extract the new title
             song_metadata = utility.get_new_title(song_metadata) if \
                 (not args.keep_chapter_name and not args.skip_meta and not is_original) else song_metadata
 
@@ -461,13 +461,13 @@ def pre_checks(args):
     #
     # It is important not to run any possible verbose commands
     # before this output because this one is used for automatic
-    # generation of the completion files.
+    # generation of the completion files
     if args.get_opts:
         print(" ".join(("--{}".format(opt.replace("_", "-"))
               for opt in vars(args))))
         exit(0)
 
-    # Update the logger flags, in case those are not the default ones.
+    # Update the logger flags, in case those are not the default ones
     if args.level.lower != "info":
         logger.update_level(args.level.upper())
 
@@ -507,7 +507,7 @@ def pre_checks(args):
 
     logger.debug("on_meta_error after: ", args.on_meta_error)
 
-    # Check the Itunes Country value
+    # Check the iTunes Country value
     logger.debug("itunes_country:", defaults.DEFAULT.ITUNES_COUNTRY)
 
     if not args.SONG_NAME and not args.url and not args.list:
@@ -516,14 +516,14 @@ def pre_checks(args):
 
 
 def extract_song_name(args) -> Tuple[str, bool]:
-    """Extract the name of the song from the given args"""
+    """Extract the name of the song from the given args."""
     logger.debug(args.SONG_NAME)
 
     if args.SONG_NAME:
         return " ".join(args.SONG_NAME), False
 
     # If song name is not passed then try to extract
-    # the title of the song using the URL.
+    # the title of the song using the URL
     verify_title = True
     try:
         # Fetch the title of the song
@@ -539,7 +539,7 @@ def extract_song_name(args) -> Tuple[str, bool]:
     #
     # NOTE: We don't need the song name if the meta is to be
     # skipped. So we can skip the next step if --skip-meta is
-    # passed.
+    # passed
     if not args.title_as_name and not args.skip_meta and verify_title:
         song_name = utility.get_new_title(song_name)
         verify_title = False

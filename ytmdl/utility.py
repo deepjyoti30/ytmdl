@@ -144,8 +144,8 @@ def extract_m4a(path, start=None, end=None, cleanup_after_done=True):
 
 
 def extract_part_convert(path, format, start, end):
-    """Extract part of the file using the path provided and accordingly
-    convert to the given format.
+    """Extract part of the file using the path provided and
+    convert to the given format accordingly.
     """
     FORMAT_MAP = {
         "mp3": convert_to_mp3,
@@ -154,7 +154,7 @@ def extract_part_convert(path, format, start, end):
     }
 
     # Format will be checked by the main function so no need
-    # to check here.
+    # to check here
     converted_name = FORMAT_MAP.get(format)(path, start, end, False)
     return converted_name
 

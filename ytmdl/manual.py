@@ -1,4 +1,4 @@
-"""Handle inserting metadata manually."""
+"""Handle manually inserting metadata."""
 
 from datetime import datetime
 from simber import Logger
@@ -11,12 +11,12 @@ logger = Logger("manual")
 class Meta:
     """
     Meta Class will have properties same as
-    those of Gaana and Itunes in order to make
+    those of Gaana and iTunes in order to make
     them compatible with the other modules
     that are using this data to write to the
     song files.
 
-    Following properties will only be present
+    Following properties will only be present:
 
     release_date        : Date of Release of the song
     track_name          : Name of the song
@@ -47,14 +47,14 @@ class Meta:
 
     def _read_individual(self, default_value):
         """
-        Read each value and do the usual checks.
+        Prompt the user for input to overwrite the default value (if they want).
 
-        One value is confirmed legit, return it.
+        If the user inputs something, remove excess spaces from it.
         """
         temp_value = input("")
-        # Remove starting and terminating spaces
-        # and more than one space
+        # Remove leading spaces and trailing spaces
         temp_value = sub(r'^\ |\ $', '', temp_value)
+        # Remove sequences of two or more spaces
         temp_value = sub(r'[\ ]{2,}', ' ', temp_value)
 
         return temp_value if temp_value != "" else default_value

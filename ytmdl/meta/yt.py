@@ -1,5 +1,5 @@
 """
-Handle metadata extraction from youtube
+Handle metadata extraction from Youtube.
 """
 
 from typing import Dict, List
@@ -28,7 +28,7 @@ def __parse_genre_name_from_categories(categories: List[str]) -> str:
 
 def __parse_meta_from_details(details: Dict) -> Meta:
     """
-    Parse the meta object from the passed details
+    Parse the meta object from the passed details.
     """
     return Meta(
         release_date=__parse_release_date_from_utc(details.get("release_timestamp", None)),

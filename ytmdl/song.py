@@ -1,4 +1,5 @@
-"""song.py - Used for song related functions.
+"""
+song.py - Used for song related functions.
 
 All the functions used to interact with the downloaded song are defined here.
 """
@@ -36,7 +37,7 @@ logger = Logger("song")
 
 
 def dwCover(song):
-    """Download the song cover img from itunes."""
+    """Download the song cover image from iTunes."""
     # Try to download the cover art as cover.jpg in temp
     logger.info("Preparing the album cover")
     try:
@@ -125,12 +126,11 @@ def get_default(songs, type="mp3") -> int:
     """Get the default song that will be selected if the user
     doesn't select a value.
     """
-    # If the user is asked to select metadata, then just return
-    # 1
+    # If the user is asked to select metadata, then just return 1
     if type != "mp3":
         return 1
 
-    # Else, we need to find the first verified music video present.
+    # Else, we need to find the first verified music video present
     choice = 1
 
     for index in range(0, len(songs)):
@@ -170,8 +170,8 @@ def getChoice(SONG_INFO, type):
         logger.debug(choice)
         choice = int(choice)
 
-        # If the choice is 0 then try to print more results
-        # The choice is valid if it is in the range and it is greater than 0
+        # If the choice is 0 then try to print more results.
+        # The choice is valid if it is in the range and it is greater than 0.
         # We also need to break when the user enters -1 which means the exec
         # will skip the current song or -2 which means the exec will amend the
         # search and retry
@@ -191,7 +191,7 @@ def set_MP3_data(song, song_path):
     """
     Set the meta data if the passed data is mp3.
     """
-    # A variable to see if cover image was added.
+    # A variable to see if cover image was added
     IS_IMG_ADDED = False
 
     try:
@@ -205,7 +205,7 @@ def set_MP3_data(song, song_path):
         if dwCover(song):
             imagedata = open(defaults.DEFAULT.COVER_IMG, 'rb').read()
             data.add(APIC(3, 'image/jpeg', 3, 'Front cover', imagedata))
-            # REmove the image
+            # Remove the image
             os.remove(defaults.DEFAULT.COVER_IMG)
             IS_IMG_ADDED = True
 
@@ -265,7 +265,7 @@ def set_M4A_data(song, song_path):
                 imagedata,
                 imageformat=MP4Cover.FORMAT_JPEG
             )]
-            # REmove the image
+            # Remove the image
             os.remove(defaults.DEFAULT.COVER_IMG)
             cover_added = True
 
@@ -286,9 +286,9 @@ def set_M4A_data(song, song_path):
         audio["\xa9gen"] = song.primary_genre_name
 
         # NOTE: In m4a files, the track number is of the following format
-        # track number / track count
+        # track number / track count.
         # However, we don't have track count for all songs, so
-        # we'll have to find a fallback for that.
+        # we'll have to find a fallback for that
         track_count = song.track_count if hasattr(song, 'track_count') else "1"
         logger.debug("Adding track count")
         logger.debug(f"Count: {track_count}")
@@ -350,9 +350,9 @@ def set_OPUS_data(song, song_path):
             os.remove(defaults.DEFAULT.COVER_IMG)
             COVER_ADDED = True
 
-        # Add the tags now
+        # Add the tags now.
         # Refer to https://www.programcreek.com/python/example/63675/mutagen.File
-        # for more information on it
+        # for more information about them
         mutagen_file["Title"] = song.track_name
         mutagen_file["Album"] = song.collection_name
         mutagen_file["Artist"] = song.artist_name
