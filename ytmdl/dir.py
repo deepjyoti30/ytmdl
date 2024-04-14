@@ -18,7 +18,7 @@ def __replace_special_characters(passed_name: str) -> str:
     / with a `-` so that it does not raise any errors
     related to the OS while moving the file
     """
-    return sub(r'/|\\', '-', passed_name)
+    return sub(r'[\\/|&?;:#~!"<>$%^*{}[\]+=`´]+', '-', passed_name)
 
 
 def get_abs_path(path_passed: str) -> str:
