@@ -187,6 +187,13 @@ def getChoice(SONG_INFO, type):
     return choice - 1 if (choice != -1 and choice != -2) else choice
 
 
+def get_song_name_to_save(name: str, format: str) -> str:
+    """
+    Get the song name to save the song with.
+    """
+    return f"{__replace_special_characters(name)}.{format}"
+
+
 def set_MP3_data(song, song_path):
     """
     Set the meta data if the passed data is mp3.
@@ -228,8 +235,7 @@ def set_MP3_data(song, song_path):
 
         data.save()
 
-        defaults.DEFAULT.SONG_NAME_TO_SAVE = __replace_special_characters(
-            song.track_name) + '.mp3'
+        defaults.DEFAULT.SONG_NAME_TO_SAVE = get_song_name_to_save(song.track_name, "mp3")
 
         # Rename the downloaded file
         to_save_as = os.path.join(
@@ -296,7 +302,7 @@ def set_M4A_data(song, song_path):
 
         audio.save()
 
-        defaults.DEFAULT.SONG_NAME_TO_SAVE = song.track_name + '.m4a'
+        defaults.DEFAULT.SONG_NAME_TO_SAVE = get_song_name_to_save(song.track_name, "m4a")
 
         # Rename the downloaded file
         os.rename(SONG_PATH, os.path.join(
@@ -361,7 +367,7 @@ def set_OPUS_data(song, song_path):
 
         mutagen_file.save()
 
-        defaults.DEFAULT.SONG_NAME_TO_SAVE = song.track_name + '.opus'
+        defaults.DEFAULT.SONG_NAME_TO_SAVE = get_song_name_to_save(song.track_name, "opus")
 
         # Rename the downloaded file
         os.rename(SONG_PATH, os.path.join(
