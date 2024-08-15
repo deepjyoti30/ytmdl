@@ -84,7 +84,8 @@ def dw_using_yt(
     no_progress=False,
     ytdl_config: str = None,
     dont_convert: bool = False,
-    cookiefile=None
+    cookiefile=None,
+    creds = None
 ):
     """
     Download the song using YTDL downloader and use downloader CLI's
@@ -132,6 +133,10 @@ def dw_using_yt(
 
     if cookiefile is not None:
         ydl_opts['cookiefile'] = cookiefile
+    
+    if creds is not None:
+        ydl_opts["username"] = creds.get("username", "")
+        ydl_opts["password"] = creds.get("password", "")
 
     logger.debug("args passed: ", str(ydl_opts))
     ydl = yt_dlp.YoutubeDL(ydl_opts)
@@ -152,7 +157,8 @@ def dw(
         no_progress=False,
         ytdl_config: str = None,
         dont_convert: bool = False,
-        cookiefile: str = None
+        cookiefile: str = None,
+        creds = None
 ):
     """
     Download the song.
@@ -187,7 +193,7 @@ def dw(
         # Start downloading the song
         status = dw_using_yt(value, proxy, name, datatype,
                              no_progress, ytdl_config, dont_convert,
-                             cookiefile)
+                             cookiefile, creds)
 
         if status == 0:
             return name
