@@ -12,6 +12,7 @@ exec(open("ytmdl/__version__.py").read())
 
 req_pkgs = [
     'yt-dlp>=2024.4.9',
+    'httpx<0.28',
     'mutagen',
     'itunespy',
     'requests',
